@@ -1,0 +1,35 @@
+<div class="blog3-section-area sp2">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 m-auto">
+          <div class="blog-header-area text-center heading6">
+            <h5 data-aos="fade-up" data-aos-duration="800">Our Latest News</h5>
+            <h2 class="tg-element-title">Your Knowledge into Our Blog</h2>
+            <p data-aos="fade-up" data-aos-duration="1000">From residential households to commercial enterprises, we provide <br class="d-lg-block d-none"> reliable, efficient, and sustainable energy solutions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngFor="let post of blogPosts" class="col-lg-4 col-md-6" [attr.data-aos]="'zoom-in'" [attr.data-aos-duration]="post.aosDuration">
+          <div class="blog-boxes-area">
+            <div class="tags-area">
+              <div class="date">
+                <a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i>{{ post.date }}</a>
+              </div>
+              <div class="contact">
+                <a href="javascript:void(0)"><img [src]="post.authorImg" [alt]="post.author">{{ post.author }}</a>
+              </div>
+            </div>
+            <div class="content-area">
+              <a routerLink="/case-study-single">{{ post.title }}</a>
+              <a routerLink="/case-study-single" class="readmore">Read More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="img1">
+              <img [src]="post.image" [alt]="post.title">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>

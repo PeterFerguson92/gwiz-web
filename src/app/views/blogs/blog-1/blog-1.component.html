@@ -1,0 +1,23 @@
+<div class="hero1-section-area about-bg-area">
+    <img src="assets/img/bg/header-img1.png" alt="" class="header-img1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 m-auto">
+                <div class="hero-heading-area heading1 text-center">
+                    <h1>Our Blog</h1>
+                    <app-breadcrumb title="Our Blog" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blog1-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div *ngFor="let blog of blogs" class="col-lg-4 col-md-6">
+                <app-blog-card [blog]="blog"/>
+            </div>
+        </div>
+    </div>
+</div>

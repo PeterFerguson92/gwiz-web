@@ -1,0 +1,20 @@
+<div class="team-auhtor-boxarea">
+    <div class="images">
+        <img [src]="member.image" alt="">
+        <div class="team-social-area">
+            <div class="icons">
+                <a href="javascript:void(0)" class="plus"><i class="fa-solid fa-plus"></i></a>
+                <ul>
+                    <li><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a></li>
+                    <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+                    <li><a href="javascript:void(0)"><i class="fa-brands fa-pinterest-p"></i></a></li>
+                    <li><a href="javascript:void(0)"><i class="fa-brands fa-youtube"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content-area">
+        <a routerLink="/team">{{member.name}}</a>
+        <p>{{member.role}}</p>
+    </div>
+</div>

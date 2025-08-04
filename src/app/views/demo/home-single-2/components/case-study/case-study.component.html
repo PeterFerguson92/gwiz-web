@@ -1,0 +1,37 @@
+<div class="casestudy4-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="case-header text-center heading11">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Case Studies</h5>
+                    <h2 class="tg-element-title"> Case Studies in Energy Transformation</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">From residential households to commercial
+                        enterprises, we provide reliable, efficient, <br class="d-lg-block d-none"> and sustainable
+                        energy solutions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6" *ngFor="let item of caseStudies" [attr.data-aos]="'zoom-in'"
+                [attr.data-aos-duration]="item.duration">
+                <div class="case-boxes-area">
+                    <div class="img1">
+                        <img [src]="item.image" alt="">
+                    </div>
+                    <div class="content-area">
+                        <div class="icons">
+                            <img [src]="item.icon" alt="">
+                        </div>
+                        <a routerLink="/case-study-single">{{ item.title }}</a>
+                        <p>{{ item.description }}</p>
+                        <a routerLink="/case-study-single" class="readmore">
+                            Learn More <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

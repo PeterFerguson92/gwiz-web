@@ -1,0 +1,64 @@
+<div class="testimonial1-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="testimonial-header heading2">
+                    <h5 data-aos="fade-left" data-aos-duration="800">Testimonials</h5>
+                    <h2 class="tg-element-title">Powerful Praise Hear from Our Customers</h2>
+                    <p data-aos="fade-left" data-aos-duration="1000">We take pride in providing top-notch <br
+                            class="d-lg-block d-none"> electricity services that exceed our <br
+                            class="d-lg-block d-none"> customers' expectations.</p>
+                    <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+                        <a routerLink="/pages/testimonials" class="header-btn1">View all reviews <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="testimonial-vertical-slider">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ngx-slick-carousel [config]="sliderForConfig" class="slider-galeria">
+                                <div *ngFor="let item of testimonials" ngxSlickItem
+                                    class="testimonial3-slider-content-area">
+                                    <div class="testimonial3-author-area">
+                                        <ul>
+                                            <li><a href=""><i class="fa-solid fa-star"></i></a></li>
+                                            <li><a href=""><i class="fa-solid fa-star"></i></a></li>
+                                            <li><a href=""><i class="fa-solid fa-star"></i></a></li>
+                                            <li><a href=""><i class="fa-solid fa-star"></i></a></li>
+                                            <li><a href=""><i class="fa-solid fa-star"></i></a></li>
+                                        </ul>
+                                        <img src="assets/img/icons/quito1.svg" alt="" class="quito1">
+                                        <p>{{item.message}}</p>
+                                    </div>
+                                    <div class="testimonial1-man-info-area">
+                                        <div class="mans-img">
+                                            <img [src]="item.authorImg" alt="">
+                                        </div>
+                                        <div class="man-text">
+                                            <a routerLink="/pages/our-team">{{item.name}}</a>
+                                            <p>{{item.role}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </ngx-slick-carousel>
+                        </div>
+                        <div class="col-lg-2">
+                            <ngx-slick-carousel [config]="sliderThumbConfig"
+                                class="slider-galeria-thumbs text-center d-lg-block d-none">
+                                <div *ngFor="let thumb of thumbnails" ngxSlickItem class="testimonial1-sliders-img"
+                                    data-aos="fade-left" [attr.data-aos-duration]="thumb.aosDuration">
+                                    <img [src]="thumb.image" alt="">
+                                </div>
+
+                            </ngx-slick-carousel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

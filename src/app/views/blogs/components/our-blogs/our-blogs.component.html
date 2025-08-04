@@ -1,0 +1,16 @@
+<div class="blog1-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="blog-header heading2 text-center">
+                    <h2>Read More Our Blogs</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let blog of blogPosts" class="col-lg-4 col-md-6">
+                <app-blog-card [blog]="blog" />
+            </div>
+        </div>
+    </div>
+</div>

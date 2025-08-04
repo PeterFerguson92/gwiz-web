@@ -1,0 +1,16 @@
+<div class="casestudy-inner-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="casestudy-header heading2 text-center">
+                    <h2 class="tg-element-title">Read More Case Studies</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let case of caseStudies.slice(0,3)" class="col-lg-4 col-md-6">
+                <app-case-study-card [case]="case" />
+            </div>
+        </div>
+    </div>
+</div>

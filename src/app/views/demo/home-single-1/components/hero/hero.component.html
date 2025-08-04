@@ -1,0 +1,48 @@
+<owl-carousel-o class="slider-header-carousel" [options]="carouselOptions">
+    <ng-container *ngFor="let slide of slides">
+      <ng-template carouselSlide>
+        <div class="hero1-section-area">
+          <img [src]="slide.img" alt="" class="header-img1">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="hero-heading-area heading1">
+                  <h5>Current Electricity Services</h5>
+                  <h1 class="main-heading">Power for Seamless Electricity Solutions</h1>
+                  <p class="pera">
+                    Whether you're a homeowner, business owner, or community leader,
+                    we're here to light up your life with sustainable energy solutions that.
+                  </p>
+                  <div class="btn-area">
+                    <a routerLink="/contact" class="header-btn1">Get A Free Estimate <i class="fa-solid fa-arrow-right"></i></a>
+                    <a routerLink="/contact" class="header-btn2">Discover More <i class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                  <div class="header-bottom-images">
+                    <div class="img1">
+                      <img src="assets/img/all-images/header-bottom.png" alt="">
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li *ngFor="let star of [1,2,3,4,5]"><i class="fa-solid fa-star"></i></li>
+                      </ul>
+                      <p><span>4k</span>Happy Client</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-lg-6">
+                <div class="circle-arrow">
+                  <a href="javascript:void(0)">
+                    <img src="assets/img/elements/circle1.png" alt="" class="keyframe5 circle1">
+                    <img src="assets/img/icons/arrow1.svg" alt="" class="arrow1">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </owl-carousel-o>
+  

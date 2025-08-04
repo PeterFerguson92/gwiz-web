@@ -1,0 +1,43 @@
+<div class="compare-palns-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="compare-plan-header text-center heading2">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Pricing Plan</h5>
+                    <h2 class="tg-element-title">Watt Wise Pricing Best Solutions</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">That's why we offer a range of pricing plans designed
+                        to suit <br> individual needs & budget.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="plan-toggle-wrap" [class]="isMonthly ? 'active' : ''">
+                    <div class="toggle-inner" data-aos="fade-up" data-aos-duration="1000">
+                        <input id="ce-toggle" [checked]="isMonthly" (change)="togglePlan()" type="checkbox">
+                        <span class="custom-toggle"></span>
+                        <div class="t-month">
+                            <h4>Monthly</h4>
+                        </div>
+                        <div class="t-year">
+                            <h4>Yearly <span>(20% Save)</span></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="tab-content">
+                    <div id="monthly">
+                        <div class="row">
+                            <div *ngFor="let plan of pricingPlans" class="col-lg-4 col-md-6" [attr.data-aos]="plan.aos"
+                                [attr.data-aos-duration]="plan.duration">
+                                <app-pricing-card [plan]="plan" [isMonthly]="isMonthly" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

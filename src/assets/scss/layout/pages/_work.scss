@@ -1,0 +1,129 @@
+@use '../../utils/' as * ;
+
+/*============= WORK CSS AREA ===============*/
+.work1-section-area {
+    .tabs-list {
+        ul {
+            li {
+                button {
+                    background: var(--ztc-bg-bg-1);
+                    border: none;
+                    outline: none;
+                    padding: 14px 16px;
+                    border-radius: 4px;
+                    transition: all .4s;
+                    display: flex;
+                    align-items: center;
+                    margin-top: 24px;
+                    text-transform: capitalize;
+                    width: 380px;
+                    @media #{$xs} {
+                        width: 100%;
+                    }
+                    .workicons {
+                        height: 48px;
+                        width: 48px;
+                        text-align: center;
+                        line-height: 48px;
+                        border-radius: 50%;
+                        display: inline-block;
+                        background: var(--ztc-text-text-2);
+                        transition: all .4s;
+                        margin: 0 8px 0 0;
+                    }
+                    .worktext {
+                        font-family: var(--ztc-family-font1);
+                        font-size: var(--ztc-font-size-font-s18);
+                        display: inline-block;
+                        line-height: 18px;
+                        font-weight: var(--ztc-weight-semibold);
+                        color: var(--ztc-text-text-3);
+                        text-align: start;
+                        @media #{$xs} {
+                            line-height: 24px;
+                        }
+                    }
+                }
+                button.active {
+                    background: var(--ztc-text-text-2);
+                    color: var(--ztc-text-text-1);
+                    .workicons {
+                        background: #D23D48;
+                    }
+                    .worktext {
+                        color: var(--ztc-text-text-1);
+                    }
+                }
+            }
+        }
+    }
+
+    .works-author-area {
+        padding: 0 0 0 70px;
+        position: relative;
+        @media #{$xs} {
+            padding: 0;
+            margin-top: 30px;
+        }
+        @media #{$md} {
+            padding: 0;
+            margin-top: 30px;
+        }
+        .tab-pane {
+            position: relative;
+            left: 100px;
+            transition: all .4s;
+            .works-side-area {
+                background: var(--ztc-bg-bg-1);
+                border-radius: 4px;
+                .images {
+                    img {
+                        height: 100%;
+                        width: 100%;
+                        border-radius: 4px 4px 0 0;
+                    }
+                }
+                .content-area {
+                    padding: 32px 50px 32px 32px;
+                    @media #{$xs} {
+                        padding: 32px;
+                    }
+                    a.power {
+                        display: inline-block;
+                        font-size: var(--ztc-font-size-font-s32);
+                        font-family: var(--ztc-family-font1);
+                        line-height: var(--ztc-font-size-font-s32);
+                        font-weight: var(--ztc-weight-bold);
+                        color: var(--ztc-text-text-3);
+                        transition: all .4s;
+                        margin-bottom: 20px;
+                        @media #{$xs} {
+                            font-size: var(--ztc-font-size-font-s24);
+                            line-height: var(--ztc-font-size-font-s32);
+                        }
+                        &:hover {
+                            color: var(--ztc-text-text-2);
+                            transition: all .4s;
+                        }
+                    }
+                    p {
+                        font-family: var(--ztc-family-font1);
+                        font-size: var(--ztc-font-size-font-s18);
+                        line-height: var(--ztc-font-size-font-s26);
+                        font-weight: var(--ztc-weight-medium);
+                        color: var(--ztc-text-text-4);
+                        transition: all .4s;
+                    }
+                    .btn-area {
+                        margin-top: 24px;
+                    }
+                }
+            }
+        }
+        .tab-pane.fade.show.active {
+            left: 0;
+            transition: all .4s;
+        }
+    }
+}
+/*============= WORK CSS AREA ===============*/

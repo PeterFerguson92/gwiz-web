@@ -1,0 +1,41 @@
+<div class="team2-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="team-header heading4 text-center">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Our Team</h5>
+                    <h2 class="tg-element-title">Power Players Meet Our Team</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000"> From our experienced technicians to our
+                        knowledgeable customer service representatives, each member of our team plays a crucial</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let member of teamMembers" class="col-lg-4 col-md-6" data-aos="flip-right" data-aos-duration="800">                
+                <div class="team-author-boxarea">
+                    <div class="images">
+                        <img [src]="member.image" alt="">
+                    </div>
+                    <div class="content">
+                        <a routerLink="/our-team">{{member.name}}</a>
+                        <p>{{member.role}}</p>
+                    </div>
+                    <div class="share-area">
+                        <div class="icons">
+                            <a href="javascript:void(0)"><i class="fa-solid fa-share-nodes"></i></a>
+                        </div>
+                        <div class="list">
+                            <ul>
+                                <li><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fa-brands fa-pinterest-p"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

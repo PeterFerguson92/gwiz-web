@@ -1,0 +1,72 @@
+<header>
+    <div class="header-area {{headerClass}} header header-sticky  d-none d-lg-block" stickyScroll id="header">
+        <p *ngIf="isAlert" class="header-pera">Electricity Service In Losangle City. Get Appointment Today</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="header-elements">
+                        <div class="site-logo">
+                            <a routerLink="/home-1"><img [src]="logo" alt=""></a>
+                        </div>
+                        <div class="main-menu">
+                            <ul>
+                                <li><a href="javascript:void(0)">Home <i class="fa-solid fa-angle-down"></i></a>
+                                    <div class="tp-submenu">
+                                        <div class="row">
+
+                                            <div *ngFor="let item of homeMenuItems" class="col-lg-3">
+                                                <div class="homemenu-thumb">
+                                                    <div class="img1">
+                                                        <img [src]="item.image" alt="">
+                                                    </div>
+                                                    <div class="homemenu-btn">
+                                                        <a [class]="btnClass" [routerLink]="item.multiPageLink"> Multi
+                                                            Page
+                                                            <span><i class="fa-solid fa-arrow-right"></i></span></a>
+                                                        <div class="space16"></div>
+                                                        <a [class]="btnClass" [routerLink]="item.onePageLink"
+                                                            target="_blank">One Page <span><i
+                                                                    class="fa-solid fa-arrow-right"></i></span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="homemenu-content text-center">
+                                                    <a [routerLink]="item.multiPageLink">{{item.title}}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li><a routerLink="/about">About</a></li>
+                                <li><a href="javascript:void(0)">Services <i class="fa-solid fa-angle-down"></i></a>
+                                    <ul class="dropdown-padding">
+                                        <li *ngFor="let item of serviceMenuItems"><a
+                                                [routerLink]="item.link">{{item.title}}</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="javascript:void(0)">Blogs <i class="fa-solid fa-angle-down"></i></a>
+                                    <ul class="dropdown-padding">
+                                        <li *ngFor="let item of blogMenuItems"><a
+                                                [routerLink]="item.link">{{item.title}}</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="javascript:void(0)">Pages <i class="fa-solid fa-angle-down"></i></a>
+                                    <ul class="dropdown-padding">
+                                        <li *ngFor="let item of pageMenuItems"><a [routerLink]="item.link">{{item.title}}</a></li>
+                                    </ul>
+                                </li>
+                                <li><a routerLink="/contact-us">Contact Us</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-area">
+                            <a routerLink="/contact-us" [class]="btnClass">Contact Us <i
+                                    class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<app-mobile-menu [btnClass]="btnClass" [mobileHeaderClass]="mobileHeaderClass" [mobileLogo]="mobileLogo"
+    [mobileSidebarClass]="mobileSidebarClass" />

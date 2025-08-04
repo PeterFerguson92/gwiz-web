@@ -1,0 +1,41 @@
+<div class="hero1-section-area about-bg-area">
+    <img src="assets/img/bg/header-img1.png" alt="" class="header-img1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 m-auto">
+                <div class="hero-heading-area heading1 text-center">
+                    <h1>Voltage Vision</h1>
+                    <app-breadcrumb title="Voltage Vision" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="testimonials-inner-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div *ngFor="let testimonial of testimonials" class="col-lg-4 col-md-6">
+                <div class="testimonial-inner-boxarea">
+                    <div class="img1">
+                        <img [src]="testimonial.image" alt="">
+                    </div>
+                    <div class="content-area">
+                        <ul class="d-flex align-items-center justify-content-center flex-wrap gap-1">
+                            <li *ngFor="let item of [].constructor(5)"><i class="fa-solid fa-star"></i></li>
+                        </ul>
+                        <p>{{testimonial.description}}</p>
+                        <div class="text">
+                            <a routerLink="/pages/our-team">{{testimonial.name}}</a>
+                            <p>{{testimonial.role}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <app-pagination />
+            </div>
+        </div>
+    </div>
+</div>

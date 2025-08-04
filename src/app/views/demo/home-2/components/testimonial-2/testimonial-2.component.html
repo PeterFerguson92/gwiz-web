@@ -1,0 +1,42 @@
+<div class="testimonial4-section-area sp1">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="testimonial-header heading9">
+            <h5 data-aos="fade-left" data-aos-duration="800">Testimonials</h5>
+            <h2 class="tg-element-title">Happy Customers Stories from</h2>
+            <p data-aos="fade-left" data-aos-duration="1000"> Our team of experienced professionals is <br class="d-lg-block d-none"> driven by a shared vision of creating a </p>
+            <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+              <a routerLink="/contact-us" class="header-btn7">Contact Us <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+            <owl-carousel-o [options]="customOptions" class="testimonial-slider-boxarea4">
+                <ng-container *ngFor="let testimonial of testimonials">
+                  <ng-template carouselSlide>
+                    <div class="tesimonial-slider">
+                      <ul class="d-flex align-items-center gap-1 flex-wrap">
+                        <li *ngFor="let star of [].constructor(testimonial.rating)">
+                          <i class="fa-solid fa-star"></i>
+                        </li>
+                      </ul>
+                      <p>{{ testimonial.description }}</p>
+                      <div class="auhtor-images">
+                        <div class="img1">
+                          <img [src]="testimonial.image" alt="{{ testimonial.name }}">
+                        </div>
+                        <div class="text">
+                          <a routerLink="/our-team">{{ testimonial.name }}</a>
+                          <p>{{ testimonial.role }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-container>
+              </owl-carousel-o>
+              
+        </div>
+      </div>
+    </div>
+  </div>

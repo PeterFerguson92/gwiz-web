@@ -1,0 +1,195 @@
+@use '../../utils/' as * ;
+
+/*============= CTA CSS AREA ===============*/
+.cta1-section-area {
+    position: relative;
+    z-index: 1;
+    background: var(--ztc-text-text-2);
+    overflow: hidden;
+    .cta-header {
+        h2 {
+            color: var(--ztc-text-text-1);
+        }
+        p {
+            color: var(--ztc-text-text-1);
+            opacity: 80%;
+        }
+        form {
+            background: var(--ztc-text-text-1);
+            border-radius: 4px;
+            padding: 20px;
+            position: relative;
+            height: 56px;
+            margin-top: 32px;
+            display: inline-block;
+            width: 385px;
+            @media #{$xs} {
+                width: 100%;
+            }
+            @media #{$md} {
+                width: 100%;
+            }
+            input {
+                font-family: var(--ztc-family-font1);
+                font-size: var( --ztc-font-size-font-s16);
+                line-height: var(--ztc-font-size-font-s16);
+                color: var(--ztc-text-text-3);
+                font-weight: var(--ztc-weight-medium);
+                width: 100%;
+                outline: none;
+                &::placeholder {
+                    font-family: var(--ztc-family-font1);
+                    font-size: var(--ztc-font-size-font-s16);
+                    font-weight: var(--ztc-weight-medium);
+                    color: var(--ztc-text-text-4);
+                }
+            }
+            button {
+                border: none;
+                transition: all .4s;
+                position: absolute;
+                right: 4px;
+                top: 4px;
+            }
+        }
+    }
+    .cta-images {
+        
+        .img1 {
+            position: absolute;
+            text-align: right;
+            bottom: 0;
+            z-index: 1;
+            @media #{$xs} {
+                position: relative;
+                top: 50px;
+            }
+            @media #{$md} {
+                position: relative;
+                top: 50px;
+            }
+            &::after {
+                position: absolute;
+                content: "";
+                height: 470px;
+                width: 470px;
+                left: 10%;
+                transition: all .4s;
+                z-index: -1;
+                background: #CC2431;
+                border-radius: 50%;
+                bottom: -215px;
+                animation-name: animation-5;
+                animation-duration: 2s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                @media #{$xs} {
+                    display: none;
+                }
+            }
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+// homepage4 //
+.cta4-section-area {
+    position: relative;
+    z-index: 1;
+    background: var(--ztc-bg-bg-11);
+    overflow: hidden;
+    .cta-header {
+        h2 {
+            color: var(--ztc-text-text-1);
+        }
+        p {
+            color: var(--ztc-text-text-1);
+            opacity: 80%;
+        }
+        form {
+            background: var(--ztc-text-text-1);
+            border-radius: 4px;
+            padding: 20px;
+            position: relative;
+            height: 56px;
+            margin-top: 32px;
+            display: inline-block;
+            width: 385px;
+            @media #{$xs} {
+                width: 100%;
+            }
+            @media #{$md} {
+                width: 100%;
+            }
+            input {
+                font-family: var(--ztc-family-font1);
+                font-size: var( --ztc-font-size-font-s16);
+                line-height: var(--ztc-font-size-font-s16);
+                color: var(--ztc-text-text-3);
+                font-weight: var(--ztc-weight-medium);
+                width: 100%;
+                outline: none;
+                &::placeholder {
+                    font-family: var(--ztc-family-font1);
+                    font-size: var(--ztc-font-size-font-s16);
+                    font-weight: var(--ztc-weight-medium);
+                    color: var(--ztc-text-text-4);
+                }
+            }
+            button {
+                border: none;
+                transition: all .4s;
+                position: absolute;
+                right: 4px;
+                top: 4px;
+            }
+        }
+    }
+    .cta-images {
+        
+        .img1 {
+            position: absolute;
+            text-align: right;
+            bottom: 0;
+            z-index: 1;
+            @media #{$xs} {
+                position: relative;
+                top: 50px;
+            }
+            @media #{$md} {
+                position: relative;
+                top: 50px;
+            }
+            &::after {
+                position: absolute;
+                content: "";
+                height: 470px;
+                width: 470px;
+                left: 10%;
+                transition: all .4s;
+                z-index: -1;
+                background: #1F59B2;
+                border-radius: 50%;
+                bottom: -215px;
+                animation-name: animation-5;
+                animation-duration: 2s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                @media #{$xs} {
+                    display: none;
+                }
+            }
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+/*============= CTA CSS AREA ENDS===============*/

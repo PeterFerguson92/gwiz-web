@@ -1,0 +1,79 @@
+<div class="testimonial2-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="testimonial-header heading4">
+                    <h5 data-aos="fade-left" data-aos-duration="800">Testimonials</h5>
+                    <h2 class="tg-element-title">Powerful Praise Hear from Our Customers</h2>
+                    <p data-aos="fade-left" data-aos-duration="1000">From homeowners to businesses, <br
+                            class="d-lg-block d-none"> our clients have experienced the <br class="d-lg-block d-none">
+                        reliability, affordability.</p>
+                    <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+                        <a routerLink="/testimonials" class="header-btn3">View all reviews <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8" data-aos="zoom-out" data-aos-duration="1000">
+                <div class="testimonial-sliders">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-6">
+                            <ngx-slick-carousel class="teimonial-slider-nav-area foter-carousel"
+                                [config]="sliderForConfig">
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                                <div ngxSlickItem class="testimonial-slider-img">
+                                    <img src="assets/img/all-images/testimonial-img6.png" alt="">
+                                </div>
+                            </ngx-slick-carousel>
+                        </div>
+                        <div class="col-lg-8 col-md-6">
+                            <ngx-slick-carousel [config]="sliderNavConfig"
+                                class="testimonial-content-slider slider-nav1">
+                                <div *ngFor="let testimonial of [].constructor(5)" ngxSlickItem
+                                    class="testimonial-slider-boxarea">
+                                    <ul class="d-flex align-items-center gap-1 flex-wrap">
+                                        <li *ngFor="let star of [].constructor(5)">
+                                            <i class="fa-solid fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <div class="testimonial5-all-content">
+                                        <p>“Discover why our customers love us! At Current, we take pride in providing
+                                            exceptional electricity services that exceed expectations. But don't just
+                                            take our word for it - hear what our satisfied customers have to say. From
+                                            homeowners”</p>
+                                    </div>
+                                    <div class="content">
+                                        <a routerLink="/our-team">Junaid Hasan</a>
+                                        <p>Happy Client</p>
+                                    </div>
+                                </div>
+                            </ngx-slick-carousel>
+                            <div class="testimonial-arrows">
+                                <div class="testimonial-prev-arrow">
+                                    <button><i class="fa-solid fa-arrow-left"></i></button>
+                                </div>
+                                <div class="testimonial-next-arrow">
+                                    <button><i class="fa-solid fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

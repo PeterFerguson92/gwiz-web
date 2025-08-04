@@ -1,0 +1,142 @@
+<div class="blog-left-heading heading2">
+    <div class="img1">
+        <img src="assets/img/all-images/blog-img23.png" alt="">
+    </div>
+</div>
+<div class="space48"></div>
+<div class="left-heading2 heading2">
+    <h3>Electricity Services That Illuminate Your World:</h3>
+    <div class="space16"></div>
+    <p>Our team of experts is dedicated to delivering valuable content that empowers you to make
+        informed decisions about your energy usage, while also showcasing the latest developments in
+        the field. Whether you're a homeowner, business owner</p>
+    <div class="space16"></div>
+    <p>Passionate about sustainability, our blog has something for everyone. So, grab a cup of
+        coffee, explore our articles, and join us on a journey to a brighter, more sustainable
+        future.</p>
+</div>
+<div class="space48"></div>
+<div class="left-heading2 heading2">
+    <h3>Empower Your World: Unleash the Power</h3>
+    <div class="space16"></div>
+    <p>Welcome to our comprehensive electricity services blog, where we delve deep into the world of
+        energy to bring you valuable insights, practical tips, and thought-provoking discussions.
+        Our blog covers a diverse range of topics, from the latest advancements</p>
+    <div class="space16"></div>
+    <p>Whether you're interested in learning how to reduce your carbon footprint, exploring the
+        benefits of solar power, or staying up-to-date with industry news and regulations, </p>
+</div>
+<div class="space18"></div>
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <div class="space30"></div>
+        <div class="img1">
+            <img src="assets/img/all-images/blog-img24.png" alt="">
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <div class="space30"></div>
+        <div class="img1">
+            <img src="assets/img/all-images/blog-img25.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="space32"></div>
+<p>With regular updates and new articles published, there's always something fresh and exciting to
+    discover in our blog. So, whether you're a seasoned energy enthusiast or just starting your
+    journey towards a greener future, join us as we explore</p>
+<div class="space48"></div>
+<div class="tags-share-area">
+    <div class="tags">
+        <h4>Our Tags:</h4>
+        <ul>
+            <li><a href="javascript:void(0)">Science</a></li>
+            <li><a href="javascript:void(0)">creative</a></li>
+            <li><a href="javascript:void(0)">development</a></li>
+        </ul>
+    </div>
+    <div class="share">
+        <h4>Share:</h4>
+        <ul>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-linkedin-in"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-youtube"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a></li>
+        </ul>
+    </div>
+</div>
+<div class="space48"></div>
+
+<div class="heading2">
+    <h3>Comments ({{ commentCount }})</h3>
+    @for (comment of comments; track $index;let first=$first) {
+    <div class="{{first ? 'space16' : 'space32'}}"></div>
+    <div class="comments-boxarea {{comment.isReply ? 'boxarea2' : ''}}">
+        <div class="comment-auhtor-box">
+            <div class="all-content">
+                <div class="img1">
+                    <img [src]="comment.image" alt="">
+                </div>
+                <div class="content-area">
+                    <a href="javascript:void(0)">{{ comment.name }}</a>
+                    <a href="javascript:void(0)" class="date">{{ comment.date }}</a>
+                </div>
+            </div>
+            <div class="reply">
+                <a><img src="assets/img/icons/share.svg" alt="">Reply</a>
+            </div>
+        </div>
+        <div class="space16"></div>
+        <p>{{ comment.text }}</p>
+    </div>
+    }
+</div>
+
+<div class="space32"></div>
+<div class="contact-submit-boxarea">
+    <h4>Leave a Reply</h4>
+    <p> Welcome to a space where every click brings you closer to a world powered </p>
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="0cd32fff-eda2-4da3-be43-37d47fbb396b">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-area">
+                    <input type="text" placeholder="First Name" required>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-area">
+                    <input type="text" placeholder="Last Name" required>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-area">
+                    <input type="email" placeholder="Email" required>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="input-area">
+                    <input type="number" placeholder="Phone" required>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="input-area">
+                    <input type="text" placeholder="Subject" required>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="input-area">
+                    <textarea placeholder="Message" cols="30" rows="10" required></textarea>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="input-area1">
+                    <button type="submit" class="header-btn1">Submit Now <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

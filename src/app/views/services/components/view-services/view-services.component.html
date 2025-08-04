@@ -1,0 +1,16 @@
+<div class="service1-section-area leftside sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="service-header-area heading2 text-center">
+                    <h2 class="tg-element-title">View Our More Services</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let service of services" class="col-lg-4 col-md-6">
+                <app-service-card [service]="service" />
+            </div>
+        </div>
+    </div>
+</div>

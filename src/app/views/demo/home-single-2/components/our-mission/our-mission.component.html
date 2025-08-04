@@ -1,0 +1,123 @@
+<div class="mission-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="mission-header-area heading9 text-center">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Our Mission</h5>
+                    <h2 class="tg-element-title">Our Bold Mission in Electricity Services</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000"> We are committed to providing innovative electricity
+                        services that not only meet the needs of <br class="d-lg-block d-none"> today but also safeguard
+                        the environment for generations to come</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tabs-auhtor-area">
+                    <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav nav-pills" id="pills-tab"
+                        role="tablist">
+                        <li [ngbNavItem]="1" class="nav-item" role="presentation" data-aos="zoom-in"
+                            data-aos-duration="800">
+                            <button ngbNavLink class="nav-link" id="pills-mission1-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-mission1" type="button" role="tab" aria-controls="pills-mission1"
+                                aria-selected="true">
+                                Our Mission
+                            </button>
+                            <ng-template ngbNavContent>
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6">
+                                            <div class="mission-img" data-aos="zoom-in" data-aos-duration="1000">
+                                                <img src="assets/img/all-images/mission-img1.png" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mission-content-area heading10">
+                                                <h3 class="tg-element-title">Empowering a Sustainable Future Electricity
+                                                    Services</h3>
+                                                <p data-aos="fade-left" data-aos-duration="900">Through cutting-edge
+                                                    technology, renewable energy solutions, and unwavering dedication,
+                                                    we aim to empower communities, businesses, and individuals alike to
+                                                    embrace cleaner,</p>
+                                                <p data-aos="fade-left" data-aos-duration="1000">With every connection
+                                                    we make and every service we provide, we are driven by our passion
+                                                    for sustainability and our determination .</p>
+                                                <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+                                                    <a routerLink="/contact-us" class="header-btn7">Contact Us<i
+                                                            class="fa-solid fa-arrow-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2" class="nav-item" role="presentation" data-aos="zoom-in"
+                            data-aos-duration="1000">
+                            <button ngbNavLink class="nav-link" id="pills-mission2-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-mission2" type="button" role="tab" aria-controls="pills-mission2"
+                                aria-selected="false">
+                                Our Vision
+                            </button>
+                            <ng-template ngbNavContent>
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6">
+                                            <div class="mission-img">
+                                                <img src="assets/img/all-images/mission-img1.png" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mission-content-area heading10">
+                                                <h3>Empowering a Sustainable Future Electricity Services</h3>
+                                                <p>Through cutting-edge technology, renewable energy solutions, and
+                                                    unwavering dedication, we aim to empower communities, businesses,
+                                                    and individuals alike to embrace cleaner,</p>
+                                                <p>With every connection we make and every service we provide, we are
+                                                    driven by our passion for sustainability and our determination .</p>
+                                                <div class="btn-area">
+                                                    <a routerLink="/contact-us" class="header-btn7">Contact Us<i
+                                                            class="fa-solid fa-arrow-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </ng-template>
+
+                        </li>
+                        <li [ngbNavItem]="3" class="nav-item" role="presentation" data-aos="zoom-in"
+                            data-aos-duration="1200">
+                            <button ngbNavLink class="nav-link" id="pills-mission3-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-mission3" type="button" role="tab" aria-controls="pills-mission3"
+                                aria-selected="false">
+                                Our Golds
+                            </button>
+                            <ng-template ngbNavContent>
+                           
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6">
+                                        <div class="mission-img">
+                                            <img src="assets/img/all-images/mission-img1.png" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mission-content-area heading10">
+                                            <h3>Empowering a Sustainable Future Electricity Services</h3>
+                                            <p>Through cutting-edge technology, renewable energy solutions, and unwavering
+                                                dedication, we aim to empower communities, businesses, and individuals alike
+                                                to embrace cleaner,</p>
+                                            <p>With every connection we make and every service we provide, we are driven by
+                                                our passion for sustainability and our determination .</p>
+                                            <div class="btn-area">
+                                                <a routerLink="/contact-us" class="header-btn7">Contact Us<i
+                                                        class="fa-solid fa-arrow-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="nav" class="tab-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

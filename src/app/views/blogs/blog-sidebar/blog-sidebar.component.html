@@ -1,0 +1,75 @@
+<div class="hero1-section-area about-bg-area">
+    <img src="assets/img/bg/header-img1.png" alt="" class="header-img1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="hero-heading-area heading1 text-center">
+                    <h1>Empowering Energy Dive into Our Electricity</h1>
+                    <app-breadcrumb subTitle="Blog Sidebar" title="Our Blog" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blog-leftside-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog1-section-area">
+                    <div class="container">
+                        <div class="row">
+                            <div *ngFor="let blog of blogs" class="col-lg-12 col-md-12">
+                                <div class="blog-auhtor-boxarea">
+                                    <div class="img1">
+                                        <img [src]="blog.image" alt="">
+                                    </div>
+                                    <div class="blog-position">
+                                        <div class="blog-content-area">
+                                            <ul>
+                                                <li><a href="javascript:void(0)"><i class="fa-solid fa-user"></i>{{blog.author}}</a></li>
+                                                <li><a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i>{{blog.date}}</a></li>
+                                            </ul>
+                                            <a routerLink="/blogs/single" class="heading">{{blog.title}} </a>
+                                            <div class="space16"></div>
+                                            <p>{{blog.description}}</p>
+                                            <div class="space24"></div>
+                                            <a routerLink="/blogs/single" class="header-btn1">Learn more <i
+                                                    class="fa-solid fa-arrow-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-12">
+                                <div class="pagination-area">
+                                    <div class="page">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" aria-label="Previous"><i
+                                                        class="fa-solid fa-angles-left"></i></a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link active" href="javascript:void(0)">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0)">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0)">...</a></li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0)">12</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="javascript:void(0)" aria-label="Next"><i
+                                                        class="fa-solid fa-angles-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space50 d-lg-none d-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <app-blogs-sidebar />
+            </div>
+        </div>
+    </div>
+</div>

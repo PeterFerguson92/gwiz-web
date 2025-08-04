@@ -1,0 +1,17 @@
+<li [ngClass]="{ 'has-sub hash-has-sub': item.isOpen }">
+    <a [routerLink]="item.link" (click)="toggleSubMenu(item)" [class.hash-nav]="item.link === '#'">
+        {{ item.title }}
+    </a>
+
+    <span *ngIf="item.subMenu" class="submenu-button" [ngClass]="{ 'submenu-opened': item.isOpen }"
+        (click)="toggleSubMenu(item, $event)">
+        <em></em>
+    </span>
+
+    <ul *ngIf="item.subMenu && item.isOpen" class="sub-menu" [ngClass]="{ 'open-sub': item.isOpen }"
+        [ngStyle]="{ 'display': item.isOpen ? 'block' : 'none' }">
+        <ng-container *ngFor="let subItem of item.subMenu;">
+            <app-mobile-nav-item [item]="subItem"></app-mobile-nav-item>
+        </ng-container>
+    </ul>
+</li>

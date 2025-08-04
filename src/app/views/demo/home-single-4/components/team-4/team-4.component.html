@@ -1,0 +1,35 @@
+<div class="team3-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="team-header-area text-center heading6">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Our Team</h5>
+                    <h2 data-aos="tg-element-title">Discover Our Dedicated Team</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">From our experienced technicians who ensure reliable
+                        installations to our knowledgeable customer service representatives who provide.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let member of teamMembers" class="col-lg-4 col-md-6" [attr.data-aos]="'zoom-in'"
+                [attr.data-aos-duration]="member.aosDuration">
+                <div class="team-auhtor-boxes">
+                    <div class="img1">
+                        <img [src]="member.image" [alt]="member.name">
+                    </div>
+                    <div class="content-area">
+                        <a routerLink="/pages/our-team">{{ member.name }}</a>
+                        <p>{{ member.role }}</p>
+                        <ul>
+                            <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+                            <li><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a></li>
+                            <li><a href="javascript:void(0)"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                            <li><a href="javascript:void(0)"><i class="fa-brands fa-behance"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

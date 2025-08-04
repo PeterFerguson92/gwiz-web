@@ -1,0 +1,30 @@
+<div class="service1-section-area sp2">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 m-auto">
+          <div class="service-header-area heading2 text-center">
+            <h5 data-aos="fade-up" data-aos-duration="800">Our Service</h5>
+            <h2 class="tg-element-title">Electricity Service Offerings</h2>
+            <p data-aos="fade-up" data-aos-duration="1000">From residential households to commercial enterprises, we provide reliable, efficient, and sustainable energy solutions.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div *ngFor="let service of services" class="col-lg-4 col-md-6" data-aos="zoom-out" [attr.data-aos-duration]="service.duration">
+          <div class="service-auhtor-boxarea">
+            <div class="img1">
+              <img [src]="service.image" alt="">
+            </div>
+            <div class="content-area">
+              <h3>0{{service.id}}</h3>
+              <a routerLink="/service-single">Bright Spark Services</a>
+              <p>Explore our range of services below & discover how you power your life</p>
+              <a routerLink="/service-single" class="readmore">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>

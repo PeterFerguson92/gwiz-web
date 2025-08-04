@@ -1,0 +1,34 @@
+<div class="casestudy2-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 m-auto">
+                <div class="casestudy-header text-center heading6">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Case Studies</h5>
+                    <h2 class="tg-element-title">Electricity Service Case Studies</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000"> Explore real-life examples of our electricity
+                        services in action through our case studies. From residential homes to commercial enterprises,
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6" *ngFor="let item of cases" data-aos="zoom-in"
+                [attr.data-aos-duration]="item.duration">
+                <div class="case-auhtor-boxarea">
+                    <div class="img1">
+                        <img [src]="item.image" alt="">
+                    </div>
+                    <div class="case-bg">
+                        <img src="assets/img/bg/casebg.png" alt="">
+                    </div>
+                    <div class="content">
+                        <a routerLink="/case-study-single"><span><i class="fa-solid fa-arrow-right"></i></span></a>
+                        <p>{{ item.subtitle }}</p>
+                        <a routerLink="/case-study-single">{{ item.title }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

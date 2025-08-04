@@ -1,0 +1,74 @@
+<div class="blog-auhtor-side-area">
+    <div class="search-boxarea">
+        <h3>Search Post</h3>
+        <form action="#">
+            <input type="text" placeholder="Search here....">
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </div>
+    <div class="blog-author-list">
+        <h3>Our Categories</h3>
+        <ul>
+            <li><a href="javascript:void(0)">Voltage Vision <i class="fa-solid fa-arrow-right"></i></a></li>
+            <li><a href="javascript:void(0)">Power Grid Expansion <i class="fa-solid fa-arrow-right"></i></a></li>
+            <li><a href="javascript:void(0)">Best Power and Progress <i class="fa-solid fa-arrow-right"></i></a></li>
+            <li><a href="javascript:void(0)">Electrifying Results <i class="fa-solid fa-arrow-right"></i></a></li>
+            <li><a href="javascript:void(0)">Voltage Wave Energy <i class="fa-solid fa-arrow-right"></i></a></li>
+        </ul>
+    </div>
+    <div class="recent-posts-area">
+        <h3>Recent Posts</h3>
+        <div *ngFor="let post of recentPosts;let isLast=last" class="recent-single-posts {{isLast ?? 'pb-0 border-0'}}">
+            <div class="img1">
+                <img [src]="post.image" alt="">
+            </div>
+            <div class="content">
+                <a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i> {{post.date}}</a>
+                <a routerLink="/blogs/single" class="heading">{{post.title}}</a>
+            </div>
+        </div>
+    </div>
+    <div class="helping-area">
+        <h3>If You Need Any Help <br class="d-lg-block d-none"> Contact With Us</h3>
+        <div class="btn-area">
+            <a href="tel:+917052101786" class="header-btn1"><i class="fa-solid fa-phone-volume"></i>+91 705 2101 786</a>
+        </div>
+    </div>
+    <div class="tags-area">
+        <h3>Our Tags</h3>
+        <ul>
+            <li><a href="javascript:void(0)">Electricity </a></li>
+            <li><a href="javascript:void(0)">Creative </a></li>
+            <li><a href="javascript:void(0)">Design </a></li>
+        </ul>
+        <ul>
+            <li><a href="javascript:void(0)">Art </a></li>
+            <li><a href="javascript:void(0)">Development </a></li>
+            <li><a href="javascript:void(0)">Image </a></li>
+        </ul>
+        <ul>
+            <li><a href="javascript:void(0)">People </a></li>
+            <li><a href="javascript:void(0)">Tech </a></li>
+            <li><a href="javascript:void(0)">3D Images </a></li>
+        </ul>
+    </div>
+
+    <div class="download-broucher">
+        <h3>Download Brochure</h3>
+        <p>We also offer innovative solar financing packages, ensuring that the transition.</p>
+        <div class="btn-area">
+            <a href="javascript:void(0)" class="header-btn1"><img src="assets/img/icons/download1.svg" alt="">Pdf Download</a>
+            <a href="javascript:void(0)" class="header-btn2"><img src="assets/img/icons/download1.svg" alt="">Doc Download</a>
+        </div>
+    </div>
+
+    <div class="social-icons">
+        <h3>Follow Us</h3>
+        <ul>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-linkedin-in"></i></a></li>
+            <li><a href="javascript:void(0)"><i class="fa-brands fa-pinterest-p"></i></a></li>
+        </ul>
+    </div>
+</div>

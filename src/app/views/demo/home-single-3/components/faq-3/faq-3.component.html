@@ -1,0 +1,43 @@
+<div class="faq2-section-area sp1">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 m-auto">
+                <div class="faq-header-area heading4 text-center">
+                    <h5 data-aos="fade-left" data-aos-duration="800">FAQ’S</h5>
+                    <h2 class="tg-element-title">Frequently Best Asked Question?</h2>
+                    <p data-aos="fade-left" data-aos-duration="1000">Take a look at our FAQ section below, and if you
+                        don't find the <br class="d-lg-block d-none"> answer you're looking for, feel free to reach.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="1000">
+                <div class="faq-images">
+                    <img src="assets/img/all-images/faq-img1.png" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="faq-auhtor-area1">
+                    <div  ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+                        @for (faq of faqs; track $index;let first=$first;let id=$index;let last=$last) {
+                            <div  ngbAccordionItem [collapsed]="first ? false : true"  data-aos="fade-left" data-aos-duration="800">
+                                <h2 ngbAccordionHeader>
+                                    <button ngbAccordionButton type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                        aria-controls="flush-collapseOne">
+                                      {{faq.question}}
+                                    </button>
+                                </h2>
+                                <div ngbAccordionCollapse id="flush-collapseOne"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div ngbAccordionBody>{{faq.answer}}</div>
+                                </div>
+                            </div>
+                            <div *ngIf="!last" class="space20"></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

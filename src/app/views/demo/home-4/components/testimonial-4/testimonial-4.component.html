@@ -1,0 +1,37 @@
+<div class="testimonial3-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="testimonial3-header heading6">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Testimonials</h5>
+                    <h2 class="tg-element-title">Hear from Our Satisfied Customers</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">Discover why our customers love our electricity services! Read testimonials from <br class="d-lg-block d-none"> satisfied clients who have experienced the reliability, efficiency,</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12" data-aos="zoom-in" data-aos-duration="1000">
+            <owl-carousel-o [options]="carouselOptions" class="testimonial-slider-area">
+                <ng-container *ngFor="let item of testimonials">
+                  <ng-template carouselSlide>
+                    <div class="testimonial-boxes">
+                      <div class="img1">
+                        <img [src]="item.image" [alt]="item.name">
+                      </div>
+                      <div class="content-area">
+                        <ul class="d-flex gap-1 align-items-center justify-content-center">
+                          <li *ngFor="let star of [1,2,3,4,5]" ><i class="fa-solid fa-star"></i></li>
+                        </ul>
+                        <p>“{{ item.description }}”</p>
+                        <a routerLink="/our-team">{{ item.name }}</a>
+                        <p>{{ item.role }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-container>
+              </owl-carousel-o>
+              
+          </div>
+        </div>
+    </div>
+</div>

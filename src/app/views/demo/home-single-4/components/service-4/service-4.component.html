@@ -1,0 +1,32 @@
+<div class="service3-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="service-header-area heading7 text-center">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Our Services</h5>
+                    <h2 class="tg-element-title">Trusted Electricity Providers</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">From residential households to commercial
+                        enterprises, we provide reliable, efficient, and sustainable energy solutions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6" *ngFor="let item of services" data-aos="zoom-in"
+                [attr.data-aos-duration]="item.duration">
+                <div class="service-auhtor-boxarea">
+                    <div class="icons">
+                        <img [src]="item.icon" alt="">
+                    </div>
+                    <div class="content-area">
+                        <a routerLink="/services/single">{{ item.title }}</a>
+                        <p>{{ item.description }}</p>
+                        <a routerLink="/services/single" class="readmore">
+                            Read More <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

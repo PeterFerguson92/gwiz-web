@@ -1,0 +1,126 @@
+<div class="hero1-section-area about-bg-area">
+    <img src="assets/img/bg/header-img1.png" alt="" class="header-img1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="hero-heading-area heading1 text-center">
+                    <h1>Frequently Asked Questions</h1>
+                    <app-breadcrumb title="Frequently Asked Questions" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq1-section-area faq-inner sp8">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 m-auto">
+                <div class="faq-header-area heading2 text-center">
+                    <h2 class="tg-element-title">Energy Electricity Questions</h2>
+                </div>
+            </div>
+        </div>
+        <div class="space44 d-lg-block d-none"></div>
+        <div class="space14 d-lg-none d-block"></div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="faq-auhtoir-area1">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+                                @for (faq of faqData1; track $index;let first=$first;let id=$index;let last=$last) {
+                                <div ngbAccordionItem [collapsed]="first ? false : true">
+                                    <h2 ngbAccordionHeader>
+                                        <button ngbAccordionButton type="button">
+                                            {{faq.question}}
+                                        </button>
+                                    </h2>
+                                    <div ngbAccordionCollapse>
+                                        <div ngbAccordionBody>{{faq.answer}}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!last" class="space20"></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+                                @for (faq of faqData1; track $index;let first=$first;let id=$index;let last=$last) {
+                                <div ngbAccordionItem>
+                                    <h2 ngbAccordionHeader>
+                                        <button ngbAccordionButton type="button">
+                                            {{faq.question}}
+                                        </button>
+                                    </h2>
+                                    <div ngbAccordionCollapse>
+                                        <div ngbAccordionBody>{{faq.answer}}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!last" class="space20"></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="faq1-section-area faq-inner sp1">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 m-auto">
+                <div class="faq-header-area heading2 text-center">
+                    <h2 class="tg-element-title">Energy Electricity Questions</h2>
+                </div>
+            </div>
+        </div>
+        <div class="space44 d-lg-block d-none"></div>
+        <div class="space14 d-lg-none d-block"></div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="faq-auhtoir-area1">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+                                @for (faq of faqData2; track $index;let first=$first;let id=$index;let last=$last) {
+                                <div ngbAccordionItem [collapsed]="first ? false : true">
+                                    <h2 ngbAccordionHeader>
+                                        <button ngbAccordionButton type="button">
+                                            {{faq.question}}
+                                        </button>
+                                    </h2>
+                                    <div ngbAccordionCollapse>
+                                        <div ngbAccordionBody>{{faq.answer}}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!last" class="space20"></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+                                @for (faq of faqData2; track $index;let first=$first;let id=$index;let last=$last) {
+                                <div ngbAccordionItem >
+                                    <h2 ngbAccordionHeader>
+                                        <button ngbAccordionButton type="button">
+                                            {{faq.question}}
+                                        </button>
+                                    </h2>
+                                    <div ngbAccordionCollapse>
+                                        <div ngbAccordionBody>{{faq.answer}}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!last" class="space20"></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

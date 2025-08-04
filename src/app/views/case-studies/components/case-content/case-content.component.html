@@ -1,0 +1,75 @@
+<div class="img1">
+    <img src="assets/img/all-images/case-img16.png" alt="">
+</div>
+<div class="space32"></div>
+<h3>Voltage Vision</h3>
+<p>Explore our electricity services through real-life success stories showcase our case studies.
+    Each case study delves into the unique challenges faced by our clients and how our tailored
+    solutions helped them overcome these obstacles.</p>
+<p>From residential homes to large-scale industrial projects, our case studies highlight diverse
+    range of services we offer and the positive impact they have had on our</p>
+<div class="space16"></div>
+<h3>Experiences Tales of Energy Transformation</h3>
+<p>Dive into our case studies to see how we've delivered reliable, efficient, and innovative
+    electricity solutions, empowering our clients to achieve their goals and drive progress in their
+    communities lives and businesses</p>
+<p>Whether it's optimizing energy efficiency, integrating renewable energy sources enhancing grid
+    resilience, our case studies showcase the tangible impact </p>
+<div class="space16"></div>
+<h3>Epics Stories of Sustainability</h3>
+<p>Embark on a journey of discovery with our electricity services through our collection of
+    insightful case studies. Each case study unveils a unique narrative, depicting the challenges
+    faced by our clients and the innovative solutions we provided</p>
+<p>Delve into these stories to witness firsthand how we have transformed challenges into
+    opportunities, delivering reliable, efficient, and sustainable</p>
+<div class="row align-items-center">
+    <div class="col-lg-6 col-md-6">
+        <div class="space32"></div>
+        <div class="img1">
+            <img src="assets/img/all-images/service-img14.png" alt="">
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <div class="space32"></div>
+        <div class="img1">
+            <ul>
+                <li><img src="assets/img/icons/check4.svg" alt="">Facers voluptatum meatus, volutes.
+                </li>
+                <li class="space16"></li>
+                <li><img src="assets/img/icons/check4.svg" alt="">Habitant seeped corrupts fuse
+                    culpa.</li>
+                <li class="space16"></li>
+                <li><img src="assets/img/icons/check4.svg" alt="">Tempore Atenean debits, Atenean.
+                </li>
+                <li class="space16"></li>
+                <li><img src="assets/img/icons/check4.svg" alt="">Quisqueya venerates fringillid
+                    bland.</li>
+                <li class="space16"></li>
+                <li><img src="assets/img/icons/check4.svg" alt="">Bibendum corrupts quake chillum.
+                </li>
+                <li class="space16"></li>
+                <li><img src="assets/img/icons/check4.svg" alt="">Habitant seeped corrupts fuse
+                    culpa.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="space32"></div>
+
+<div class="faq-auhtor-area1">
+    <div ngbAccordion class="accordion-flush" [closeOthers]="true" id="accordionFlushExample">
+        @for (faq of faqs; track $index;let first=$first;let id=$index;let last=$last) {
+        <div ngbAccordionItem [collapsed]="first ? false : true" data-aos="fade-left" [attr.data-aos-duration]="faq.duration">
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton type="button">
+                    {{faq.question}}
+                </button>
+            </h2>
+            <div id="flush-collapseOne" ngbAccordionCollapse data-bs-parent="#accordionFlushExample">
+                <div ngbAccordionBody>{{faq.answer}}</div>
+            </div>
+        </div>
+        <div *ngIf="!last" class="space20"></div>
+        }
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="blog4-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <div class="blog-header-area heading9 text-center">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Our Latest News</h5>
+                    <h2 class="tg-element-title">Electricity Explained Explore Our Blog</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">Our goal is to empower you with the knowledge and
+                        insights you need to make informed <br class="d-lg-block d-none"> decisions about your energy
+                        consumption and contribute to a greener</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6" *ngFor="let blog of blogs; let i = index"
+                [attr.data-aos]="i % 2 === 0 ? 'flip-right' : 'flip-left'" [attr.data-aos-duration]="800 + (i * 200)">
+                <div class="blog-auhtor-boxesarea">
+                    <div class="img1">
+                        <img [src]="blog.image" alt="">
+                    </div>
+                    <div class="content-area">
+                        <a routerLink="/single-blog">{{ blog.title }}</a>
+                        <p>{{ blog.description }}</p>
+                        <ul>
+                            <li><a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i>{{ blog.date }}</a></li>
+                            <li>
+                                <a routerLink="/single-blog" class="learnmore">
+                                    Learn More <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

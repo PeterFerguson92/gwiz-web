@@ -1,0 +1,39 @@
+<div class="casestudy-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="casestudy-header heading4 text-center">
+                    <h5 data-aos="fade-up" data-aos-duration="800">Case studies</h5>
+                    <h2 class="tg-element-title">Electricity Unveiled Explaining Our Service Process</h2>
+                    <p data-aos="fade-up" data-aos-duration="1000">Once we understand your requirements, our expert team
+                        swings into action, customizing a solution that's tailored just for you.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" data-aos="fade-up" data-aos-duration="1000">
+                <owl-carousel-o [options]="carouselOptions" class="casestudy-slider-area">
+                    <ng-container *ngFor="let case of caseStudies">
+                      <ng-template carouselSlide>
+                        <div class="case-author-boxarea">
+                          <div class="imges">
+                            <img [src]="case.image" alt="">
+                          </div>
+                          <div class="case-content">
+                            <div class="text">
+                              <p>{{ case.subtitle }}</p>
+                              <a routerLink="/case-study-single">{{ case.title }}</a>
+                            </div>
+                            <div class="icons">
+                              <a routerLink="/case-study-single"><span><i class="fa-solid fa-arrow-right"></i></span></a>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </ng-container>
+                  </owl-carousel-o>
+                  
+            </div>
+        </div>
+    </div>
+</div>

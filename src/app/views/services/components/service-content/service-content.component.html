@@ -1,0 +1,62 @@
+<div class="img1">
+    <img src="assets/img/all-images/service-img13.png" alt="">
+</div>
+<div class="space32"></div>
+<h3>Energy Ease Packages</h3>
+<p>We pride ourselves on delivering comprehensive and innovative electricity services tailored to
+    meet the diverse needs of our customers. With years of experience in the industry, we offer a
+    wide range of solutions spanning from residential</p>
+<p>Additionally, our team of skilled technicians is available around the clock to provide prompt and
+    reliable emergency services, ensuring that you're never left in the dark</p>
+<div class="space16"></div>
+<h3>Electricity Services That Illuminate Your World:</h3>
+<p>Our services include installation, maintenance, and repair of electrical systems, ensuring that
+    your home or business remains powered efficiently and safely. We specialize in renewable energy
+    solutions, offering solar panel installation and energy storage </p>
+<p>Whether you're interested in upgrading to energy-efficient appliances, implementing smart home
+    automation systems , we're here to guide you every step of the way.</p>
+<div class="space16"></div>
+<h3>Empower Your World: Unleash the Power</h3>
+<p>Our commitment to excellence extends beyond the installation and maintenance of electrical
+    systems. We also offer energy efficiency consultations to help you optimize your energy usage
+    and reduce your monthly bills. Our team of experts will assess </p>
+<p>Furthermore, we understand the importance of safety when it comes to electrical systems. That's
+    why we adhere to the highest industry standards and prioritize safety</p>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="space32"></div>
+        <div class="img1">
+            <img src="assets/img/all-images/service-img14.png" alt="">
+            <div class="space32"></div>
+            <p>Our technicians are fully licensed and trained to handle all types of electrical
+                work, ensuring that every installation</p>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="space32"></div>
+        <div class="img1">
+            <img src="assets/img/all-images/service-img15.png" alt="">
+            <div class="space32"></div>
+            <p>Experience the difference with and let us help you power your life efficiently,
+                sustainably, and safely.</p>
+        </div>
+    </div>
+</div>
+<div class="space32"></div>
+<div class="faq-auhtor-area1">
+    <div ngbAccordion [closeOthers]="true" class="accordion-flush" id="accordionFlushExample">
+        @for (faq of faqs; track $index;let first=$first;let id=$index;let last=$last) {
+        <div ngbAccordionItem [collapsed]="first ? false : true" data-aos="fade-left" data-aos-duration="800">
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton type="button">
+                    {{faq.question}}
+                </button>
+            </h2>
+            <div id="flush-collapseOne" ngbAccordionCollapse>
+                <div ngbAccordionBody>{{faq.answer}}</div>
+            </div>
+        </div>
+        <div *ngIf="!last" class="space20"></div>
+        }
+    </div>
+</div>

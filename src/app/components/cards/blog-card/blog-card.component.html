@@ -1,0 +1,16 @@
+<div class="blog-auhtor-boxarea">
+    <div class="img1">
+        <img [src]="blog.image" alt="">
+    </div>
+    <div class="blog-position">
+        <a routerLink="/blogs/single" class="heading">{{blog.title}} </a>
+        <div class="blog-content-area">
+            <ul>
+                <li><a href="javascript:void(0)"><i class="fa-solid fa-calendar-days"></i>{{blog.date}}</a></li>
+                <li><a href="javascript:void(0)"><i class="fa-solid fa-tag"></i>{{blog.authorRole}}</a></li>
+            </ul>
+            <p>{{blog.description}}</p>
+            <a routerLink="/blogs/single" class="learnmore">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>

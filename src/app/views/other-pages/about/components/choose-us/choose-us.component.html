@@ -1,0 +1,39 @@
+<div class="about2-section-area about-innerpage sp1">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-images-area" data-aos="zoom-out" data-aos-duration="1000">
+                    <div class="img1">
+                        <img src="assets/img/all-images/about-img3.png" alt="">
+                    </div>
+                    <div class="img2">
+                        <img src="assets/img/all-images/about-img4.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-header-area heading2">
+                    <h5 data-aos="fade-left" data-aos-duration="800">Why Choose Us</h5>
+                    <h2 class="tg-element-title">Illuminate Your Choice Reasons to Choose Us</h2>
+                    <p data-aos="fade-left" data-aos-duration="1000">Because we're more than just an electricity
+                        provider – we're your trusted partner in power. With a commitment to reliability.</p>
+                    <div class="space40"></div>
+                    <div class="progress_bar" data-aos="fade-left" data-aos-duration="1200">
+                        <div class="progress_bar_item grid-x" *ngFor="let item of progressItems;let i=index">
+                          <div class="item_label">{{ item.label }}</div>
+                          <div class="item_value cell{{i+1}}">{{ item.current }}%</div>
+                          <div class="item_bar">
+                            <div class="progress" [ngStyle]="{ width: item.current + '%' }"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+                        <a routerLink="/blogs/single" class="header-btn1">Find Out More <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

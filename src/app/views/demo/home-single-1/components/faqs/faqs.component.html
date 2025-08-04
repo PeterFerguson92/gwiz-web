@@ -1,0 +1,49 @@
+<div class="faq1-section-area sp1">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5">
+                <div class="faq-header-area heading2">
+                    <h5 data-aos="fade-left" data-aos-duration="800">FAQ’S</h5>
+                    <h2 class="tg-element-title">Frequently Best Asked Question?</h2>
+                    <p data-aos="fade-left" data-aos-duration="1000">That's why we've compiled a list of frequently
+                        asked questions to help make the process as smooth as possible for you.</p>
+                    <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+                        <a routerLink="/pages/faq" class="header-btn1">Have Any Questions <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-6">
+                <div class="faq-auhtoir-area1">
+                    <div class="accordion accordion-flush" id="accordionFlushExample" ngbAccordion
+                        [closeOthers]="true">
+                        @for (faq of faqData; track $index;let first=$first;let id=$index;let last=$last) {
+                        <div ngbAccordionItem [collapsed]="first ? false : true" class="accordion-item"
+                            data-aos="fade-left" data-aos-duration="800">                                 
+                            <h2 class="accordion-header" ngbAccordionHeader>
+                                <button ngbAccordionButton class="accordion-button" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                    How do I sign up for your electricity services?
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" 
+                                data-bs-parent="#accordionFlushExample" ngbAccordionCollapse>
+                                <div class="accordion-body" ngbAccordionBody>
+                                    <ng-template>
+                                        Whether you're wondering about our pricing
+                                        plans, process
+                                        <br> installation , or sustainability initiatives.
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!last" class="space20"></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
