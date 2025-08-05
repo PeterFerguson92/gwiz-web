@@ -1,11 +1,18 @@
-<app-hero />
-<app-about id="about"/>
-<app-services id="service"/>
-<app-work id="works"/>
-<app-testimonial />
-<app-team />
-<app-faqs />
-<app-contact />
-<app-pricing-plans />
-<app-brands />
-<app-blogs />
+<app-loading-api *ngIf="showLoader"></app-loading-api>
+
+<section *ngIf="!showNotification">
+	<app-hero [banner]="banner" />
+	<app-about id="about" />
+	<app-services id="service" />
+	<app-work id="works" />
+	<app-testimonial />
+	<app-team />
+	<app-faqs />
+	<app-contact />
+	<app-pricing-plans />
+	<app-brands />
+	<app-blogs />
+</section>
+<section *ngIf="showNotification">
+	<app-notification-message [showNotification]="showNotification" [message]="message"></app-notification-message>
+</section>

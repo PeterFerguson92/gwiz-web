@@ -1,47 +1,52 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
-import { CarouselModule, type OwlOptions } from 'ngx-owl-carousel-o';
+import { NgFor } from "@angular/common";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { CarouselModule, type OwlOptions } from "ngx-owl-carousel-o";
 
 @Component({
-    selector: 'app-hero',
-    imports: [NgFor, CarouselModule],
-    templateUrl: './hero.component.html',
-    styles: ``
+	selector: "app-hero",
+	imports: [NgFor, CarouselModule],
+	templateUrl: "./hero.component.html",
+	styles: ``,
 })
-export class HeroComponent {
+export class HeroComponent implements OnChanges {
+	@Input() banner: any;
+	slides: { title: any; subtitle: any; image: any }[] = [];
 
-    slides = [
-        { img: 'assets/img/bg/header-img4.png' },
-        { img: 'assets/img/bg/header-img2.png' },
-        { img: 'assets/img/bg/header-img3.png' }
-    ];
+	carouselOptions: OwlOptions = {
+		loop: true,
+		margin: 0,
+		nav: true,
+		dots: true,
+		mouseDrag: false,
+		items: 1,
+		autoplay: true,
+		navText: ["<i class='fa-solid fa-angle-up'></i>", "<i class='fa-solid fa-angle-down'></i>"],
+		animateOut: "fadeOut",
+		animateIn: "fadeIn",
+		smartSpeed: 2000,
+		autoplayTimeout: 4000,
+		autoplayHoverPause: false,
+		responsive: {
+			0: {
+				items: 1,
+				nav: true,
+			},
+			600: {
+				items: 1,
+			},
+			1000: {
+				items: 1,
+			},
+		},
+	};
 
-    carouselOptions: OwlOptions = {
-        loop: true,
-        margin: 0,
-        nav: true,
-        dots: true,
-        mouseDrag: false,
-        items: 1,
-        autoplay: true,
-        navText: ["<i class='fa-solid fa-angle-up'></i>", "<i class='fa-solid fa-angle-down'></i>"],
-        animateOut: 'fadeOut',
-        animateIn: 'fadeIn',
-        smartSpeed: 2000,
-        autoplayTimeout: 4000,
-        autoplayHoverPause: false,
-        responsive: {
-            0: {
-                items: 1,
-                nav: true,
-            },
-            600: {
-                items: 1,
-            },
-            1000: {
-                items: 1,
-            }
-        }
-    };
-
+	ngOnChanges(): void {
+		if (this.banner) {
+			this.slides = [1, 2, 3].map((i) => ({
+				title: this.banner[`title_slide_${i}`],
+				subtitle: this.banner[`subtitle_slide_${i}`],
+				image: this.banner[`img_slide_${i}`],
+			}));
+		}
+	}
 }
