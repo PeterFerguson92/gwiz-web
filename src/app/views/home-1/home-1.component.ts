@@ -26,9 +26,9 @@ import { CommonModule, SHARED_IMPORTS } from "../../shared/shared-imports";
 		ContactComponent,
 		PricingPlansComponent,
 		BrandsComponent,
-        BlogsComponent,
-        CommonModule,
-        ...SHARED_IMPORTS
+		BlogsComponent,
+		CommonModule,
+		...SHARED_IMPORTS,
 	],
 	templateUrl: "./home-1.component.html",
 	styles: ``,
@@ -36,17 +36,15 @@ import { CommonModule, SHARED_IMPORTS } from "../../shared/shared-imports";
 export class Home1Component {
 	result: any;
 	banner: any;
-	message: string | null = '9393';
+	message: string | null = "";
 	showLoader = false;
-	showNotification = false
-	status = false;
+	showNotification = false;
 	constructor(private service: ApiService) {}
 
 	ngOnInit() {
 		this.showLoader = true;
 		this.service.getResource("homepage").subscribe(
 			(data) => {
-				console.log(data);
 				if (data && data.status === "success") {
 					const result = data.result[0];
 					this.banner = result.banner[0];

@@ -12,7 +12,7 @@ export class ApiService {
 	constructor(private http: HttpClient) {}
 
 	getResource(resource: string): Observable<any> {
-		const url = `${this.baseUrl}/${resource}/`;
+		const url = `${this.baseUrl}/${resource}`;
 		return this.http.get(url);
 	}
 }
