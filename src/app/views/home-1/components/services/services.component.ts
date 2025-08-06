@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
-import { serviceData } from '../data';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, Input } from "@angular/core";
+import { serviceData } from "../data";
+import { CommonModule } from "@angular/common";
+import { RouterLink } from "@angular/router";
 
 @Component({
-    selector: 'app-services',
-    imports: [CommonModule, RouterLink],
-    templateUrl: './services.component.html',
-    styles: ``
+	selector: "app-services",
+	imports: [CommonModule, RouterLink],
+	templateUrl: "./services.component.html",
+	styles: ``,
 })
 export class ServicesComponent {
-    services = serviceData
+	// services = serviceData
+	@Input() services: any;
+	@Input() serviceTitle = "";
+	@Input() serviceDescription = "";
 }

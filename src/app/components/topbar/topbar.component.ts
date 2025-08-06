@@ -67,7 +67,6 @@ export class TopbarComponent implements OnInit {
 	ngOnInit(): void {
 		this.service.getResource("homepage/banners").subscribe(
 			(data) => {
-				console.log(data);
 				if (data && data.status === "succefss") {
 					const result = data.result[0];
 					this.logoImg = result.logo;
@@ -75,8 +74,6 @@ export class TopbarComponent implements OnInit {
 				} else {
 					this.logoImg = "assets/img/logo/nobglogo/small_image_transparent.png";
 					this.mobileLogoImg = "assets/img/logo/nobglogo/small_image_transparent.png";
-					const error = "Banners information not found";
-					console.log(error);
 				}
 			},
 			(error) => {

@@ -16,20 +16,14 @@ import { CommonModule, SHARED_IMPORTS } from "../../shared/shared-imports";
 @Component({
 	selector: "app-home-1",
 	imports: [
-    HeroComponent,
-    AboutComponent,
-    ServicesComponent,
-    WorkComponent,
-    TestimonialComponent,
-    TeamComponent,
-    FaqsComponent,
-    ContactComponent,
-    PricingPlansComponent,
-    BrandsComponent,
-    BlogsComponent,
-    CommonModule,
-    ...SHARED_IMPORTS,
-],
+		HeroComponent,
+		AboutComponent,
+		ServicesComponent,
+		FaqsComponent,
+		ContactComponent,
+		CommonModule,
+		...SHARED_IMPORTS,
+	],
 	templateUrl: "./home-1.component.html",
 	styles: ``,
 })
@@ -37,6 +31,9 @@ export class Home1Component {
 	result: any;
 	banner: any;
 	aboutUs: any;
+	services: any;
+	serviceTitle = "";
+	serviceDescription = "";
 	message: string | null = "";
 	showLoader = false;
 	showNotification = false;
@@ -50,6 +47,9 @@ export class Home1Component {
 					const result = data.result[0];
 					this.banner = result.banner;
 					this.aboutUs = result.about_us;
+					this.services = result.services;
+					this.serviceTitle = result.service_title;
+					this.serviceDescription = result.service_description;
 					this.showLoader = false;
 				} else {
 					const error = "Homepage information not found";

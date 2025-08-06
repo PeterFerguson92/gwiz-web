@@ -1,16 +1,16 @@
 <app-loading-api *ngIf="showLoader"></app-loading-api>
-<section *ngIf="!showNotification">
+<section *ngIf="!showNotification && aboutUs">
 	<app-hero [banner]="banner" />
-	<app-about [aboutUs]="aboutUs" id="about" />
-	<app-services id="service" />
-	<app-work id="works" />
-	<app-testimonial />
-	<app-team />
+	<app-about *ngIf="aboutUs" [aboutUs]="aboutUs" id="about" />
+	<app-services *ngIf="services" [services]="services" [serviceTitle]="serviceTitle" [serviceDescription]="serviceDescription" id="service" />
+	<!-- <app-work id="works" /> -->
+	<!-- <app-testimonial /> -->
+	<!-- <app-team /> -->
 	<app-faqs />
 	<app-contact />
-	<app-pricing-plans />
-	<app-brands />
-	<app-blogs />
+	<!-- <app-pricing-plans /> -->
+	<!-- <app-brands /> -->
+	<!-- <app-blogs /> -->
 </section>
 <section *ngIf="showNotification">
 	<app-notification-message [showNotification]="showNotification" [message]="message"></app-notification-message>
