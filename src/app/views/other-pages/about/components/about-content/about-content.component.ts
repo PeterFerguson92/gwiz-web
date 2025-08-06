@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -8,5 +8,13 @@ import { RouterLink } from '@angular/router';
   styles: ``
 })
 export class AboutContentComponent {
+	@Input() section_display_header = "";
+	@Input() section_display_text = "";
 
+	// @Input() highlight_text1 = "";
+	// @Input() highlight_text2 = "";
+	// @Input() highlight_text3 = "";
+
+	@Input() about_us_section_image1 = "";
+	@Input() about_us_section_image2 = "";
 }

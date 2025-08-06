@@ -36,6 +36,7 @@ import { CommonModule, SHARED_IMPORTS } from "../../shared/shared-imports";
 export class Home1Component {
 	result: any;
 	banner: any;
+	aboutUs: any;
 	message: string | null = "";
 	showLoader = false;
 	showNotification = false;
@@ -47,7 +48,8 @@ export class Home1Component {
 			(data) => {
 				if (data && data.status === "success") {
 					const result = data.result[0];
-					this.banner = result.banner[0];
+					this.banner = result.banner;
+					this.aboutUs = result.about_us;
 					this.showLoader = false;
 				} else {
 					const error = "Homepage information not found";
