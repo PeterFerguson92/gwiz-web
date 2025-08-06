@@ -4,7 +4,7 @@
             <div class="col-lg-6 m-auto">
                 <div class="team-header-area heading2 text-center">
                     <h5 data-aos="fade-left" data-aos-duration="800">Our Team</h5>
-                    <h2 class="tg-element-title">Electricity Service Offerings</h2>
+                    <h2 class="tg-element-title">{{team.header}}</h2>
                     <p data-aos="fade-left" data-aos-duration="1000"> From residential households to commercial
                         enterprises, we provide reliable, efficient, and sustainable energy solutions.</p>
                 </div>
@@ -12,7 +12,7 @@
         </div>
 
         <div class="row">
-            <div *ngFor="let member of teamMembers" class="col-lg-3 col-md-6">
+            <div *ngFor="let member of team.trainers" class="col-lg-3 col-md-6">
                 <app-member-card [member]="member"/>
             </div>
         </div>
