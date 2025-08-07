@@ -60,7 +60,7 @@ export class TopbarComponent implements OnInit {
 	ngOnInit(): void {
 		this.service.getResource("homepage/banners").subscribe(
 			(data) => {
-				if (data && data.status === "succefss") {
+				if (data && data.status === "success") {
 					const result = data.result[0];
 					this.logoImg = result.logo;
 					this.mobileLogoImg = result.logo;
