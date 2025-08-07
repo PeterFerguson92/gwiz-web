@@ -6,7 +6,7 @@ import { ServiceSingleComponent } from './service-single/service-single.componen
 
 export const SERVICES_ROUTES: Routes = [
     {
-        path: 'services/one',
+        path: 'services',
         component: Service1Component,
         data: { title: "Service One" }
     },

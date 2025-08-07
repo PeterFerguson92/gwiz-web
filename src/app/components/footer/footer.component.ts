@@ -25,7 +25,6 @@ export class FooterComponent {
 		this.service.getResource("homepage/footer").subscribe(
 			(data) => {
 				if (data && data.status === "success") {
-					console.log(data);
 					this.footer = data.result[0];
 					this.showLoader = false;
 				} else {

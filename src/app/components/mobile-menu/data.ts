@@ -8,7 +8,7 @@ interface MenuItem {
 export const menuItems:MenuItem[] = [
     {
         "title": "Home",
-        "link": "#",
+        "link": "/",
         "isOpen":false,
         "subMenu": [
             {
