@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { faqData } from '../data';
 import { CommonModule } from '@angular/common';
@@ -11,5 +11,8 @@ import { RouterLink } from '@angular/router';
   styles: ``
 })
 export class FaqsComponent {
-    faqData=faqData
+  faqData = faqData
+  @Input() faqs: any;
+	@Input() faqTitle = "";
+	@Input() faqDescription = "";
 }

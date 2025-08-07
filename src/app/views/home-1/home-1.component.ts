@@ -15,15 +15,7 @@ import { CommonModule, SHARED_IMPORTS } from "../../shared/shared-imports";
 
 @Component({
 	selector: "app-home-1",
-	imports: [
-		HeroComponent,
-		AboutComponent,
-		ServicesComponent,
-		FaqsComponent,
-		ContactComponent,
-		CommonModule,
-		...SHARED_IMPORTS,
-	],
+	imports: [HeroComponent, AboutComponent, ServicesComponent, FaqsComponent, ContactComponent, CommonModule, ...SHARED_IMPORTS],
 	templateUrl: "./home-1.component.html",
 	styles: ``,
 })
@@ -34,6 +26,9 @@ export class Home1Component {
 	services: any;
 	serviceTitle = "";
 	serviceDescription = "";
+	faqs: any;
+	faqTitle = "";
+	faqDescription = "";
 	message: string | null = "";
 	showLoader = false;
 	showNotification = false;
@@ -50,6 +45,9 @@ export class Home1Component {
 					this.services = result.services;
 					this.serviceTitle = result.service_title;
 					this.serviceDescription = result.service_description;
+					this.faqs = result.faqs;
+					this.faqTitle = result.faq_title;
+					this.faqDescription = result.faq_description;
 					this.showLoader = false;
 				} else {
 					const error = "Homepage information not found";

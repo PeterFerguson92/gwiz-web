@@ -6,7 +6,7 @@
 	<!-- <app-work id="works" /> -->
 	<!-- <app-testimonial /> -->
 	<!-- <app-team /> -->
-	<app-faqs />
+	<app-faqs *ngIf="faqs" [faqs]="faqs" [faqTitle]="faqTitle" [faqDescription]="faqDescription"/>
 	<app-contact />
 	<!-- <app-pricing-plans /> -->
 	<!-- <app-brands /> -->
