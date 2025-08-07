@@ -2,13 +2,13 @@ import type { ServiceType } from "@/types";
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { ServiceCardComponent } from "@app/components/cards/service-card/service-card.component";
-import { PaginationComponent } from "@app/components/pagination/pagination.component";
 import { BreadcrumbComponent } from "../../../components/breadcrumb/breadcrumb.component";
 import { ApiService } from "@core/services/api.service";
+import { SHARED_IMPORTS } from "@/app/shared/shared-imports";
 
 @Component({
 	selector: "app-service-1",
-	imports: [CommonModule, PaginationComponent, ServiceCardComponent, BreadcrumbComponent],
+	imports: [CommonModule, ServiceCardComponent, BreadcrumbComponent, ...SHARED_IMPORTS],
 	templateUrl: "./service-1.component.html",
 	styles: ``,
 })

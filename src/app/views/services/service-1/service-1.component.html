@@ -1,3 +1,4 @@
+<section *ngIf="!showNotification">
 <div class="hero1-section-area about-bg-area">
     <img src="assets/img/bg/service_bg.jpg" alt="" class="header-img1">
     <div class="container">
@@ -11,15 +12,16 @@
         </div>
     </div>
 </div>
-
+</section>
 <div class="service1-section-area leftside sp1">
     <div class="container">
         <div class="row">
             <div *ngFor="let service of services; let i = index" class="col-lg-4 col-md-6">
                 <app-service-card [index]="i+1" [service]="service"/>
             </div>
-
-           
         </div>
     </div>
 </div>
+<section *ngIf="showNotification">
+	<app-notification-message [showNotification]="showNotification" [message]="message"></app-notification-message>
+</section>

@@ -55,17 +55,16 @@
 									</div>
 									<div class="text">
 										<p>Email</p>
-										<a>{{ contact.email }}</a>
+										<a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
 									</div>
 								</div>
 								<div class="space48"></div>
 								<div class="icons-text">
 									<div class="icons">
-										<i class="fa-brands fa-linkedin-in"></i>
+										<i class="fa-brands fa-instagram"></i>
 									</div>
 									<div class="text">
-										<p>Instagram</p>
-										<a href="javascript:void(0)">{{ contact.social }}</a>
+										<a *ngIf="contact?.social" [href]="contact.social" target="_blank" rel="noopener noreferrer"> Instagram </a>
 									</div>
 								</div>
 							</div>

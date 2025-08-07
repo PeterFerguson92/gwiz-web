@@ -1,5 +1,5 @@
 <app-loading-api *ngIf="showLoader"></app-loading-api>
-<section *ngIf="!showNotification && aboutUs">
+<section *ngIf="!showNotification">
 	<app-hero [banner]="banner" />
 	<app-about *ngIf="aboutUs" [aboutUs]="aboutUs" id="about" />
 	<app-services *ngIf="services" [services]="services" [serviceTitle]="serviceTitle" [serviceDescription]="serviceDescription" id="service" />
@@ -7,7 +7,7 @@
 	<!-- <app-testimonial /> -->
 	<!-- <app-team /> -->
 	<app-faqs *ngIf="faqs" [faqs]="faqs" [faqTitle]="faqTitle" [faqDescription]="faqDescription"/>
-	<app-contact *ngIf="contact" [contact]="contact" />
+	<app-contact *ngIf="faqs" [contact]="contact" />
 	<!-- <app-pricing-plans /> -->
 	<!-- <app-brands /> -->
 	<!-- <app-blogs /> -->

@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
 import { BreadcrumbComponent } from "../../../components/breadcrumb/breadcrumb.component";
 import { ApiService } from "@core/services/api.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
 	selector: "app-contact-us",
-	imports: [BreadcrumbComponent],
+	imports: [BreadcrumbComponent, CommonModule],
 	templateUrl: "./contact-us.component.html",
 	styles: ``,
 })
