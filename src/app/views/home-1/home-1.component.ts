@@ -29,6 +29,7 @@ export class Home1Component {
 	faqs: any;
 	faqTitle = "";
 	faqDescription = "";
+	contact: any;
 	message: string | null = "";
 	showLoader = false;
 	showNotification = false;
@@ -48,6 +49,7 @@ export class Home1Component {
 					this.faqs = result.faqs;
 					this.faqTitle = result.faq_title;
 					this.faqDescription = result.faq_description;
+					this.contact = result.contact;
 					this.showLoader = false;
 				} else {
 					const error = "Homepage information not found";
