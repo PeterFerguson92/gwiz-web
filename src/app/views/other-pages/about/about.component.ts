@@ -42,7 +42,6 @@ export class AboutComponent {
 			(data: { status: string; result: any[] }) => {
 				if (data && data.status === "success") {
 					this.aboutUs = data.result[0];
-					console.log(this.aboutUs);
 					this.showLoader = false;
 				} else {
 					const error = "About us information not found";
