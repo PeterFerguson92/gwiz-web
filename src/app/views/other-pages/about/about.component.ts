@@ -1,29 +1,13 @@
 import { Component } from "@angular/core";
 import { AboutHeroComponent } from "./components/about-hero/about-hero.component";
-import { AboutUsComponent } from "./components/about-us/about-us.component";
-import { ChooseUsComponent } from "./components/choose-us/choose-us.component";
 import { AboutContentComponent } from "./components/about-content/about-content.component";
-import { TestimonialComponent } from "./components/testimonial/testimonial.component";
 import { TeamComponent } from "./components/team/team.component";
-import { BrandsComponent } from "./components/brands/brands.component";
-import { BlogsComponent } from "./components/blogs/blogs.component";
 import { CommonModule, SHARED_IMPORTS } from "@/app/shared/shared-imports";
 import { ApiService } from "@core/services/api.service";
 
 @Component({
 	selector: "app-about",
-	imports: [
-		AboutHeroComponent,
-		AboutUsComponent,
-		ChooseUsComponent,
-		AboutContentComponent,
-		TestimonialComponent,
-		TeamComponent,
-		BrandsComponent,
-		BlogsComponent,
-		CommonModule,
-		...SHARED_IMPORTS,
-	],
+	imports: [AboutHeroComponent, AboutContentComponent, TeamComponent, CommonModule, ...SHARED_IMPORTS],
 	templateUrl: "./about.component.html",
 	styles: ``,
 })
@@ -40,6 +24,7 @@ export class AboutComponent {
 		this.showLoader = true;
 		this.service.getResource("homepage/about-us").subscribe(
 			(data: { status: string; result: any[] }) => {
+				console.log(data);
 				if (data && data.status === "success") {
 					this.aboutUs = data.result[0];
 					this.showLoader = false;

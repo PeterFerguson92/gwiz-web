@@ -1,4 +1,3 @@
-import type { ServiceType } from "@/types";
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { ServiceCardComponent } from "@app/components/cards/service-card/service-card.component";
