@@ -1,17 +1,28 @@
 <!-- Mobile Header -->
 <div class="mobile-header {{ mobileHeaderClass }} d-block d-lg-none">
-	<div class="container-fluid">
-		<div class="col-12">
-			<div class="mobile-header-elements">
-				<div class="mobile-logo">
-					<a routerLink="/home"><img [src]="mobileLogo" style="width: 35%" alt="logo" /></a>
-				</div>
-				<div class="mobile-nav-icon dots-menu" (click)="toggleMenu()">
-					<i class="fa-solid fa-bars"></i>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="container-fluid">
+    <div class="col-12">
+      <div class="mobile-header-elements" style="display: flex; align-items: center; justify-content: space-between;">
+        
+        <!-- Logo centered absolutely -->
+        <div class="mobile-logo" style="position: absolute; left: 50%; transform: translateX(-50%);">
+          <a routerLink="/home">
+            <img 
+              [src]="mobileLogo" 
+              alt="logo"
+              style="width: 70%; max-width: 150px; height: auto; object-fit: contain;" 
+            />
+          </a>
+        </div>
+
+        <!-- Hamburger Menu -->
+        <div class="mobile-nav-icon dots-menu" (click)="toggleMenu()" style="margin-left: auto;">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Sidebar -->
