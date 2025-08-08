@@ -42,6 +42,14 @@ export class MobileMenuComponent {
 			link: "/services",
 		},
 		{
+			title: "Privacy Policy",
+			link: "/privacy",
+		},
+		{
+			title: "Terms & Condition",
+			link: "/terms",
+		},
+		{
 			title: "Contact us",
 			link: "/contact-us",
 		},
