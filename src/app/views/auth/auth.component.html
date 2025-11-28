@@ -86,7 +86,9 @@
             <a class="link-small" href="#">Forgot password?</a>
           </div>
 
-          <button type="submit" class="btn-primary">Sign in</button>
+          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Signing in…' : 'Sign in' }}
+          </button>
 
           <button type="button" class="btn-outline">
             <span class="google-icon">G</span>
@@ -97,6 +99,10 @@
             Don’t have an account?
             <a (click)="switchMode('signup')">Sign up for free</a>
           </p>
+
+          <div class="error global" *ngIf="errorMessage && isLogin">
+            {{ errorMessage }}
+          </div>
         </form>
       </div>
 
@@ -175,58 +181,74 @@
           </div>
 
           <!-- Password + Confirm -->
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="signup-password">Password</label>
-              <input
-                id="signup-password"
-                type="password"
-                formControlName="password"
-                placeholder="At least 6 characters"
-              />
+<div class="form-group">
+  <label for="signup-password">Password</label>
+  <input
+    id="signup-password"
+    type="password"
+    formControlName="password"
+    placeholder="Min 8 chars, upper, lower, number & symbol"
+  />
 
-              <div
-                class="error"
-                *ngIf="hasError('signup','password','required')"
-              >
-                Password is required.
-              </div>
+  <!-- Validation messages -->
+  <div class="error" *ngIf="hasError('signup','password','required')">
+    Password is required.
+  </div>
+  <div class="error" *ngIf="hasError('signup','password','minlength')">
+    Password must be at least 8 characters.
+  </div>
+  <div class="error" *ngIf="hasError('signup','password','passwordStrength')">
+    Use upper & lower case letters, a number and a symbol.
+  </div>
 
-              <div
-                class="error"
-                *ngIf="hasError('signup','password','minlength')"
-              >
-                Password too short.
-              </div>
-            </div>
+  <!-- Strength meter -->
+  <div
+    class="password-strength"
+    *ngIf="passwordControl?.value && !hasError('signup','password','required')"
+  >
+    <div class="strength-bars">
+      <span
+        class="bar"
+        [class.filled]="passwordStrengthLevel === 'weak' || passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"
+      ></span>
+      <span
+        class="bar"
+        [class.filled]="passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"
+      ></span>
+      <span
+        class="bar"
+        [class.filled]="passwordStrengthLevel === 'strong'"
+      ></span>
+    </div>
+    <span class="strength-label" [ngClass]="passwordStrengthLevel">
+      {{ passwordStrengthLabel }}
+    </span>
+  </div>
+</div>
 
-            <div class="form-group">
-              <label for="signup-confirm">Confirm password</label>
-              <input
-                id="signup-confirm"
-                type="password"
-                formControlName="confirmPassword"
-                placeholder="Repeat password"
-              />
+<!-- Confirm Password -->
+<div class="form-group">
+  <label for="signup-confirm">Confirm password</label>
+  <input
+    id="signup-confirm"
+    type="password"
+    formControlName="confirmPassword"
+    placeholder="Repeat password"
+  />
 
-              <div
-                class="error"
-                *ngIf="hasError('signup','confirmPassword','required')"
-              >
-                Please confirm your password.
-              </div>
+  <div class="error" *ngIf="hasError('signup','confirmPassword','required')">
+    Please confirm your password.
+  </div>
 
-              <div
-                class="error"
-                *ngIf="signupForm.touched && !passwordsMatch()"
-              >
-                Passwords do not match.
-              </div>
-            </div>
-          </div>
+  <div class="error" *ngIf="signupForm.touched && !passwordsMatch()">
+    Passwords do not match.
+  </div>
+</div>
 
-          <!-- Buttons -->
-          <button type="submit" class="btn-primary">Create account</button>
+
+          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Creating account…' : 'Create account' }}
+          </button>
 
           <button type="button" class="btn-outline">
             <span class="google-icon">G</span>
@@ -237,6 +259,10 @@
             Already training with us?
             <a (click)="switchMode('login')">Log in</a>
           </p>
+
+          <div class="error global" *ngIf="errorMessage && !isLogin">
+            {{ errorMessage }}
+          </div>
         </form>
       </div>
     </div>

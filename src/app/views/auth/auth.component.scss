@@ -232,7 +232,12 @@ input:focus {
   box-shadow: 0 12px 25px rgba(249, 115, 22, 0.4);
 }
 
-.btn-primary:hover {
+.btn-primary[disabled] {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.btn-primary:hover:not([disabled]) {
   filter: brightness(1.05);
 }
 
@@ -266,6 +271,11 @@ input:focus {
   font-size: 0.78rem;
 }
 
+.error.global {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
 .switch-text {
   margin-top: 1rem;
   text-align: center;
@@ -283,6 +293,64 @@ input:focus {
   text-decoration: underline;
 }
 
+/* Password strength meter */
+.password-strength {
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.password-strength .strength-bars {
+  display: flex;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.password-strength .bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #111827;
+  opacity: 0.4;
+}
+
+.password-strength .bar.filled {
+  opacity: 1;
+}
+
+.password-strength .bar.filled:nth-child(1) {
+  background: #f97316; /* orange */
+}
+
+.password-strength .bar.filled:nth-child(2) {
+  background: #facc15; /* yellow */
+}
+
+.password-strength .bar.filled:nth-child(3) {
+  background: #22c55e; /* green */
+}
+
+.password-strength .strength-label {
+  min-width: 150px;
+  text-align: right;
+}
+
+.strength-label.weak {
+  color: #f97373;
+}
+
+.strength-label.medium {
+  color: #facc15;
+}
+
+.strength-label.strong {
+  color: #22c55e;
+}
+
+
 /* RESPONSIVE */
 
 @media (max-width: 900px) {
@@ -292,7 +360,7 @@ input:focus {
   }
 
   .auth-hero {
-    display: none; /* hide hero on smaller screens; or keep and reduce height */
+    display: none;
   }
 
   .auth-panel {
