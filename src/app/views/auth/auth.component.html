@@ -1,270 +1,172 @@
 <div class="auth-wrapper">
-  <div class="auth-card">
-    <!-- LEFT: Hero -->
-    <div class="auth-hero">
-      <div class="hero-overlay"></div>
+	<div class="auth-card">
+		<!-- LEFT: Hero -->
+		<div class="auth-hero">
+			<div class="hero-overlay"></div>
 
-      <div class="hero-content">
-        <h2>IRONCORE GYM</h2>
-        <p>Stronger every day.</p>
+			<div class="hero-content">
+				<h2>IRONCORE GYM</h2>
+				<p>Stronger every day.</p>
 
-        <ul>
-          <li>✔ 24/7 access</li>
-          <li>✔ Personal coaching</li>
-          <li>✔ Group classes & HIIT</li>
-        </ul>
-      </div>
-    </div>
+				<ul>
+					<li>✔ 24/7 access</li>
+					<li>✔ Personal coaching</li>
+					<li>✔ Group classes & HIIT</li>
+				</ul>
+			</div>
+		</div>
 
-    <!-- RIGHT: Panels -->
-    <div class="auth-panel">
+		<!-- RIGHT: Panels -->
+		<div class="auth-panel">
+			<!-- Toggle Buttons -->
+			<div class="auth-toggle">
+				<button type="button" [class.active]="isLogin" (click)="switchMode('login')">Login</button>
 
-      <!-- Toggle Buttons -->
-      <div class="auth-toggle">
-        <button
-          type="button"
-          [class.active]="isLogin"
-          (click)="switchMode('login')"
-        >
-          Login
-        </button>
+				<button type="button" [class.active]="!isLogin" (click)="switchMode('signup')">Sign up</button>
+			</div>
 
-        <button
-          type="button"
-          [class.active]="!isLogin"
-          (click)="switchMode('signup')"
-        >
-          Sign up
-        </button>
-      </div>
+			<!-- LOGIN FORM -->
+			<div *ngIf="isLogin" class="auth-form-container">
+				<h1>Welcome back</h1>
+				<p class="subtitle">Log in to continue your training.</p>
 
-      <!-- LOGIN FORM -->
-      <div *ngIf="isLogin" class="auth-form-container">
-        <h1>Welcome back</h1>
-        <p class="subtitle">Log in to continue your training.</p>
+				<form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+					<!-- Email -->
+					<div class="form-group">
+						<label for="login-email">Email</label>
+						<input id="login-email" type="email" formControlName="email" placeholder="you@ironcore.fit" />
 
-        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
-          <!-- Email -->
-          <div class="form-group">
-            <label for="login-email">Email</label>
-            <input
-              id="login-email"
-              type="email"
-              formControlName="email"
-              placeholder="you@ironcore.fit"
-            />
+						<div class="error" *ngIf="hasError('login', 'email', 'required')">Email is required.</div>
+						<div class="error" *ngIf="hasError('login', 'email', 'email')">Enter a valid email.</div>
+					</div>
 
-            <div class="error" *ngIf="hasError('login','email','required')">
-              Email is required.
-            </div>
-            <div class="error" *ngIf="hasError('login','email','email')">
-              Enter a valid email.
-            </div>
-          </div>
+					<!-- Password -->
+					<div class="form-group">
+						<label for="login-password">Password</label>
+						<input id="login-password" type="password" formControlName="password" placeholder="Your password" />
 
-          <!-- Password -->
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              formControlName="password"
-              placeholder="Your password"
-            />
+						<div class="error" *ngIf="hasError('login', 'password', 'required')">Password is required.</div>
+					</div>
 
-            <div class="error" *ngIf="hasError('login','password','required')">
-              Password is required.
-            </div>
-          </div>
+					<div class="form-meta">
+						<label class="checkbox">
+							<input type="checkbox" formControlName="rememberMe" />
+							<span>Remember me</span>
+						</label>
 
-          <div class="form-meta">
-            <label class="checkbox">
-              <input type="checkbox" formControlName="rememberMe" />
-              <span>Remember me</span>
-            </label>
+						<a class="link-small" href="#">Forgot password?</a>
+					</div>
 
-            <a class="link-small" href="#">Forgot password?</a>
-          </div>
+					<button type="submit" class="btn-primary" [disabled]="isSubmitting">
+						{{ isSubmitting ? "Signing in…" : "Sign in" }}
+					</button>
 
-          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-            {{ isSubmitting ? 'Signing in…' : 'Sign in' }}
-          </button>
+					<button type="button" class="btn-outline">
+						<span class="google-icon">G</span>
+						Sign in with Google
+					</button>
 
-          <button type="button" class="btn-outline">
-            <span class="google-icon">G</span>
-            Sign in with Google
-          </button>
+					<p class="switch-text">
+						Don’t have an account?
+						<a (click)="switchMode('signup')">Sign up for free</a>
+					</p>
 
-          <p class="switch-text">
-            Don’t have an account?
-            <a (click)="switchMode('signup')">Sign up for free</a>
-          </p>
+					<div class="error global" *ngIf="errorMessage && isLogin">
+						{{ errorMessage }}
+					</div>
+				</form>
+			</div>
 
-          <div class="error global" *ngIf="errorMessage && isLogin">
-            {{ errorMessage }}
-          </div>
-        </form>
-      </div>
+			<!-- SIGNUP FORM -->
+			<div *ngIf="!isLogin" class="auth-form-container">
+				<h1>Join the crew</h1>
+				<p class="subtitle">Create your Ironcore account.</p>
 
-      <!-- SIGNUP FORM -->
-      <div *ngIf="!isLogin" class="auth-form-container">
-        <h1>Join the crew</h1>
-        <p class="subtitle">Create your Ironcore account.</p>
+				<form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()">
+					<!-- Name + Surname -->
+					<div class="form-grid">
+						<div class="form-group">
+							<label for="signup-name">Name</label>
+							<input id="signup-name" type="text" formControlName="name" placeholder="John" />
+							<div class="error" *ngIf="hasError('signup', 'name', 'required')">Name is required.</div>
+						</div>
 
-        <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()">
-          <!-- Name + Surname -->
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="signup-name">Name</label>
-              <input
-                id="signup-name"
-                type="text"
-                formControlName="name"
-                placeholder="John"
-              />
-              <div class="error" *ngIf="hasError('signup','name','required')">
-                Name is required.
-              </div>
-            </div>
+						<div class="form-group">
+							<label for="signup-surname">Surname</label>
+							<input id="signup-surname" type="text" formControlName="surname" placeholder="Doe" />
+							<div class="error" *ngIf="hasError('signup', 'surname', 'required')">Surname is required.</div>
+						</div>
+					</div>
 
-            <div class="form-group">
-              <label for="signup-surname">Surname</label>
-              <input
-                id="signup-surname"
-                type="text"
-                formControlName="surname"
-                placeholder="Doe"
-              />
-              <div
-                class="error"
-                *ngIf="hasError('signup','surname','required')"
-              >
-                Surname is required.
-              </div>
-            </div>
-          </div>
+					<!-- Email -->
+					<div class="form-group">
+						<label for="signup-email">Email</label>
+						<input id="signup-email" type="email" formControlName="email" placeholder="you@ironcore.fit" />
 
-          <!-- Email -->
-          <div class="form-group">
-            <label for="signup-email">Email</label>
-            <input
-              id="signup-email"
-              type="email"
-              formControlName="email"
-              placeholder="you@ironcore.fit"
-            />
+						<div class="error" *ngIf="hasError('signup', 'email', 'required')">Email is required.</div>
+						<div class="error" *ngIf="hasError('signup', 'email', 'email')">Enter a valid email.</div>
+					</div>
 
-            <div class="error" *ngIf="hasError('signup','email','required')">
-              Email is required.
-            </div>
-            <div class="error" *ngIf="hasError('signup','email','email')">
-              Enter a valid email.
-            </div>
-          </div>
+					<!-- Phone -->
+					<div class="form-group">
+						<label for="signup-phone">Phone number</label>
+						<input id="signup-phone" type="tel" formControlName="phone_number" placeholder="+441234567890" />
 
-          <!-- Phone -->
-          <div class="form-group">
-            <label for="signup-phone">Phone number</label>
-            <input
-              id="signup-phone"
-              type="tel"
-              formControlName="phone_number"
-              placeholder="+441234567890"
-            />
+						<div class="error" *ngIf="hasError('signup', 'phone_number', 'required')">Phone number is required.</div>
+					</div>
 
-            <div
-              class="error"
-              *ngIf="hasError('signup','phone_number','required')"
-            >
-              Phone number is required.
-            </div>
-          </div>
+					<!-- Password + Confirm -->
+					<div class="form-group">
+						<label for="signup-password">Password</label>
+						<input id="signup-password" type="password" formControlName="password" placeholder="Min 8 chars, upper, lower, number & symbol" />
 
-          <!-- Password + Confirm -->
-<div class="form-group">
-  <label for="signup-password">Password</label>
-  <input
-    id="signup-password"
-    type="password"
-    formControlName="password"
-    placeholder="Min 8 chars, upper, lower, number & symbol"
-  />
+						<!-- Validation messages -->
+						<div class="error" *ngIf="hasError('signup', 'password', 'required')">Password is required.</div>
+						<div class="error" *ngIf="hasError('signup', 'password', 'minlength')">Password must be at least 8 characters.</div>
+						<div class="error" *ngIf="hasError('signup', 'password', 'passwordStrength')">Use upper & lower case letters, a number and a symbol.</div>
 
-  <!-- Validation messages -->
-  <div class="error" *ngIf="hasError('signup','password','required')">
-    Password is required.
-  </div>
-  <div class="error" *ngIf="hasError('signup','password','minlength')">
-    Password must be at least 8 characters.
-  </div>
-  <div class="error" *ngIf="hasError('signup','password','passwordStrength')">
-    Use upper & lower case letters, a number and a symbol.
-  </div>
+						<!-- Strength meter -->
+						<div class="password-strength" *ngIf="passwordControl?.value && !hasError('signup', 'password', 'required')">
+							<div class="strength-bars">
+								<span class="bar" [class.filled]="passwordStrengthLevel === 'weak' || passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"></span>
+								<span class="bar" [class.filled]="passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"></span>
+								<span class="bar" [class.filled]="passwordStrengthLevel === 'strong'"></span>
+							</div>
+							<span class="strength-label" [ngClass]="passwordStrengthLevel">
+								{{ passwordStrengthLabel }}
+							</span>
+						</div>
+					</div>
 
-  <!-- Strength meter -->
-  <div
-    class="password-strength"
-    *ngIf="passwordControl?.value && !hasError('signup','password','required')"
-  >
-    <div class="strength-bars">
-      <span
-        class="bar"
-        [class.filled]="passwordStrengthLevel === 'weak' || passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"
-      ></span>
-      <span
-        class="bar"
-        [class.filled]="passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"
-      ></span>
-      <span
-        class="bar"
-        [class.filled]="passwordStrengthLevel === 'strong'"
-      ></span>
-    </div>
-    <span class="strength-label" [ngClass]="passwordStrengthLevel">
-      {{ passwordStrengthLabel }}
-    </span>
-  </div>
-</div>
+					<!-- Confirm Password -->
+					<div class="form-group">
+						<label for="signup-confirm">Confirm password</label>
+						<input id="signup-confirm" type="password" formControlName="confirmPassword" placeholder="Repeat password" />
 
-<!-- Confirm Password -->
-<div class="form-group">
-  <label for="signup-confirm">Confirm password</label>
-  <input
-    id="signup-confirm"
-    type="password"
-    formControlName="confirmPassword"
-    placeholder="Repeat password"
-  />
+						<div class="error" *ngIf="hasError('signup', 'confirmPassword', 'required')">Please confirm your password.</div>
 
-  <div class="error" *ngIf="hasError('signup','confirmPassword','required')">
-    Please confirm your password.
-  </div>
+						<div class="error" *ngIf="signupForm.touched && !passwordsMatch()">Passwords do not match.</div>
+					</div>
 
-  <div class="error" *ngIf="signupForm.touched && !passwordsMatch()">
-    Passwords do not match.
-  </div>
-</div>
+					<button type="submit" class="btn-primary" [disabled]="isSubmitting">
+						{{ isSubmitting ? "Creating account…" : "Create account" }}
+					</button>
 
+					<button type="button" class="btn-outline">
+						<span class="google-icon">G</span>
+						Sign up with Google
+					</button>
 
-          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-            {{ isSubmitting ? 'Creating account…' : 'Create account' }}
-          </button>
+					<p class="switch-text">
+						Already training with us?
+						<a (click)="switchMode('login')">Log in</a>
+					</p>
 
-          <button type="button" class="btn-outline">
-            <span class="google-icon">G</span>
-            Sign up with Google
-          </button>
-
-          <p class="switch-text">
-            Already training with us?
-            <a (click)="switchMode('login')">Log in</a>
-          </p>
-
-          <div class="error global" *ngIf="errorMessage && !isLogin">
-            {{ errorMessage }}
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+					<div class="error global" *ngIf="errorMessage && !isLogin">
+						{{ errorMessage }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
