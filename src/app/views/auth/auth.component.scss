@@ -117,7 +117,7 @@
 }
 
 .auth-toggle button.active {
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #C90F16, #C90F16);
   color: #f9fafb;
   transform: translateY(-1px);
 }
@@ -173,7 +173,7 @@ input::placeholder {
 }
 
 input:focus {
-  border-color: #f97316;
+  border-color: #C90F16;
   box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.4);
   background: #020617;
 }
@@ -201,7 +201,7 @@ input:focus {
 }
 
 .link-small {
-  color: #f97316;
+  color: #C90F16;
   text-decoration: none;
 }
 
@@ -227,7 +227,7 @@ input:focus {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #C90F16);
   color: #f9fafb;
   box-shadow: 0 12px 25px rgba(249, 115, 22, 0.4);
 }
@@ -284,7 +284,7 @@ input:focus {
 }
 
 .switch-text a {
-  color: #f97316;
+  color: #C90F16;
   cursor: pointer;
   text-decoration: none;
 }
@@ -322,7 +322,7 @@ input:focus {
 }
 
 .password-strength .bar.filled:nth-child(1) {
-  background: #f97316; /* orange */
+  background: #C90F16; /* orange */
 }
 
 .password-strength .bar.filled:nth-child(2) {
@@ -339,7 +339,7 @@ input:focus {
 }
 
 .strength-label.weak {
-  color: #f97373;
+  color: #C90F16;
 }
 
 .strength-label.medium {
