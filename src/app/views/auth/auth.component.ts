@@ -4,6 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, AbstractContro
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { AuthService } from "@core/services/auth.service";
+import { NAME_PATTERN } from "@core/constants/auth.constants";
 
 @Component({
 	selector: "app-auth",
@@ -30,8 +31,8 @@ export class AuthComponent implements OnInit {
 
 		// SIGNUP FORM
 		this.signupForm = this.fb.group({
-			name: ["", [Validators.required]],
-			surname: ["", [Validators.required]],
+			name: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
+			surname: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
 			email: ["", [Validators.required, Validators.email]],
 			phone_number: ["", [Validators.required, this.phoneValidator.bind(this)]],
 			password: [
@@ -197,8 +198,15 @@ export class AuthComponent implements OnInit {
 
 	// ---------- HELPERS ----------
 	passwordsMatch(): boolean {
-		const { password, confirmPassword } = this.signupForm.value;
-		return !!password && !!confirmPassword && (password as string) === (confirmPassword as string);
+		const pass = this.signupForm.get("password")?.value;
+		const confirm = this.signupForm.get("confirmPassword")?.value;
+
+		// If either is empty, don't consider it a mismatch yet
+		if (!pass || !confirm) {
+			return true;
+		}
+
+		return pass === confirm;
 	}
 
 	hasError(form: "login" | "signup", controlName: string, error: string): boolean {

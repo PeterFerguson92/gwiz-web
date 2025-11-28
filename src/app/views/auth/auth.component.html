@@ -89,12 +89,22 @@
 							<label for="signup-name">Name</label>
 							<input id="signup-name" type="text" formControlName="name" placeholder="John" />
 							<div class="error" *ngIf="hasError('signup', 'name', 'required')">Name is required.</div>
+							<!-- Too short -->
+							<div class="error" *ngIf="hasError('signup', 'name', 'minlength')">Must be at least 2 characters.</div>
+
+							<!-- Contains numbers / invalid chars -->
+							<div class="error" *ngIf="hasError('signup', 'name', 'pattern')">Cannot contain numbers or special characters.</div>
 						</div>
 
 						<div class="form-group">
 							<label for="signup-surname">Surname</label>
 							<input id="signup-surname" type="text" formControlName="surname" placeholder="Doe" />
 							<div class="error" *ngIf="hasError('signup', 'surname', 'required')">Surname is required.</div>
+							<!-- Too short -->
+							<div class="error" *ngIf="hasError('signup', 'surname', 'minlength')">Must be at least 2 characters.</div>
+
+							<!-- Contains numbers / invalid chars -->
+							<div class="error" *ngIf="hasError('signup', 'surname', 'pattern')">Cannot contain numbers or special characters.</div>
 						</div>
 					</div>
 
