@@ -31,7 +31,7 @@ export class AuthService {
 
   /** Login with email + password */
   login(payload: LoginPayload): Observable<AuthResponse> {
-    const url = `${environment.apiUrl}/api/auth/login/`;
+    const url = `${environment.apiUrl}/auth/token/`;
 
     return this.http.post<AuthResponse>(url, payload).pipe(
       tap((res) => this.handleAuth(res))
@@ -40,7 +40,7 @@ export class AuthService {
 
   /** Register a new user with Django's expected payload */
   register(payload: SignupPayload): Observable<AuthResponse | any> {
-    const url = `${environment.apiUrl}/api/auth/register/`;
+    const url = `${environment.apiUrl}/auth/register/`;
 
     // Backend expects these exact keys:
     const backendPayload = {
@@ -68,7 +68,7 @@ export class AuthService {
       throw new Error('No refresh token stored');
     }
 
-    const url = `${environment.apiUrl}/api/auth/token/refresh/`;
+    const url = `${environment.apiUrl}/auth/token/refresh/`;
     return this.http.post<AuthResponse>(url, { refresh }).pipe(
       tap((res) => this.handleAuth(res))
     );
