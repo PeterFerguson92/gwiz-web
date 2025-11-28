@@ -26,3 +26,22 @@ export interface AuthResponse {
   refresh?: string;        // optional refresh token
   user: User;
 }
+
+export interface UserProfile {
+  name: string;
+  surname: string;
+  email: string;
+  phone_number: string;
+}
+
+export interface UpdateProfilePayload {
+  name: string;
+  surname: string;
+  email: string;
+  phone_number: string;
+}
+
+export interface ChangePasswordPayload {
+  old_password: string;
+  new_password: string;
+}
