@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "gwiz-web"
+    "prod": "gwiz-web",
+    "qa": "gwiz-web-qa"
   }
 }
