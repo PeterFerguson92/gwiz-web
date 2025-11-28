@@ -113,6 +113,8 @@
 						<input id="signup-phone" type="tel" formControlName="phone_number" placeholder="+441234567890" />
 
 						<div class="error" *ngIf="hasError('signup', 'phone_number', 'required')">Phone number is required.</div>
+
+						<div class="error" *ngIf="hasError('signup', 'phone_number', 'invalidPhone')">Please enter a valid phone number (e.g., +441234567890).</div>
 					</div>
 
 					<!-- Password + Confirm -->

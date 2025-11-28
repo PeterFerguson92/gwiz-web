@@ -33,7 +33,7 @@ export class AuthComponent implements OnInit {
 			name: ["", [Validators.required]],
 			surname: ["", [Validators.required]],
 			email: ["", [Validators.required, Validators.email]],
-			phone_number: ["", [Validators.required]],
+			phone_number: ["", [Validators.required, this.phoneValidator.bind(this)]],
 			password: [
 				"",
 				[
@@ -44,40 +44,40 @@ export class AuthComponent implements OnInit {
 			],
 			confirmPassword: ["", [Validators.required]],
 		});
-  }
-  
-  get passwordControl(): AbstractControl | null {
-  return this.signupForm.get('password');
-}
+	}
 
-get passwordStrengthLevel(): 'weak' | 'medium' | 'strong' | 'empty' {
-  const value = this.passwordControl?.value as string;
-  if (!value) return 'empty';
+	get passwordControl(): AbstractControl | null {
+		return this.signupForm.get("password");
+	}
 
-  let score = 0;
-  if (value.length >= 8) score++;
-  if (/[A-Z]/.test(value)) score++;
-  if (/[a-z]/.test(value)) score++;
-  if (/[0-9]/.test(value)) score++;
-  if (/[^A-Za-z0-9]/.test(value)) score++;
+	get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
+		const value = this.passwordControl?.value as string;
+		if (!value) return "empty";
 
-  if (score <= 2) return 'weak';
-  if (score === 3 || score === 4) return 'medium';
-  return 'strong';
-}
+		let score = 0;
+		if (value.length >= 8) score++;
+		if (/[A-Z]/.test(value)) score++;
+		if (/[a-z]/.test(value)) score++;
+		if (/[0-9]/.test(value)) score++;
+		if (/[^A-Za-z0-9]/.test(value)) score++;
 
-get passwordStrengthLabel(): string {
-  switch (this.passwordStrengthLevel) {
-    case 'weak':
-      return 'Needs more gains 💪';
-    case 'medium':
-      return 'Ok we getting there 🔥';
-    case 'strong':
-      return 'Beast mode unlocked 🏋️';
-    default:
-      return '';
-  }
-}
+		if (score <= 2) return "weak";
+		if (score === 3 || score === 4) return "medium";
+		return "strong";
+	}
+
+	get passwordStrengthLabel(): string {
+		switch (this.passwordStrengthLevel) {
+			case "weak":
+				return "Needs more gains 💪";
+			case "medium":
+				return "Ok we getting there 🔥";
+			case "strong":
+				return "Beast mode unlocked 🏋️";
+			default:
+				return "";
+		}
+	}
 
 	ngOnInit(): void {
 		// Set initial mode based on route URL (/login or /signup)
@@ -185,7 +185,15 @@ get passwordStrengthLabel(): string {
 		this.errorMessage = ""; // reset errors when switching
 	}
 
-  
+	private phoneValidator(control: AbstractControl): ValidationErrors | null {
+		const value = (control.value || "").trim();
+		if (!value) return null;
+
+		// Very flexible E.164-like format:
+		const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+
+		return phoneRegex.test(value) ? null : { invalidPhone: true };
+	}
 
 	// ---------- HELPERS ----------
 	passwordsMatch(): boolean {
