@@ -23,28 +23,34 @@ export class AuthComponent implements OnInit {
 
 	constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
 		// LOGIN FORM
-		this.loginForm = this.fb.group({
-			email: ["", [Validators.required, Validators.email]],
-			password: ["", [Validators.required]],
-			rememberMe: [false],
-		});
+		this.loginForm = this.fb.group(
+			{
+				email: ["", [Validators.required, Validators.email]],
+				password: ["", [Validators.required]],
+				rememberMe: [false],
+			},
+			{ updateOn: "blur" }
+		);
 
 		// SIGNUP FORM
-		this.signupForm = this.fb.group({
-			name: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
-			surname: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
-			email: ["", [Validators.required, Validators.email]],
-			phone_number: ["", [Validators.required, this.phoneValidator.bind(this)]],
-			password: [
-				"",
-				[
-					Validators.required,
-					Validators.minLength(8), // bump to 8
-					this.passwordStrengthValidator.bind(this),
+		this.signupForm = this.fb.group(
+			{
+				name: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
+				surname: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
+				email: ["", [Validators.required, Validators.email]],
+				phone_number: ["", [Validators.required, this.phoneValidator.bind(this)]],
+				password: [
+					"",
+					[
+						Validators.required,
+						Validators.minLength(8), // bump to 8
+						this.passwordStrengthValidator.bind(this),
+					],
 				],
-			],
-			confirmPassword: ["", [Validators.required]],
-		});
+				confirmPassword: ["", [Validators.required]],
+			},
+			{ updateOn: "blur" }
+		);
 	}
 
 	get passwordControl(): AbstractControl | null {
