@@ -70,7 +70,7 @@
 							</div>
 						</div>
 
-						<button type="submit" class="btn-primary" [disabled]="savingProfile || loadingProfile">
+						<button type="submit" class="btn-primary" [disabled]="savingProfile || loadingProfile || !hasChanges">
 							{{ loadingProfile ? "Loading…" : savingProfile ? "Saving…" : "Save changes" }}
 						</button>
 					</form>

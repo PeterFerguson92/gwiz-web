@@ -151,6 +151,10 @@ export class ProfileComponent implements OnInit {
 		return !!control && control.touched && control.hasError(error);
 	}
 
+	get hasChanges(): boolean {
+		return this.profileForm.dirty;
+	}
+
 	// ---- Submit handlers ----
 	onSaveProfile(): void {
 		if (this.profileForm.invalid) {
