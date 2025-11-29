@@ -76,14 +76,25 @@ export class AuthService {
 		return this.http.get<UserProfile>(`${environment.apiUrl}/auth/me/`);
 	}
 
-	updateProfile(payload: UpdateProfilePayload) {
-		return this.http.patch<UserProfile>(`${environment.apiUrl}/auth/me/`, payload).pipe(
-			tap((user) => {
-				// keep currentUser$ in sync
-				this.currentUserSubject.next(user as any);
-			})
-		);
-	}
+	// service method
+	updateProfile(payload: Partial<UpdateProfilePayload>) {
+  const url = `${environment.apiUrl}/auth/me/`;
+
+  return this.http.patch<UserProfile>(url, payload).pipe(
+    tap((updated) => {
+      const current = this.currentUserSubject.value;
+
+      // Only update the BehaviorSubject if we already have a user (with id)
+      if (current) {
+        this.currentUserSubject.next({
+          ...current,   // keeps id and any other fixed fields
+          ...updated,   // overwrites name, surname, email, phone_number
+        });
+      }
+    })
+  );
+}
+
 
 	changePassword(payload: ChangePasswordPayload) {
 		return this.http.post(`${environment.apiUrl}/auth/password/change/`, payload);
