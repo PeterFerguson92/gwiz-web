@@ -1,4 +1,4 @@
-.toast {
+.app-toast {
   position: fixed;
   top: 110px;
   left: 50%;
@@ -16,15 +16,15 @@
   animation: toast-fade 0.2s ease-out;
 }
 
-.toast.success {
+.app-toast.success {
   background: #16a34a;
 }
 
-.toast.error {
+.app-toast.error {
   background: #c90f16; // brand red
 }
 
-.toast.info {
+.app-toast.info {
   background: #374151;
 }
 

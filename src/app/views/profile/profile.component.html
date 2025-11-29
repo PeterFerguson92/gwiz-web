@@ -73,13 +73,6 @@
 						<button type="submit" class="btn-primary" [disabled]="savingProfile || loadingProfile">
 							{{ loadingProfile ? "Loading…" : savingProfile ? "Saving…" : "Save changes" }}
 						</button>
-
-						<div class="success" *ngIf="profileSuccess">
-							{{ profileSuccess }}
-						</div>
-						<div class="error global" *ngIf="profileError">
-							{{ profileError }}
-						</div>
 					</form>
 
 					<div class="space32"></div>
@@ -140,13 +133,6 @@
 						<button type="submit" class="btn-primary" [disabled]="!canChangePassword">
 							{{ changingPassword ? "Changing…" : "Change password" }}
 						</button>
-
-						<div class="success" *ngIf="passwordSuccess">
-							{{ passwordSuccess }}
-						</div>
-						<div class="error global" *ngIf="passwordError">
-							{{ passwordError }}
-						</div>
 					</form>
 				</div>
 			</div>

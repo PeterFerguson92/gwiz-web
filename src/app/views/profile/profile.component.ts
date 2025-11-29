@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { AuthService } from "../../core/services/auth.service";
 import { UserProfile } from "../../core/models/auth.models";
 import { BreadcrumbComponent } from "@app/components/breadcrumb/breadcrumb.component";
-import { ToastService } from "@core/services/toast.service";
 import { Router } from "@angular/router";
+import { ToastService } from "@core/services/toast.service";
 const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 
 @Component({
@@ -22,15 +22,6 @@ export class ProfileComponent implements OnInit {
 	loadingProfile = true;
 	savingProfile = false;
 	changingPassword = false;
-
-	profileSuccess = "";
-	profileError = "";
-	passwordSuccess = "";
-	passwordError = "";
-
-	toastMessage = "";
-	toastType: "success" | "error" = "success";
-	showToast = false;
 
 	showOldPassword = false;
 	showNewPassword = false;
@@ -116,17 +107,6 @@ export class ProfileComponent implements OnInit {
 		return newPass === confirm;
 	}
 
-	private triggerToast(message: string, type: "success" | "error") {
-		console.log("Triggering toast:", message, type);
-		this.toastMessage = message;
-		this.toastType = type;
-		this.showToast = true;
-
-		setTimeout(() => {
-			this.showToast = false;
-		}, 3000); // 3 seconds
-	}
-
 	get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
 		const value = this.newPasswordControl?.value as string;
 		if (!value) return "empty";
@@ -186,17 +166,8 @@ export class ProfileComponent implements OnInit {
 				changes[key] = control.value;
 			}
 		});
-
-		// If nothing changed, don't call the API
-		if (Object.keys(changes).length === 0) {
-			this.profileSuccess = "Nothing to update – your profile is already up to date.";
-			this.profileError = "";
-			return;
-		}
-
+	
 		this.savingProfile = true;
-		this.profileError = "";
-		this.profileSuccess = "";
 
 		this.authService.updateProfile(changes).subscribe({
 			next: () => {
@@ -207,7 +178,7 @@ export class ProfileComponent implements OnInit {
 				this.profileForm.markAsPristine();
 				Object.values(this.profileForm.controls).forEach((c) => c.markAsPristine());
 			},
-			error: (err) => {
+			error: () => {
 				this.savingProfile = false;
 			},
 		});
@@ -220,8 +191,6 @@ export class ProfileComponent implements OnInit {
 		}
 
 		this.changingPassword = true;
-		this.passwordError = "";
-		this.passwordSuccess = "";
 
 		const { old_password, new_password, confirm_password } = this.passwordForm.value;
 
@@ -239,7 +208,8 @@ export class ProfileComponent implements OnInit {
 				},
 				error: (err) => {
 					this.changingPassword = false;
-					this.passwordError = err?.error?.detail || err?.error?.message || "Failed to change password. Please try again.";
+					const msg = err?.error?.detail || err?.error?.message || "Failed to change password. Please try again.";
+					this.toast.error(msg);
 				},
 			});
 	}

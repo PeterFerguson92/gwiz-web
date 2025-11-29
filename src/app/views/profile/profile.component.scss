@@ -164,45 +164,6 @@
 	color: #22c55e;
 }
 
-.profile-toast {
-	position: fixed;
-	/* center it at the top so it's nowhere near side content */
-	top: 110px; /* below your fixed header */
-	left: 50%;
-	transform: translateX(-50%);
-
-	z-index: 9999999; /* basically "on top of all the things" */
-
-	padding: 12px 20px;
-	border-radius: 999px;
-	font-size: 0.9rem;
-	font-weight: 600;
-	color: #ffffff;
-	background: #16a34a; /* default green, overridden by .error */
-
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-	animation: profile-toast-fade 0.2s ease-out;
-}
-
-.profile-toast.error {
-	background: #c90f16; /* your brand red */
-}
-
-.profile-toast.success {
-	background: #16a34a; /* green */
-}
-
-@keyframes profile-toast-fade {
-	from {
-		opacity: 0;
-		transform: translate(-50%, -8px);
-	}
-	to {
-		opacity: 1;
-		transform: translate(-50%, 0);
-	}
-}
-
 .password-field {
   position: relative;
   display: flex;
