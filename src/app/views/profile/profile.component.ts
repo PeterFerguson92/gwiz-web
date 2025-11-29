@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { AuthService } from "../../core/services/auth.service";
 import { UserProfile } from "../../core/models/auth.models";
 import { BreadcrumbComponent } from "@app/components/breadcrumb/breadcrumb.component";
-import { ToastComponent } from "@/app/shared/components/toast/toast.component";
+import { ToastService } from "@core/services/toast.service";
+import { Router } from "@angular/router";
 const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 
 @Component({
 	selector: "app-profile",
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, BreadcrumbComponent, ToastComponent],
+	imports: [CommonModule, ReactiveFormsModule, BreadcrumbComponent],
 	templateUrl: "./profile.component.html",
 	styleUrls: ["./profile.component.scss"],
 })
@@ -31,7 +32,7 @@ export class ProfileComponent implements OnInit {
 	toastType: "success" | "error" = "success";
 	showToast = false;
 
-	constructor(private fb: FormBuilder, private authService: AuthService) {}
+	constructor(private fb: FormBuilder, private authService: AuthService, private toast: ToastService, private router: Router) {}
 
 	ngOnInit(): void {
 		this.initForms();
@@ -55,26 +56,24 @@ export class ProfileComponent implements OnInit {
 
 	private loadProfile(): void {
 		this.loadingProfile = true;
+
 		this.authService.getProfile().subscribe({
 			next: (profile: UserProfile) => {
 				this.loadingProfile = false;
 				this.profileForm.patchValue(profile);
-				// mark form as pristine
 				this.profileForm.markAsPristine();
 				Object.values(this.profileForm.controls).forEach((c) => c.markAsPristine());
 			},
 			error: (err) => {
 				this.loadingProfile = false;
 
+				// If unauthorized → redirect (OPTIONAL)
 				if (err.status === 401) {
-					this.triggerToast("Session expired — please log in again.", "error");
-					// this.router.navigate(["/login"], {
-					// 	queryParams: { returnUrl: "/profile" },
-					// });
-					return;
+					// global interceptor already shows toast
+					this.router.navigate(["/login"], {
+						queryParams: { returnUrl: "/profile" },
+					});
 				}
-
-				this.triggerToast("Failed to load your profile. Please try again.", "error");
 			},
 		});
 	}
@@ -114,7 +113,7 @@ export class ProfileComponent implements OnInit {
 	}
 
 	private triggerToast(message: string, type: "success" | "error") {
-    console.log("Triggering toast:", message, type);
+		console.log("Triggering toast:", message, type);
 		this.toastMessage = message;
 		this.toastType = type;
 		this.showToast = true;
@@ -190,7 +189,7 @@ export class ProfileComponent implements OnInit {
 		this.authService.updateProfile(changes).subscribe({
 			next: () => {
 				this.savingProfile = false;
-				this.triggerToast("Profile updated successfully!", "success");
+				this.toast.success("Profile updated successfully!");
 
 				// mark form as pristine again
 				this.profileForm.markAsPristine();
@@ -198,7 +197,6 @@ export class ProfileComponent implements OnInit {
 			},
 			error: (err) => {
 				this.savingProfile = false;
-				this.triggerToast("Failed to update profile. Please try again.", "error");
 			},
 		});
 	}
@@ -223,12 +221,11 @@ export class ProfileComponent implements OnInit {
 			.subscribe({
 				next: () => {
 					this.changingPassword = false;
-					this.passwordSuccess = "Password changed successfully.";
+					this.toast.success("Password changed successfully.");
 					this.passwordForm.reset();
 				},
 				error: (err) => {
 					this.changingPassword = false;
-					this.passwordError = err?.error?.detail || err?.error?.message || "Failed to change password. Please try again.";
 				},
 			});
 	}

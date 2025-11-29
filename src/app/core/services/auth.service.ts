@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AuthResponse, ChangePasswordPayload, LoginPayload, SignupPayload, UpdateProfilePayload, User, UserProfile } from "../models/auth.models";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
 	private readonly ACCESS_KEY = "access";
 	private readonly REFRESH_KEY = "refresh";
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient, private router: Router) {
 		// Try to restore user on reload if you have a /me endpoint later
 		const access = this.getAccessToken();
 		if (!access) {
@@ -66,10 +67,19 @@ export class AuthService {
 	}
 
 	/** Clear tokens and user from memory */
-	logout(): void {
-		localStorage.removeItem(this.ACCESS_KEY);
-		localStorage.removeItem(this.REFRESH_KEY);
+	logout(redirectToLogin = true, returnUrl?: string) {
+		// Clear tokens
+		localStorage.removeItem("access");
+		localStorage.removeItem("refresh");
+
+		// Clear current user state (if you have a BehaviorSubject)
 		this.currentUserSubject.next(null);
+
+		if (redirectToLogin) {
+			this.router.navigate(["/login"], {
+				queryParams: returnUrl ? { returnUrl } : undefined,
+			});
+		}
 	}
 
 	getProfile() {
@@ -78,23 +88,22 @@ export class AuthService {
 
 	// service method
 	updateProfile(payload: Partial<UpdateProfilePayload>) {
-  const url = `${environment.apiUrl}/auth/me/`;
+		const url = `${environment.apiUrl}/auth/me/`;
 
-  return this.http.patch<UserProfile>(url, payload).pipe(
-    tap((updated) => {
-      const current = this.currentUserSubject.value;
+		return this.http.patch<UserProfile>(url, payload).pipe(
+			tap((updated) => {
+				const current = this.currentUserSubject.value;
 
-      // Only update the BehaviorSubject if we already have a user (with id)
-      if (current) {
-        this.currentUserSubject.next({
-          ...current,   // keeps id and any other fixed fields
-          ...updated,   // overwrites name, surname, email, phone_number
-        });
-      }
-    })
-  );
-}
-
+				// Only update the BehaviorSubject if we already have a user (with id)
+				if (current) {
+					this.currentUserSubject.next({
+						...current, // keeps id and any other fixed fields
+						...updated, // overwrites name, surname, email, phone_number
+					});
+				}
+			})
+		);
+	}
 
 	changePassword(payload: ChangePasswordPayload) {
 		return this.http.post(`${environment.apiUrl}/auth/password/change/`, payload);

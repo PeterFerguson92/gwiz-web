@@ -1,39 +1,40 @@
 .toast {
-	position: fixed;
-	top: 90px;
-	right: 20px;
-	z-index: 9999;
-	padding: 14px 20px;
-	border-radius: 10px;
-	font-size: 0.95rem;
-	font-weight: 600;
-	color: #fff;
-	animation: fadeInOut 3s ease forwards;
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  position: fixed;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999999;
+
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: #16a34a; // default green
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  animation: toast-fade 0.2s ease-out;
 }
 
 .toast.success {
-	background: #16a34a; /* green */
+  background: #16a34a;
 }
 
 .toast.error {
-	background: #c90f16; /* your brand red */
+  background: #c90f16; // brand red
 }
 
-@keyframes fadeInOut {
-	0% {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
-	10% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-	90% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
+.toast.info {
+  background: #374151;
+}
+
+@keyframes toast-fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
