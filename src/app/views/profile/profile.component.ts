@@ -4,12 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { AuthService } from "../../core/services/auth.service";
 import { UserProfile } from "../../core/models/auth.models";
 import { BreadcrumbComponent } from "@app/components/breadcrumb/breadcrumb.component";
+import { ToastComponent } from "@/app/shared/components/toast/toast.component";
 const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 
 @Component({
 	selector: "app-profile",
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, BreadcrumbComponent],
+	imports: [CommonModule, ReactiveFormsModule, BreadcrumbComponent, ToastComponent],
 	templateUrl: "./profile.component.html",
 	styleUrls: ["./profile.component.scss"],
 })
@@ -25,6 +26,10 @@ export class ProfileComponent implements OnInit {
 	profileError = "";
 	passwordSuccess = "";
 	passwordError = "";
+
+	toastMessage = "";
+	toastType: "success" | "error" = "success";
+	showToast = false;
 
 	constructor(private fb: FormBuilder, private authService: AuthService) {}
 
@@ -58,9 +63,18 @@ export class ProfileComponent implements OnInit {
 				this.profileForm.markAsPristine();
 				Object.values(this.profileForm.controls).forEach((c) => c.markAsPristine());
 			},
-			error: () => {
+			error: (err) => {
 				this.loadingProfile = false;
-				this.profileError = "Failed to load profile. Please try again.";
+
+				if (err.status === 401) {
+					this.triggerToast("Session expired — please log in again.", "error");
+					// this.router.navigate(["/login"], {
+					// 	queryParams: { returnUrl: "/profile" },
+					// });
+					return;
+				}
+
+				this.triggerToast("Failed to load your profile. Please try again.", "error");
 			},
 		});
 	}
@@ -97,6 +111,17 @@ export class ProfileComponent implements OnInit {
 		const confirm = this.passwordForm.get("confirm_password")?.value;
 		if (!newPass || !confirm) return true;
 		return newPass === confirm;
+	}
+
+	private triggerToast(message: string, type: "success" | "error") {
+    console.log("Triggering toast:", message, type);
+		this.toastMessage = message;
+		this.toastType = type;
+		this.showToast = true;
+
+		setTimeout(() => {
+			this.showToast = false;
+		}, 3000); // 3 seconds
 	}
 
 	get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
@@ -165,7 +190,7 @@ export class ProfileComponent implements OnInit {
 		this.authService.updateProfile(changes).subscribe({
 			next: () => {
 				this.savingProfile = false;
-				this.profileSuccess = "Profile updated successfully.";
+				this.triggerToast("Profile updated successfully!", "success");
 
 				// mark form as pristine again
 				this.profileForm.markAsPristine();
@@ -173,7 +198,7 @@ export class ProfileComponent implements OnInit {
 			},
 			error: (err) => {
 				this.savingProfile = false;
-				this.profileError = err?.error?.detail || err?.error?.message || "Failed to update profile. Please try again.";
+				this.triggerToast("Failed to update profile. Please try again.", "error");
 			},
 		});
 	}
