@@ -12,19 +12,7 @@ export const routes: Routes = [
     pathMatch: "full",
   },
 
- // 🔐 Auth routes – same component, different URLs
-  {
-    path: 'login',
-    component: AuthComponent,
-  },
-  {
-    path: 'signup',
-    component: AuthComponent,
-  }, {
-    path: 'profile',
-    component: ProfileComponent,
-    // canActivate: [AuthGuard], // once you add a guard
-  },
+
 
 
   // MAIN APP ROUTES (wrapped inside Layout)
