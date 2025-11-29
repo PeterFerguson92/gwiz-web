@@ -32,6 +32,10 @@ export class ProfileComponent implements OnInit {
 	toastType: "success" | "error" = "success";
 	showToast = false;
 
+	showOldPassword = false;
+	showNewPassword = false;
+	showConfirmPassword = false;
+
 	constructor(private fb: FormBuilder, private authService: AuthService, private toast: ToastService, private router: Router) {}
 
 	ngOnInit(): void {
@@ -139,6 +143,14 @@ export class ProfileComponent implements OnInit {
 		return "strong";
 	}
 
+	get canChangePassword(): boolean {
+		const formValid = this.passwordForm.valid;
+		const passwordsMatch = this.passwordsMatch();
+		const isStrong = this.passwordStrengthLevel === "strong";
+
+		return formValid && passwordsMatch && isStrong && !this.changingPassword;
+	}
+
 	get passwordStrengthLabel(): string {
 		switch (this.passwordStrengthLevel) {
 			case "weak":
@@ -211,21 +223,23 @@ export class ProfileComponent implements OnInit {
 		this.passwordError = "";
 		this.passwordSuccess = "";
 
-		const { old_password, new_password } = this.passwordForm.value;
+		const { old_password, new_password, confirm_password } = this.passwordForm.value;
 
 		this.authService
 			.changePassword({
 				old_password: old_password as string,
 				new_password: new_password as string,
+				confirm_password: confirm_password as string,
 			})
 			.subscribe({
 				next: () => {
 					this.changingPassword = false;
-					this.toast.success("Password changed successfully.");
 					this.passwordForm.reset();
+					this.toast.success("Password changed successfully.");
 				},
 				error: (err) => {
 					this.changingPassword = false;
+					this.passwordError = err?.error?.detail || err?.error?.message || "Failed to change password. Please try again.";
 				},
 			});
 	}
