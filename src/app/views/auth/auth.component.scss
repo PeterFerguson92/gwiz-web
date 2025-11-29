@@ -10,21 +10,21 @@
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;         /* no more vertical centering */
   justify-content: center;
-  padding: 1.5rem;
+  padding: 7rem 1.5rem 3rem;       /* big top padding to clear the toolbar */
 }
 
 /* Card */
 .auth-card {
   width: 100%;
   max-width: 1100px;
-  background: #0b1120;
+  background: #0a0a0a;
   border-radius: 1.5rem;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+  box-shadow: 0 24px 60px rgba(6, 6, 6, 0.9);
 }
 
 /* LEFT SIDE – hero */
@@ -383,5 +383,18 @@ input:focus {
 
   .form-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* On smaller screens, slightly less padding but still clear of header */
+@media (max-width: 900px) {
+  .auth-wrapper {
+    padding-top: 6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-wrapper {
+    padding-top: 5rem;
   }
 }
