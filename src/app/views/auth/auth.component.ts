@@ -124,7 +124,8 @@ export class AuthComponent implements OnInit {
 			.subscribe({
 				next: () => {
 					this.isSubmitting = false;
-					this.router.navigate(["/home"]);
+					// Redirect after successful login
+					this.router.navigate(["/profile"]);
 				},
 				error: (err) => {
 					this.isSubmitting = false;
