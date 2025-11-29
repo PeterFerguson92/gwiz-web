@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router";
 import { LayoutComponent } from "@layouts/layout/layout.component";
 import { AuthComponent } from "./views/auth/auth.component";
+import { ProfileComponent } from "@views/profile/profile.component";
 
 export const routes: Routes = [
 
@@ -19,6 +20,10 @@ export const routes: Routes = [
   {
     path: 'signup',
     component: AuthComponent,
+  }, {
+    path: 'profile',
+    component: ProfileComponent,
+    // canActivate: [AuthGuard], // once you add a guard
   },
 
 
