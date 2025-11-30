@@ -4,7 +4,7 @@
 
 export const environment = {
 	production: false,
-	apiUrl: "https://gwiz-admin-qa-a9f0452d617e.herokuapp.com/api",
+	apiUrl: "http://localhost:8000/api",
 };
 /*
  * For easier debugging in development mode, you can import the following file
