@@ -73,6 +73,14 @@ export class AuthComponent implements OnInit {
 		return "strong";
 	}
 
+	get canCreateAccount(): boolean {
+		const formValid = this.signupForm.valid;
+		const passwordsMatch = this.passwordsMatch();
+		const isStrong = this.passwordStrengthLevel === "strong";
+
+		return formValid && passwordsMatch && isStrong && !this.isSubmitting;
+	}
+
 	get passwordStrengthLabel(): string {
 		switch (this.passwordStrengthLevel) {
 			case "weak":

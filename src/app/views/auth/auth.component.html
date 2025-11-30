@@ -160,7 +160,7 @@
 						<div class="error" *ngIf="signupForm.touched && !passwordsMatch()">Passwords do not match.</div>
 					</div>
 
-					<button type="submit" class="btn-primary" [disabled]="isSubmitting">
+					<button type="submit" class="btn-primary" [disabled]="!canCreateAccount">
 						{{ isSubmitting ? "Creating account…" : "Create account" }}
 					</button>
 
