@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { AuthService } from "@core/services/auth.service";
 import { NAME_PATTERN } from "@core/constants/auth.constants";
+import { ToastService } from "@core/services/toast.service";
 
 @Component({
 	selector: "app-auth",
@@ -16,12 +17,11 @@ import { NAME_PATTERN } from "@core/constants/auth.constants";
 export class AuthComponent implements OnInit {
 	isLogin = true;
 	isSubmitting = false;
-	errorMessage = "";
 
 	loginForm: FormGroup;
 	signupForm: FormGroup;
 
-	constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
+	constructor(private fb: FormBuilder, private authService: AuthService, private toast: ToastService, private router: Router, private route: ActivatedRoute) {
 		// LOGIN FORM
 		this.loginForm = this.fb.group(
 			{
@@ -107,7 +107,6 @@ export class AuthComponent implements OnInit {
 	}
 
 	switchMode(mode: "login" | "signup"): void {
-		this.errorMessage = "";
 
 		if (mode === "login") {
 			this.router.navigate(["/login"]);
@@ -124,7 +123,6 @@ export class AuthComponent implements OnInit {
 		}
 
 		this.isSubmitting = true;
-		this.errorMessage = "";
 
 		const { email, password } = this.loginForm.value;
 
@@ -141,7 +139,7 @@ export class AuthComponent implements OnInit {
 				},
 				error: (err) => {
 					this.isSubmitting = false;
-					this.errorMessage = err?.error?.detail || err?.error?.message || "Login failed. Please check your credentials.";
+					this.toast.error("Login failed. Please check your credentials.");
 				},
 			});
 	}
@@ -154,7 +152,6 @@ export class AuthComponent implements OnInit {
 		}
 
 		this.isSubmitting = true;
-		this.errorMessage = "";
 
 		const { name, surname, email, phone_number, password } = this.signupForm.value;
 
@@ -173,7 +170,7 @@ export class AuthComponent implements OnInit {
 				},
 				error: (err) => {
 					this.isSubmitting = false;
-					this.errorMessage = err?.error?.detail || err?.error?.message || "Signup failed. Please try again.";
+					this.toast.error("Signup failed. Please try again.");
 				},
 			});
 	}
@@ -201,8 +198,6 @@ export class AuthComponent implements OnInit {
 		} else {
 			this.isLogin = true;
 		}
-
-		this.errorMessage = ""; // reset errors when switching
 	}
 
 	private phoneValidator(control: AbstractControl): ValidationErrors | null {

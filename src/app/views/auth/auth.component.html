@@ -70,10 +70,6 @@
 						Don’t have an account?
 						<a (click)="switchMode('signup')">Sign up for free</a>
 					</p>
-
-					<div class="error global" *ngIf="errorMessage && isLogin">
-						{{ errorMessage }}
-					</div>
 				</form>
 			</div>
 
@@ -173,10 +169,6 @@
 						Already training with us?
 						<a (click)="switchMode('login')">Log in</a>
 					</p>
-
-					<div class="error global" *ngIf="errorMessage && !isLogin">
-						{{ errorMessage }}
-					</div>
 				</form>
 			</div>
 		</div>
