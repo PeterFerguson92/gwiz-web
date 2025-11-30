@@ -5,6 +5,7 @@ import { MobileMenuComponent } from "../mobile-menu/mobile-menu.component";
 import { RouterLink } from "@angular/router";
 import { ApiService } from "@core/services/api.service";
 import { SHARED_IMPORTS } from "@/app/shared/shared-imports";
+import { AuthService } from "@core/services/auth.service";
 
 @Component({
 	selector: "app-topbar",
@@ -23,40 +24,13 @@ export class TopbarComponent implements OnInit {
 	@Input() logo!: string;
 	@Input() isAlert?: boolean;
 
-	serviceMenuItems = [
-		{ title: "Service One", link: "/services/one" },
-		{ title: "Service Left", link: "/services/left" },
-		{ title: "Service Right", link: "/services/right" },
-		{ title: "Service Single", link: "/services/single" },
-	];
-
-	blogMenuItems = [
-		{ title: "Blog One", link: "/blogs/one" },
-		{ title: "Blog Sidebar", link: "/blogs/sidebar" },
-		{ title: "Blog Left", link: "/blogs/left" },
-		{ title: "Blog Right", link: "/blogs/right" },
-		{ title: "Blog Single", link: "/blogs/single" },
-	];
-
-	pageMenuItems = [
-		{ title: "Case Study One", link: "/case-study-1" },
-		{ title: "Case Study Left", link: "/case-study-left" },
-		{ title: "Case Study Right", link: "/case-study-right" },
-		{ title: "Case Study Single", link: "/case-study-single" },
-		{ title: "Our Team", link: "/our-team" },
-		{ title: "Pricing Plan", link: "/pricing-plan" },
-		{ title: "Testimonials", link: "/testimonials" },
-		{ title: "FAQ", link: "/faq" },
-		{ title: "404", link: "/404" },
-	];
-
 	logoImg: any;
 	mobileLogoImg: any;
 	message: string | null = "";
 	showLoader = false;
 	showNotification = false;
 
-	constructor(private service: ApiService) {}
+	constructor(private service: ApiService, private authService: AuthService) {}
 	ngOnInit(): void {
 		this.service.getResource("homepage/banners").subscribe(
 			(data) => {
@@ -74,5 +48,13 @@ export class TopbarComponent implements OnInit {
 				// this.displayError(error);
 			}
 		);
+	}
+
+	get isLoggedIn(): boolean {
+		return this.authService.isLoggedIn();
+	}
+
+	logout(): void {
+		this.authService.logout(true);
 	}
 }

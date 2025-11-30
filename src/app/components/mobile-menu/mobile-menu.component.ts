@@ -4,7 +4,7 @@ import { menuItems } from "./data";
 import { MobileNavItemComponent } from "./mobile-nav-item/mobile-nav-item.component";
 import { RouterLink } from "@angular/router";
 import { ApiService } from "@core/services/api.service";
-
+import { AuthService } from "@core/services/auth.service";
 interface MenuItem {
 	title: string;
 	link?: string;
@@ -27,32 +27,12 @@ export class MobileMenuComponent {
 	@Input() btnClass!: string;
 	menuItems: MenuItem[] = [];
 	menu = [
-		{
-			title: "Home",
-			link: "/",
-			isOpen: false,
-		},
-		{
-			title: "About",
-			link: "/about",
-		},
-		{
-			title: "Services",
-			isOpen: false,
-			link: "/services",
-		},
-		{
-			title: "Privacy Policy",
-			link: "/privacy",
-		},
-		{
-			title: "Terms & Condition",
-			link: "/terms",
-		},
-		{
-			title: "Contact us",
-			link: "/contact-us",
-		},
+		{ title: "Home", link: "/", isOpen: false },
+		{ title: "About", link: "/about" },
+		{ title: "Services", isOpen: false, link: "/services" },
+		{ title: "Privacy Policy", link: "/privacy" },
+		{ title: "Terms & Condition", link: "/terms" },
+		{ title: "Contact us", link: "/contact-us" },
 	];
 
 	footer: any;
@@ -60,7 +40,10 @@ export class MobileMenuComponent {
 	showNotification = false;
 	message = "";
 
-	constructor(private service: ApiService) {}
+	constructor(
+		private service: ApiService,
+		private authService: AuthService // 👈 inject auth
+	) {}
 
 	ngOnInit() {
 		this.menuItems = this.menu;
@@ -80,6 +63,15 @@ export class MobileMenuComponent {
 				this.displayError(error);
 			}
 		);
+	}
+
+	get isLoggedIn(): boolean {
+		return this.authService.isLoggedIn();
+	}
+
+	logout(): void {
+		this.authService.logout(true);
+		this.closeMenu();
 	}
 
 	displayError(error: string) {
@@ -102,7 +94,7 @@ export class MobileMenuComponent {
 
 	toggleSubMenu(item: MenuItem, event?: Event): void {
 		if (event) {
-			event.stopPropagation(); // Prevents click from propagating to the parent <a>
+			event.stopPropagation();
 		}
 
 		if (item.subMenu) {

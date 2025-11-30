@@ -1,48 +1,27 @@
 <header>
-	<div class="header-area {{ headerClass }} header header-sticky  d-none d-lg-block" stickyScroll id="header">
-		<!-- <p *ngIf="isAlert" class="header-pera">Electricity Service In Losangle City. Get Appointment Today</p> -->
+	<div class="header-area {{ headerClass }} header header-sticky d-none d-lg-block" stickyScroll id="header">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="header-elements">
 						<div class="site-logo">
-							<a routerLink="/home"><img [src]="logoImg" style="width: 40%" alt="" /></a>
+							<a routerLink="/home">
+								<img [src]="logoImg" style="width: 40%" alt="" />
+							</a>
 						</div>
+
 						<div class="main-menu">
 							<ul>
-								<li>
-									<a routerLink="/">Home</a>
-								</li>
+								<li><a routerLink="/">Home</a></li>
 								<li><a routerLink="/about">About</a></li>
-								<li>
-									<a routerLink="/services">Services</a>
-								</li>
-								<li>
-									<a routerLink="/contact-us">Contact Us</a>
-								</li>
-								<!-- <li>
-									<a href="javascript:void(0)">Blogs <i class="fa-solid fa-angle-down"></i></a>
-									<ul class="dropdown-padding">
-										<li *ngFor="let item of blogMenuItems">
-											<a [routerLink]="item.link">{{ item.title }}</a>
-										</li>
-									</ul>
-								</li> -->
-								<!-- <li>
-									<a href="javascript:void(0)">Pages <i class="fa-solid fa-angle-down"></i></a>
-									<ul class="dropdown-padding">
-										<li *ngFor="let item of pageMenuItems">
-											<a [routerLink]="item.link">{{ item.title }}</a>
-										</li>
-									</ul>
-								</li> -->
+								<li><a routerLink="/services">Services</a></li>
+								<li><a routerLink="/contact-us">Contact Us</a></li>
+
+								<!-- 🔐 Auth links (Option 2 clean inline style) -->
+								<li *ngIf="isLoggedIn"><a routerLink="/profile">Profile</a></li>
+								<li *ngIf="isLoggedIn"><a (click)="logout()" style="cursor: pointer">Logout</a></li>
+								<li *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
 							</ul>
-						</div>
-						<div class="btn-area">
-							<a routerLink="/profile" [class]="btnClass">Profile<i class="fa-solid fa-arrow-right"></i></a>
-						</div>
-						<div class="btn-area">
-							<a routerLink="/login" [class]="btnClass">Login<i class="fa-solid fa-arrow-right"></i></a>
 						</div>
 					</div>
 				</div>
