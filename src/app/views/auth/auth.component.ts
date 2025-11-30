@@ -107,7 +107,6 @@ export class AuthComponent implements OnInit {
 	}
 
 	switchMode(mode: "login" | "signup"): void {
-
 		if (mode === "login") {
 			this.router.navigate(["/login"]);
 		} else {
@@ -138,6 +137,7 @@ export class AuthComponent implements OnInit {
 					this.router.navigate(["/profile"]);
 				},
 				error: (err) => {
+					console.error(err);
 					this.isSubmitting = false;
 					this.toast.error("Login failed. Please check your credentials.");
 				},
@@ -155,6 +155,7 @@ export class AuthComponent implements OnInit {
 
 		const { name, surname, email, phone_number, password } = this.signupForm.value;
 
+		// 1) Create the account
 		this.authService
 			.register({
 				name: name as string,
@@ -165,10 +166,27 @@ export class AuthComponent implements OnInit {
 			})
 			.subscribe({
 				next: () => {
-					this.isSubmitting = false;
-					this.router.navigate(["/login"]);
+					// 2) On successful signup, automatically log the user in
+					this.authService
+						.login({
+							email: email as string,
+							password: password as string,
+						})
+						.subscribe({
+							next: () => {
+								this.isSubmitting = false;
+								this.router.navigate(["/profile"]);
+							},
+							error: (err) => {
+								console.error(err);
+								this.isSubmitting = false;
+								this.toast.error("Account created, but automatic sign in failed. Please sign in manually.");
+								this.router.navigate(["/login"]);
+							},
+						});
 				},
 				error: (err) => {
+					console.error(err);
 					this.isSubmitting = false;
 					this.toast.error("Signup failed. Please try again.");
 				},
