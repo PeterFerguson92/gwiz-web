@@ -57,7 +57,7 @@
 						<a class="link-small" href="#">Forgot password?</a>
 					</div>
 
-					<button type="submit" class="btn-primary" [disabled]="isSubmitting">
+					<button type="submit" class="btn-primary" [disabled]="!canLogin">
 						{{ isSubmitting ? "Signing in…" : "Sign in" }}
 					</button>
 

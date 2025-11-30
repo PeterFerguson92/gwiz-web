@@ -73,6 +73,10 @@ export class AuthComponent implements OnInit {
 		return "strong";
 	}
 
+	get canLogin(): boolean {
+		return this.loginForm.valid && !this.isSubmitting;
+	}
+
 	get canCreateAccount(): boolean {
 		const formValid = this.signupForm.valid;
 		const passwordsMatch = this.passwordsMatch();
