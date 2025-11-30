@@ -14,6 +14,7 @@ export class AuthService {
 	// 🔑 access token lives *only in memory*
 	private accessToken: string | null = null;
 
+	private rememberMe = false;
 	private readonly ACCESS_KEY = "access"; // legacy key (we no longer set it, only clear it)
 	private readonly REFRESH_KEY = "refresh";
 
@@ -26,8 +27,11 @@ export class AuthService {
 	// ---------- AUTH CALLS ----------
 
 	/** Login with email + password */
-	login(payload: LoginPayload): Observable<AuthResponse> {
+	login(payload: LoginPayload, rememberMe: boolean): Observable<AuthResponse> {
 		const url = `${environment.apiUrl}/auth/token/`;
+
+		// remember the user's choice for this session
+		this.rememberMe = rememberMe;
 
 		return this.http.post<AuthResponse>(url, payload).pipe(tap((res) => this.handleAuth(res)));
 	}
@@ -125,21 +129,47 @@ export class AuthService {
 	}
 
 	setRefreshToken(token: string | null): void {
-		if (token) {
+		// If null → clear both storages and stop
+		if (token === null) {
+			localStorage.removeItem(this.REFRESH_KEY);
+			sessionStorage.removeItem(this.REFRESH_KEY);
+			return;
+		}
+
+		// From here on, token is guaranteed to be a string
+		if (this.rememberMe) {
 			localStorage.setItem(this.REFRESH_KEY, token);
+			sessionStorage.removeItem(this.REFRESH_KEY);
 		} else {
+			sessionStorage.setItem(this.REFRESH_KEY, token);
 			localStorage.removeItem(this.REFRESH_KEY);
 		}
 	}
 
 	getRefreshToken(): string | null {
-		return localStorage.getItem(this.REFRESH_KEY);
+		// Prefer sessionStorage if present (session-only login)
+		const sessionToken = sessionStorage.getItem(this.REFRESH_KEY);
+		if (sessionToken) {
+			this.rememberMe = false;
+			return sessionToken;
+		}
+
+		// Fallback to localStorage (remember-me login)
+		const localToken = localStorage.getItem(this.REFRESH_KEY);
+		if (localToken) {
+			this.rememberMe = true;
+			return localToken;
+		}
+
+		return null;
 	}
 
 	clearTokens(): void {
 		this.accessToken = null;
+		this.rememberMe = false;
 		localStorage.removeItem(this.REFRESH_KEY);
-		localStorage.removeItem(this.ACCESS_KEY); // clean up any old stored access tokens
+		sessionStorage.removeItem(this.REFRESH_KEY);
+		localStorage.removeItem(this.ACCESS_KEY); // old access key cleanup
 	}
 
 	initAuthOnStartup() {

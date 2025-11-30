@@ -1,6 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, AbstractControl, ValidationErrors } from "@angular/forms";
+import {
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+  FormGroup,
+  AbstractControl,
+  ValidationErrors,
+} from "@angular/forms";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { AuthService } from "@core/services/auth.service";
@@ -8,243 +15,295 @@ import { NAME_PATTERN } from "@core/constants/auth.constants";
 import { ToastService } from "@core/services/toast.service";
 
 @Component({
-	selector: "app-auth",
-	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule],
-	templateUrl: "./auth.component.html",
-	styleUrls: ["./auth.component.scss"],
+  selector: "app-auth",
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: "./auth.component.html",
+  styleUrls: ["./auth.component.scss"],
 })
 export class AuthComponent implements OnInit {
-	isLogin = true;
-	isSubmitting = false;
+  isLogin = true;
+  isSubmitting = false;
 
-	loginForm: FormGroup;
-	signupForm: FormGroup;
+  loginForm: FormGroup;
+  signupForm: FormGroup;
 
-	constructor(private fb: FormBuilder, private authService: AuthService, private toast: ToastService, private router: Router, private route: ActivatedRoute) {
-		// LOGIN FORM
-		this.loginForm = this.fb.group(
-			{
-				email: ["", [Validators.required, Validators.email]],
-				password: ["", [Validators.required]],
-				rememberMe: [false],
-			},
-			{ updateOn: "blur" }
-		);
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private toast: ToastService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    // LOGIN FORM
+    this.loginForm = this.fb.group(
+      {
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required]],
+        rememberMe: [false],
+      },
+      { updateOn: "blur" }
+    );
 
-		// SIGNUP FORM
-		this.signupForm = this.fb.group(
-			{
-				name: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
-				surname: ["", [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
-				email: ["", [Validators.required, Validators.email]],
-				phone_number: ["", [Validators.required, this.phoneValidator.bind(this)]],
-				password: [
-					"",
-					[
-						Validators.required,
-						Validators.minLength(8), // bump to 8
-						this.passwordStrengthValidator.bind(this),
-					],
-				],
-				confirmPassword: ["", [Validators.required]],
-			},
-			{ updateOn: "blur" }
-		);
-	}
+    // SIGNUP FORM
+    this.signupForm = this.fb.group(
+      {
+        name: [
+          "",
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.pattern(NAME_PATTERN),
+          ],
+        ],
+        surname: [
+          "",
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.pattern(NAME_PATTERN),
+          ],
+        ],
+        email: ["", [Validators.required, Validators.email]],
+        phone_number: [
+          "",
+          [Validators.required, this.phoneValidator.bind(this)],
+        ],
+        password: [
+          "",
+          [
+            Validators.required,
+            Validators.minLength(8),
+            this.passwordStrengthValidator.bind(this),
+          ],
+        ],
+        confirmPassword: ["", [Validators.required]],
+      },
+      { updateOn: "blur" }
+    );
+  }
 
-	get passwordControl(): AbstractControl | null {
-		return this.signupForm.get("password");
-	}
+  // ---------- GETTERS ----------
 
-	get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
-		const value = this.passwordControl?.value as string;
-		if (!value) return "empty";
+  get passwordControl(): AbstractControl | null {
+    return this.signupForm.get("password");
+  }
 
-		let score = 0;
-		if (value.length >= 8) score++;
-		if (/[A-Z]/.test(value)) score++;
-		if (/[a-z]/.test(value)) score++;
-		if (/[0-9]/.test(value)) score++;
-		if (/[^A-Za-z0-9]/.test(value)) score++;
+  get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
+    const value = this.passwordControl?.value as string;
+    if (!value) return "empty";
 
-		if (score <= 2) return "weak";
-		if (score === 3 || score === 4) return "medium";
-		return "strong";
-	}
+    let score = 0;
+    if (value.length >= 8) score++;
+    if (/[A-Z]/.test(value)) score++;
+    if (/[a-z]/.test(value)) score++;
+    if (/[0-9]/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
 
-	get canLogin(): boolean {
-		return this.loginForm.valid && !this.isSubmitting;
-	}
+    if (score <= 2) return "weak";
+    if (score === 3 || score === 4) return "medium";
+    return "strong";
+  }
 
-	get canCreateAccount(): boolean {
-		const formValid = this.signupForm.valid;
-		const passwordsMatch = this.passwordsMatch();
-		const isStrong = this.passwordStrengthLevel === "strong";
+  get canLogin(): boolean {
+    return this.loginForm.valid && !this.isSubmitting;
+  }
 
-		return formValid && passwordsMatch && isStrong && !this.isSubmitting;
-	}
+  get canCreateAccount(): boolean {
+    const formValid = this.signupForm.valid;
+    const passwordsMatch = this.passwordsMatch();
+    const isStrong = this.passwordStrengthLevel === "strong";
 
-	get passwordStrengthLabel(): string {
-		switch (this.passwordStrengthLevel) {
-			case "weak":
-				return "Needs more gains 💪";
-			case "medium":
-				return "Ok we getting there 🔥";
-			case "strong":
-				return "Beast mode unlocked 🏋️";
-			default:
-				return "";
-		}
-	}
+    return formValid && passwordsMatch && isStrong && !this.isSubmitting;
+  }
 
-	ngOnInit(): void {
-		// Set initial mode based on route URL (/login or /signup)
-		this.syncModeWithUrl(this.router.url);
+  get passwordStrengthLabel(): string {
+    switch (this.passwordStrengthLevel) {
+      case "weak":
+        return "Needs more gains 💪";
+      case "medium":
+        return "Ok we getting there 🔥";
+      case "strong":
+        return "Beast mode unlocked 🏋️";
+      default:
+        return "";
+    }
+  }
 
-		// Listen to route changes to keep UI synced with URL
-		this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe((e) => this.syncModeWithUrl(e.urlAfterRedirects));
-	}
+  // ---------- LIFECYCLE ----------
 
-	switchMode(mode: "login" | "signup"): void {
-		if (mode === "login") {
-			this.router.navigate(["/login"]);
-		} else {
-			this.router.navigate(["/signup"]);
-		}
-	}
+  ngOnInit(): void {
+    // Set initial mode based on route URL (/login or /signup)
+    this.syncModeWithUrl(this.router.url);
 
-	// ---------- LOGIN ----------
-	onLoginSubmit(): void {
-		if (this.loginForm.invalid) {
-			this.loginForm.markAllAsTouched();
-			return;
-		}
+    // Listen to route changes to keep UI synced with URL
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((e) => this.syncModeWithUrl(e.urlAfterRedirects));
+  }
 
-		this.isSubmitting = true;
+  // ---------- MODE SWITCH ----------
 
-		const { email, password } = this.loginForm.value;
+  switchMode(mode: "login" | "signup"): void {
+    if (mode === "login") {
+      this.router.navigate(["/login"]);
+    } else {
+      this.router.navigate(["/signup"]);
+    }
+  }
 
-		this.authService
-			.login({
-				email: email as string,
-				password: password as string,
-			})
-			.subscribe({
-				next: () => {
-					this.isSubmitting = false;
-					// Redirect after successful login
-					this.router.navigate(["/profile"]);
-				},
-				error: (err) => {
-					console.error(err);
-					this.isSubmitting = false;
-					this.toast.error("Login failed. Please check your credentials.");
-				},
-			});
-	}
+  // ---------- LOGIN ----------
 
-	// ---------- SIGNUP ----------
-	onSignupSubmit(): void {
-		if (this.signupForm.invalid || !this.passwordsMatch()) {
-			this.signupForm.markAllAsTouched();
-			return;
-		}
+  onLoginSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
-		this.isSubmitting = true;
+    this.isSubmitting = true;
 
-		const { name, surname, email, phone_number, password } = this.signupForm.value;
+    const { email, password, rememberMe } = this.loginForm.value;
 
-		// 1) Create the account
-		this.authService
-			.register({
-				name: name as string,
-				surname: surname as string,
-				email: email as string,
-				phone_number: phone_number as string,
-				password: password as string,
-			})
-			.subscribe({
-				next: () => {
-					// 2) On successful signup, automatically log the user in
-					this.authService
-						.login({
-							email: email as string,
-							password: password as string,
-						})
-						.subscribe({
-							next: () => {
-								this.isSubmitting = false;
-								this.router.navigate(["/profile"]);
-							},
-							error: (err) => {
-								console.error(err);
-								this.isSubmitting = false;
-								this.toast.error("Account created, but automatic sign in failed. Please sign in manually.");
-								this.router.navigate(["/login"]);
-							},
-						});
-				},
-				error: (err) => {
-					console.error(err);
-					this.isSubmitting = false;
-					this.toast.error("Signup failed. Please try again.");
-				},
-			});
-	}
+    this.authService
+      .login(
+        {
+          email: email as string,
+          password: password as string,
+        },
+        !!rememberMe // remember-me controls where refresh token is stored
+      )
+      .subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(["/profile"]);
+        },
+        error: (err) => {
+          console.error(err);
+          this.isSubmitting = false;
+          this.toast.error(
+            "Login failed. Please check your credentials."
+          );
+        },
+      });
+  }
 
-	private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
-		const value = control.value as string;
-		if (!value) {
-			return null; // handled by 'required'
-		}
+  // ---------- SIGNUP ----------
 
-		const hasMinLength = value.length >= 8;
-		const hasUpper = /[A-Z]/.test(value);
-		const hasLower = /[a-z]/.test(value);
-		const hasNumber = /[0-9]/.test(value);
-		const hasSymbol = /[^A-Za-z0-9]/.test(value);
+  onSignupSubmit(): void {
+    if (this.signupForm.invalid || !this.passwordsMatch()) {
+      this.signupForm.markAllAsTouched();
+      return;
+    }
 
-		const isStrong = hasMinLength && hasUpper && hasLower && hasNumber && hasSymbol;
+    this.isSubmitting = true;
 
-		return isStrong ? null : { passwordStrength: true };
-	}
+    const { name, surname, email, phone_number, password } =
+      this.signupForm.value;
 
-	private syncModeWithUrl(url: string): void {
-		if (url.includes("/signup")) {
-			this.isLogin = false;
-		} else {
-			this.isLogin = true;
-		}
-	}
+    // 1) Create the account
+    this.authService
+      .register({
+        name: name as string,
+        surname: surname as string,
+        email: email as string,
+        phone_number: phone_number as string,
+        password: password as string,
+      })
+      .subscribe({
+        next: () => {
+          // 2) On successful signup, automatically log the user in
+          this.authService
+            .login(
+              {
+                email: email as string,
+                password: password as string,
+              },
+              true // auto-login with "remember me" enabled
+            )
+            .subscribe({
+              next: () => {
+                this.isSubmitting = false;
+                this.router.navigate(["/profile"]);
+              },
+              error: (err) => {
+                console.error(err);
+                this.isSubmitting = false;
+                this.toast.error(
+                  "Account created, but automatic sign in failed. Please sign in manually."
+                );
+                this.router.navigate(["/login"]);
+              },
+            });
+        },
+        error: (err) => {
+          console.error(err);
+          this.isSubmitting = false;
+          this.toast.error("Signup failed. Please try again.");
+        },
+      });
+  }
 
-	private phoneValidator(control: AbstractControl): ValidationErrors | null {
-		const value = (control.value || "").trim();
-		if (!value) return null;
+  // ---------- VALIDATORS & HELPERS ----------
 
-		// Very flexible E.164-like format:
-		const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+  private passwordStrengthValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const value = control.value as string;
+    if (!value) {
+      return null; // handled by 'required'
+    }
 
-		return phoneRegex.test(value) ? null : { invalidPhone: true };
-	}
+    const hasMinLength = value.length >= 8;
+    const hasUpper = /[A-Z]/.test(value);
+    const hasLower = /[a-z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+    const hasSymbol = /[^A-Za-z0-9]/.test(value);
 
-	// ---------- HELPERS ----------
-	passwordsMatch(): boolean {
-		const pass = this.signupForm.get("password")?.value;
-		const confirm = this.signupForm.get("confirmPassword")?.value;
+    const isStrong =
+      hasMinLength && hasUpper && hasLower && hasNumber && hasSymbol;
 
-		// If either is empty, don't consider it a mismatch yet
-		if (!pass || !confirm) {
-			return true;
-		}
+    return isStrong ? null : { passwordStrength: true };
+  }
 
-		return pass === confirm;
-	}
+  private syncModeWithUrl(url: string): void {
+    if (url.includes("/signup")) {
+      this.isLogin = false;
+    } else {
+      this.isLogin = true;
+    }
+  }
 
-	hasError(form: "login" | "signup", controlName: string, error: string): boolean {
-		const group = (form === "login" ? this.loginForm : this.signupForm) as FormGroup;
+  private phoneValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const value = (control.value || "").trim();
+    if (!value) return null;
 
-		const control = group.get(controlName);
-		return !!control && control.touched && control.hasError(error);
-	}
+    const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+    return phoneRegex.test(value) ? null : { invalidPhone: true };
+  }
+
+  passwordsMatch(): boolean {
+    const pass = this.signupForm.get("password")?.value;
+    const confirm = this.signupForm.get("confirmPassword")?.value;
+
+    if (!pass || !confirm) {
+      return true;
+    }
+
+    return pass === confirm;
+  }
+
+  hasError(
+    form: "login" | "signup",
+    controlName: string,
+    error: string
+  ): boolean {
+    const group = (form === "login"
+      ? this.loginForm
+      : this.signupForm) as FormGroup;
+
+    const control = group.get(controlName);
+    return !!control && control.touched && control.hasError(error);
+  }
 }
