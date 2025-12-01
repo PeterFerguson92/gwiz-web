@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { faqData } from '../data';
 
 @Component({
   selector: 'app-faqs',
-  imports: [NgbAccordionModule, CommonModule, RouterLink],
+  imports: [NgbAccordionModule, CommonModule],
   templateUrl: './faqs.component.html',
   styles: ``,
 })

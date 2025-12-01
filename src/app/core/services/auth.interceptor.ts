@@ -63,7 +63,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
       // 🔁 call refresh endpoint using refresh token in localStorage
       return this.auth.refreshToken().pipe(
-        switchMap((res) => {
+        switchMap((_res) => {
           this.isRefreshing = false;
 
           // get the new access token from AuthService memory

@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from '@layouts/layout/layout.component';
-import { ProfileComponent } from '@views/profile/profile.component';
-
-import { AuthComponent } from './views/auth/auth.component';
 
 export const routes: Routes = [
   // Default redirect

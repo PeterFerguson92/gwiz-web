@@ -28,18 +28,17 @@ export class FooterComponent {
           this.footer = data.result[0];
           this.showLoader = false;
         } else {
-          const error = 'Footer information not found';
-          this.displayError(error);
+          this.displayError();
         }
       },
       (error) => {
         console.log(error);
-        this.displayError(error);
+        this.displayError();
       }
     );
   }
 
-  displayError(error: string) {
+  displayError() {
     this.showLoader = false;
     this.message = 'information not found';
     this.showNotification = true;

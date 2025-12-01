@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CarouselModule, type OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({

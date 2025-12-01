@@ -34,7 +34,7 @@ export interface UserProfile {
   phone_number: string;
 }
 
-export interface UpdateProfilePayload {
+export interface UpdateProfilePayload extends UserProfile {
   name: string;
   surname: string;
   email: string;
@@ -46,5 +46,3 @@ export interface ChangePasswordPayload {
   new_password: string;
   confirm_password: string;
 }
-
-export interface UpdateProfilePayload extends UserProfile {}

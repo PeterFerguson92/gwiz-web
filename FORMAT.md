@@ -19,5 +19,6 @@ Useful npm scripts (available in `package.json`):
 VS Code: install the Prettier and ESLint extensions. The workspace has `.vscode/settings.json` enabling format-on-save and using Prettier as the default formatter for TypeScript.
 
 Notes:
+
 - After installing the dev dependencies above, run `npm run lint` and `npm run format` to apply checks/fixes.
 - Optionally add `husky` + `lint-staged` to run formatting and linting on pre-commit.

@@ -1,11 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-import type { ServiceType } from '@/types';
 
 @Component({
   selector: 'app-service-card',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './service-card.component.html',
   styles: ``,
 })

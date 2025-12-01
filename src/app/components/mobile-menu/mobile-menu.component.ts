@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '@core/services/api.service';
 import { AuthService } from '@core/services/auth.service';
 
-import { menuItems } from './data';
 import { MobileNavItemComponent } from './mobile-nav-item/mobile-nav-item.component';
 
 interface MenuItem {
@@ -56,13 +55,12 @@ export class MobileMenuComponent {
           this.footer = data.result[0];
           this.showLoader = false;
         } else {
-          const error = 'Footer information not found';
-          this.displayError(error);
+          this.displayError();
         }
       },
       (error) => {
         console.log(error);
-        this.displayError(error);
+        this.displayError();
       }
     );
   }
@@ -76,7 +74,7 @@ export class MobileMenuComponent {
     this.closeMenu();
   }
 
-  displayError(error: string) {
+  displayError() {
     this.showLoader = false;
     this.message = 'information not found';
     this.showNotification = true;
