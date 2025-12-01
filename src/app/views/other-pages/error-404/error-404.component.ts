@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 @Component({

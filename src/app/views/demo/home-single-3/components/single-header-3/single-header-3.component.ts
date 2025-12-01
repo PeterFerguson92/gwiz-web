@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import { MobileNavItem2Component } from '@app/components/mobile-nav-item-2/mobile-nav-item-2.component';
 import { StickyScrollDirective } from '@core/directives/sticky-scroll.directive';
 import { ScrollService } from '@core/services/scroll.service';

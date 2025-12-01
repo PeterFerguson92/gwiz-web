@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
-import { PaginationComponent } from '@app/components/pagination/pagination.component';
 
 import type { TestimonialType } from '@/types';
+import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
+import { PaginationComponent } from '@app/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-testimonials',

@@ -23,7 +23,19 @@
   ],
   "rules": {
     "prettier/prettier": "error",
-    "simple-import-sort/imports": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          ["^\\u0000"],
+          ["^node:", "^@?\\w"],
+          ["^(@|@app|@views|@components|@core|@layouts|@assets|@environments)(/.*|$)"],
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)"],
+          ["^.+\\.s?css$"]
+        ]
+      }
+    ],
     "simple-import-sort/exports": "error",
     "import/newline-after-import": ["error", { "count": 1 }],
     "import/no-duplicates": "error",

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import { ScrollService } from '@core/services/scroll.service';
 
 interface MenuItem {

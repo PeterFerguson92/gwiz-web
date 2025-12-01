@@ -9,10 +9,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
 import { NAME_PATTERN } from '@core/constants/auth.constants';
 import { AuthService } from '@core/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth',

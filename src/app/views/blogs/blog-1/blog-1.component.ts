@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 import type { BlogType } from '@/types';
+import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 import { BlogCardComponent } from '../../../components/cards/blog-card/blog-card.component';
 

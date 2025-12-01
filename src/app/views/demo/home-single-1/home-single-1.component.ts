@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { FooterComponent } from '@app/components/footer/footer.component';
 
 import { AboutComponent } from './components/about/about.component';

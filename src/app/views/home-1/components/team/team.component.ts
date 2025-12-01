@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+
 import { MemberCardComponent } from '@app/components/cards/member-card/member-card.component';
 
 import { teamMembers } from '../data';

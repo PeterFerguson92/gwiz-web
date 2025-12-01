@@ -3,10 +3,11 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+
 import { HttpErrorInterceptor } from '@core/services/http-error.interceptor';
 
-import { routes } from './app.routes';
 import { AuthInterceptor } from './core/services/auth.interceptor'; // ⬅️ path from app.config.ts
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [

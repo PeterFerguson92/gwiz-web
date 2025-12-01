@@ -1,6 +1,7 @@
 // 🔐 Auth routes – same component, different URLs
 
 import { Routes } from '@angular/router';
+
 import { authGuard } from '@core/guards/auth.guard';
 import { guestGuard } from '@core/guards/guest.guard';
 import { AuthComponent } from '@views/auth/auth.component';

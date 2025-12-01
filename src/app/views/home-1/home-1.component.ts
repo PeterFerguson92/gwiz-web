@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+
 import { ApiService } from '@core/services/api.service';
 
 import { CommonModule, SHARED_IMPORTS } from '../../shared/shared-imports';
+
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FaqsComponent } from './components/faqs/faqs.component';

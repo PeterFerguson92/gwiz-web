@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
 import type { FAQType } from '@/types';
+import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-faq',

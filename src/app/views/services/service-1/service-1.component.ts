@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ServiceCardComponent } from '@app/components/cards/service-card/service-card.component';
-import { ApiService } from '@core/services/api.service';
 
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
+import { ServiceCardComponent } from '@app/components/cards/service-card/service-card.component';
+import { ApiService } from '@core/services/api.service';
 
 import { BreadcrumbComponent } from '../../../components/breadcrumb/breadcrumb.component';
 

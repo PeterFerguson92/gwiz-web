@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { StickyScrollDirective } from '@core/directives/sticky-scroll.directive';
 import { ApiService } from '@core/services/api.service';
 import { AuthService } from '@core/services/auth.service';
-
-import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 
 import { MobileMenuComponent } from '../mobile-menu/mobile-menu.component';
 

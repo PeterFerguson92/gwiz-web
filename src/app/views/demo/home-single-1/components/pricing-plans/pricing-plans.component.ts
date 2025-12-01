@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PricingCardComponent } from '@app/components/cards/pricing-card/pricing-card.component';
 
 import { pricingPlans } from '@/assets/data';
+import { PricingCardComponent } from '@app/components/cards/pricing-card/pricing-card.component';
 
 @Component({
   selector: 'app-pricing-plans',

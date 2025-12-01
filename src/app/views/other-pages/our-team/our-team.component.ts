@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 import type { MemberType } from '@/types';
+import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
 import { MemberCardComponent } from '../../../components/cards/member-card/member-card.component';
 import { PaginationComponent } from '../../../components/pagination/pagination.component';

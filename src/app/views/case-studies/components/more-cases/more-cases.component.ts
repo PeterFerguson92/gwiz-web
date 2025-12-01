@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+
 import { caseStudies } from '@views/case-studies/data';
 
 import { CaseStudyCardComponent } from '../../../../components/cards/case-study-card/case-study-card.component';
