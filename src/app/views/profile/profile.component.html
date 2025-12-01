@@ -1,143 +1,235 @@
 <section>
-	<div class="hero1-section-area about-bg-area">
-		<img src="assets/img/bg/dumbell_bg.png" alt="" class="header-img1" />
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-4 m-auto">
-					<div class="hero-heading-area heading1 text-center">
-						<h1>My Profile</h1>
-						<app-breadcrumb title="My Profile"></app-breadcrumb>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="hero1-section-area about-bg-area">
+    <img src="assets/img/bg/dumbell_bg.png" alt="" class="header-img1" />
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 m-auto">
+          <div class="hero-heading-area heading1 text-center">
+            <h1>My Profile</h1>
+            <app-breadcrumb title="My Profile"></app-breadcrumb>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div class="service-leftside-area sp8">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 m-auto">
-				<div class="service-rightside-area heading2" style="padding: 0">
-					<!-- Account details -->
-					<h3>Account Details</h3>
-					<p>Keep your personal information up to date so we can customise your training, stay in touch and keep your membership running smoothly.</p>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 m-auto">
+        <div class="service-rightside-area heading2" style="padding: 0">
+          <!-- Account details -->
+          <h3>Account Details</h3>
+          <p>
+            Keep your personal information up to date so we can customise your training, stay in
+            touch and keep your membership running smoothly.
+          </p>
 
-					<form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="profile-form">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="name">Name</label>
-									<input id="name" type="text" formControlName="name" />
+          <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="profile-form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input id="name" type="text" formControlName="name" />
 
-									<div class="error" *ngIf="hasError('profile', 'name', 'required')">Name is required.</div>
-									<div class="error" *ngIf="hasError('profile', 'name', 'minlength')">Must be at least 2 characters.</div>
-									<div class="error" *ngIf="hasError('profile', 'name', 'pattern')">Cannot contain numbers or special characters.</div>
-								</div>
-							</div>
+                  <div class="error" *ngIf="hasError('profile', 'name', 'required')">
+                    Name is required.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'name', 'minlength')">
+                    Must be at least 2 characters.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'name', 'pattern')">
+                    Cannot contain numbers or special characters.
+                  </div>
+                </div>
+              </div>
 
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="surname">Surname</label>
-									<input id="surname" type="text" formControlName="surname" />
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="surname">Surname</label>
+                  <input id="surname" type="text" formControlName="surname" />
 
-									<div class="error" *ngIf="hasError('profile', 'surname', 'required')">Surname is required.</div>
-									<div class="error" *ngIf="hasError('profile', 'surname', 'minlength')">Must be at least 2 characters.</div>
-									<div class="error" *ngIf="hasError('profile', 'surname', 'pattern')">Cannot contain numbers or special characters.</div>
-								</div>
-							</div>
-						</div>
+                  <div class="error" *ngIf="hasError('profile', 'surname', 'required')">
+                    Surname is required.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'surname', 'minlength')">
+                    Must be at least 2 characters.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'surname', 'pattern')">
+                    Cannot contain numbers or special characters.
+                  </div>
+                </div>
+              </div>
+            </div>
 
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="email">Email</label>
-									<input id="email" type="email" formControlName="email" />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" formControlName="email" />
 
-									<div class="error" *ngIf="hasError('profile', 'email', 'required')">Email is required.</div>
-									<div class="error" *ngIf="hasError('profile', 'email', 'email')">Enter a valid email.</div>
-								</div>
-							</div>
+                  <div class="error" *ngIf="hasError('profile', 'email', 'required')">
+                    Email is required.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'email', 'email')">
+                    Enter a valid email.
+                  </div>
+                </div>
+              </div>
 
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="phone">Phone number</label>
-									<input id="phone" type="tel" formControlName="phone_number" />
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="phone">Phone number</label>
+                  <input id="phone" type="tel" formControlName="phone_number" />
 
-									<div class="error" *ngIf="hasError('profile', 'phone_number', 'required')">Phone number is required.</div>
-									<div class="error" *ngIf="hasError('profile', 'phone_number', 'invalidPhone')">Enter a valid phone number.</div>
-								</div>
-							</div>
-						</div>
+                  <div class="error" *ngIf="hasError('profile', 'phone_number', 'required')">
+                    Phone number is required.
+                  </div>
+                  <div class="error" *ngIf="hasError('profile', 'phone_number', 'invalidPhone')">
+                    Enter a valid phone number.
+                  </div>
+                </div>
+              </div>
+            </div>
 
-						<button type="submit" class="btn-primary" [disabled]="savingProfile || loadingProfile || !hasChanges">
-							{{ loadingProfile ? "Loading…" : savingProfile ? "Saving…" : "Save changes" }}
-						</button>
-					</form>
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="savingProfile || loadingProfile || !hasChanges"
+            >
+              {{ loadingProfile ? 'Loading…' : savingProfile ? 'Saving…' : 'Save changes' }}
+            </button>
+          </form>
 
-					<div class="space32"></div>
+          <div class="space32"></div>
 
-					<!-- Change password -->
-					<h3>Security</h3>
-					<p>Update your password to keep your account locked in and secure.</p>
+          <!-- Change password -->
+          <h3>Security</h3>
+          <p>Update your password to keep your account locked in and secure.</p>
 
-					<form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="profile-form">
-						<div class="form-group">
-							<label for="old_password">Current password</label>
-							<div class="password-field">
-								<input id="old_password" [type]="showOldPassword ? 'text' : 'password'" formControlName="old_password" />
-								<button type="button" class="toggle-password" (click)="showOldPassword = !showOldPassword">
-									{{ showOldPassword ? "Hide" : "Show" }}
-								</button>
-							</div>
-							<div class="error" *ngIf="hasError('password', 'old_password', 'required')">Current password is required.</div>
-						</div>
+          <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="profile-form">
+            <div class="form-group">
+              <label for="old_password">Current password</label>
+              <div class="password-field">
+                <input
+                  id="old_password"
+                  [type]="showOldPassword ? 'text' : 'password'"
+                  formControlName="old_password"
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  (click)="showOldPassword = !showOldPassword"
+                >
+                  {{ showOldPassword ? 'Hide' : 'Show' }}
+                </button>
+              </div>
+              <div class="error" *ngIf="hasError('password', 'old_password', 'required')">
+                Current password is required.
+              </div>
+            </div>
 
-						<div class="form-group">
-							<label for="new_password">New password</label>
-							<div class="password-field">
-								<input id="new_password" [type]="showNewPassword ? 'text' : 'password'" formControlName="new_password" placeholder="Min 8 chars, upper, lower, number & symbol" />
-								<button type="button" class="toggle-password" (click)="showNewPassword = !showNewPassword">
-									{{ showNewPassword ? "Hide" : "Show" }}
-								</button>
-							</div>
-							<div class="error" *ngIf="passwordStrengthLevel !== 'strong' && newPasswordControl?.touched">Your new password must be <strong>strong</strong> to continue.</div>
-							<div class="error" *ngIf="hasError('password', 'new_password', 'required')">New password is required.</div>
-							<div class="error" *ngIf="hasError('password', 'new_password', 'minlength')">Must be at least 8 characters.</div>
-							<div class="error" *ngIf="hasError('password', 'new_password', 'passwordStrength')">Use upper & lower case letters, a number and a symbol.</div>
+            <div class="form-group">
+              <label for="new_password">New password</label>
+              <div class="password-field">
+                <input
+                  id="new_password"
+                  [type]="showNewPassword ? 'text' : 'password'"
+                  formControlName="new_password"
+                  placeholder="Min 8 chars, upper, lower, number & symbol"
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  (click)="showNewPassword = !showNewPassword"
+                >
+                  {{ showNewPassword ? 'Hide' : 'Show' }}
+                </button>
+              </div>
+              <div
+                class="error"
+                *ngIf="passwordStrengthLevel !== 'strong' && newPasswordControl?.touched"
+              >
+                Your new password must be <strong>strong</strong> to continue.
+              </div>
+              <div class="error" *ngIf="hasError('password', 'new_password', 'required')">
+                New password is required.
+              </div>
+              <div class="error" *ngIf="hasError('password', 'new_password', 'minlength')">
+                Must be at least 8 characters.
+              </div>
+              <div class="error" *ngIf="hasError('password', 'new_password', 'passwordStrength')">
+                Use upper & lower case letters, a number and a symbol.
+              </div>
 
-							<div class="password-strength" *ngIf="newPasswordControl?.value && !hasError('password', 'new_password', 'required')">
-								<div class="strength-bars">
-									<span class="bar" [class.filled]="passwordStrengthLevel === 'weak' || passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"> </span>
-									<span class="bar" [class.filled]="passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'"> </span>
-									<span class="bar" [class.filled]="passwordStrengthLevel === 'strong'"> </span>
-								</div>
-								<span class="strength-label" [ngClass]="passwordStrengthLevel">
-									{{ passwordStrengthLabel }}
-								</span>
-							</div>
-						</div>
+              <div
+                class="password-strength"
+                *ngIf="
+                  newPasswordControl?.value && !hasError('password', 'new_password', 'required')
+                "
+              >
+                <div class="strength-bars">
+                  <span
+                    class="bar"
+                    [class.filled]="
+                      passwordStrengthLevel === 'weak' ||
+                      passwordStrengthLevel === 'medium' ||
+                      passwordStrengthLevel === 'strong'
+                    "
+                  >
+                  </span>
+                  <span
+                    class="bar"
+                    [class.filled]="
+                      passwordStrengthLevel === 'medium' || passwordStrengthLevel === 'strong'
+                    "
+                  >
+                  </span>
+                  <span class="bar" [class.filled]="passwordStrengthLevel === 'strong'"> </span>
+                </div>
+                <span class="strength-label" [ngClass]="passwordStrengthLevel">
+                  {{ passwordStrengthLabel }}
+                </span>
+              </div>
+            </div>
 
-						<div class="form-group">
-							<label for="confirm_password">Confirm new password</label>
-							<div class="password-field">
-								<input id="confirm_password" [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirm_password" placeholder="Repeat new password" />
-								<button type="button" class="toggle-password" (click)="showConfirmPassword = !showConfirmPassword">
-									{{ showConfirmPassword ? "Hide" : "Show" }}
-								</button>
-							</div>
-							<div class="error" *ngIf="hasError('password', 'confirm_password', 'required')">Please confirm your new password.</div>
-							<div class="error" *ngIf="passwordForm.get('confirm_password')?.touched && !passwordsMatch()">Passwords do not match.</div>
-						</div>
+            <div class="form-group">
+              <label for="confirm_password">Confirm new password</label>
+              <div class="password-field">
+                <input
+                  id="confirm_password"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  formControlName="confirm_password"
+                  placeholder="Repeat new password"
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  (click)="showConfirmPassword = !showConfirmPassword"
+                >
+                  {{ showConfirmPassword ? 'Hide' : 'Show' }}
+                </button>
+              </div>
+              <div class="error" *ngIf="hasError('password', 'confirm_password', 'required')">
+                Please confirm your new password.
+              </div>
+              <div
+                class="error"
+                *ngIf="passwordForm.get('confirm_password')?.touched && !passwordsMatch()"
+              >
+                Passwords do not match.
+              </div>
+            </div>
 
-						<button type="submit" class="btn-primary" [disabled]="!canChangePassword">
-							{{ changingPassword ? "Changing…" : "Change password" }}
-						</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+            <button type="submit" class="btn-primary" [disabled]="!canChangePassword">
+              {{ changingPassword ? 'Changing…' : 'Change password' }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="space32"></div>

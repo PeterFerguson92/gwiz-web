@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
@@ -24,20 +24,18 @@ export class ScrollService {
   }
 
   private listenForFragmentScroll() {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const fragment = window.location.hash.replace('#', '');
-        if (fragment) {
-          this.activeSection = fragment;
-          setTimeout(() => {
-            document.getElementById(fragment)?.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
-          }, 100);
-        }
-      });
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      const fragment = window.location.hash.replace('#', '');
+      if (fragment) {
+        this.activeSection = fragment;
+        setTimeout(() => {
+          document.getElementById(fragment)?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }, 100);
+      }
+    });
   }
 
   private listenForManualScroll() {

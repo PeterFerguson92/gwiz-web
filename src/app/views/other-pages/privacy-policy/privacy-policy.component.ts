@@ -5,8 +5,6 @@ import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.compo
   selector: 'app-privacy-policy',
   imports: [BreadcrumbComponent],
   templateUrl: './privacy-policy.component.html',
-  styleUrl: './privacy-policy.component.scss'
+  styleUrl: './privacy-policy.component.scss',
 })
-export class PrivacyPolicyComponent {
-
-}
+export class PrivacyPolicyComponent {}

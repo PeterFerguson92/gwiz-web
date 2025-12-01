@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-service-sidebar',
   imports: [],
   templateUrl: './service-sidebar.component.html',
-  styles: ``
+  styles: ``,
 })
-export class ServiceSidebarComponent {
-
-}
+export class ServiceSidebarComponent {}

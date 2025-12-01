@@ -1,20 +1,22 @@
 <div class="team-auhtor-boxarea">
-    <div class="images">
-        <img [src]="getProfileImage(member.profile_image)" alt="">
-        <div class="team-social-area">
-            <div class="icons">
-                <a href="javascript:void(0)" class="plus"><i class="fa-solid fa-plus"></i></a>
-                <ul>
-                    <li><a [href]="member.instagram_link"><i class="fa-brands fa-instagram"></i></a></li>
-                    <!-- <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
+  <div class="images">
+    <img [src]="getProfileImage(member.profile_image)" alt="" />
+    <div class="team-social-area">
+      <div class="icons">
+        <a href="javascript:void(0)" class="plus"><i class="fa-solid fa-plus"></i></a>
+        <ul>
+          <li>
+            <a [href]="member.instagram_link"><i class="fa-brands fa-instagram"></i></a>
+          </li>
+          <!-- <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
                     <li><a href="javascript:void(0)"><i class="fa-brands fa-pinterest-p"></i></a></li> -->
-                    <!-- <li><a href="javascript:void(0)"><i class="fa-brands fa-youtube"></i></a></li> -->
-                </ul>
-            </div>
-        </div>
+          <!-- <li><a href="javascript:void(0)"><i class="fa-brands fa-youtube"></i></a></li> -->
+        </ul>
+      </div>
     </div>
-    <div class="content-area">
-        <a>{{member.name}}</a>
-        <p>{{member.role}}</p>
-    </div>
+  </div>
+  <div class="content-area">
+    <a>{{ member.name }}</a>
+    <p>{{ member.role }}</p>
+  </div>
 </div>

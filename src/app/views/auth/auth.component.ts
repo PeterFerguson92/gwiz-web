@@ -1,25 +1,25 @@
-import { Component, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormGroup,
   AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
   ValidationErrors,
-} from "@angular/forms";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
-import { filter } from "rxjs/operators";
-import { AuthService } from "@core/services/auth.service";
-import { NAME_PATTERN } from "@core/constants/auth.constants";
-import { ToastService } from "@core/services/toast.service";
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NAME_PATTERN } from '@core/constants/auth.constants';
+import { AuthService } from '@core/services/auth.service';
+import { ToastService } from '@core/services/toast.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: "app-auth",
+  selector: 'app-auth',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: "./auth.component.html",
-  styleUrls: ["./auth.component.scss"],
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
   isLogin = true;
@@ -38,60 +38,45 @@ export class AuthComponent implements OnInit {
     // LOGIN FORM
     this.loginForm = this.fb.group(
       {
-        email: ["", [Validators.required, Validators.email]],
-        password: ["", [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required]],
         rememberMe: [false],
       },
-      { updateOn: "blur" }
+      { updateOn: 'blur' }
     );
 
     // SIGNUP FORM
     this.signupForm = this.fb.group(
       {
         name: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.pattern(NAME_PATTERN),
-          ],
+          '',
+          [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)],
         ],
         surname: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.pattern(NAME_PATTERN),
-          ],
+          '',
+          [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)],
         ],
-        email: ["", [Validators.required, Validators.email]],
-        phone_number: [
-          "",
-          [Validators.required, this.phoneValidator.bind(this)],
-        ],
+        email: ['', [Validators.required, Validators.email]],
+        phone_number: ['', [Validators.required, this.phoneValidator.bind(this)]],
         password: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(8),
-            this.passwordStrengthValidator.bind(this),
-          ],
+          '',
+          [Validators.required, Validators.minLength(8), this.passwordStrengthValidator.bind(this)],
         ],
-        confirmPassword: ["", [Validators.required]],
+        confirmPassword: ['', [Validators.required]],
       },
-      { updateOn: "blur" }
+      { updateOn: 'blur' }
     );
   }
 
   // ---------- GETTERS ----------
 
   get passwordControl(): AbstractControl | null {
-    return this.signupForm.get("password");
+    return this.signupForm.get('password');
   }
 
-  get passwordStrengthLevel(): "weak" | "medium" | "strong" | "empty" {
+  get passwordStrengthLevel(): 'weak' | 'medium' | 'strong' | 'empty' {
     const value = this.passwordControl?.value as string;
-    if (!value) return "empty";
+    if (!value) return 'empty';
 
     let score = 0;
     if (value.length >= 8) score++;
@@ -100,9 +85,9 @@ export class AuthComponent implements OnInit {
     if (/[0-9]/.test(value)) score++;
     if (/[^A-Za-z0-9]/.test(value)) score++;
 
-    if (score <= 2) return "weak";
-    if (score === 3 || score === 4) return "medium";
-    return "strong";
+    if (score <= 2) return 'weak';
+    if (score === 3 || score === 4) return 'medium';
+    return 'strong';
   }
 
   get canLogin(): boolean {
@@ -112,21 +97,21 @@ export class AuthComponent implements OnInit {
   get canCreateAccount(): boolean {
     const formValid = this.signupForm.valid;
     const passwordsMatch = this.passwordsMatch();
-    const isStrong = this.passwordStrengthLevel === "strong";
+    const isStrong = this.passwordStrengthLevel === 'strong';
 
     return formValid && passwordsMatch && isStrong && !this.isSubmitting;
   }
 
   get passwordStrengthLabel(): string {
     switch (this.passwordStrengthLevel) {
-      case "weak":
-        return "Needs more gains 💪";
-      case "medium":
-        return "Ok we getting there 🔥";
-      case "strong":
-        return "Beast mode unlocked 🏋️";
+      case 'weak':
+        return 'Needs more gains 💪';
+      case 'medium':
+        return 'Ok we getting there 🔥';
+      case 'strong':
+        return 'Beast mode unlocked 🏋️';
       default:
-        return "";
+        return '';
     }
   }
 
@@ -144,11 +129,11 @@ export class AuthComponent implements OnInit {
 
   // ---------- MODE SWITCH ----------
 
-  switchMode(mode: "login" | "signup"): void {
-    if (mode === "login") {
-      this.router.navigate(["/login"]);
+  switchMode(mode: 'login' | 'signup'): void {
+    if (mode === 'login') {
+      this.router.navigate(['/login']);
     } else {
-      this.router.navigate(["/signup"]);
+      this.router.navigate(['/signup']);
     }
   }
 
@@ -175,14 +160,12 @@ export class AuthComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(["/profile"]);
+          this.router.navigate(['/profile']);
         },
         error: (err) => {
           console.error(err);
           this.isSubmitting = false;
-          this.toast.error(
-            "Login failed. Please check your credentials."
-          );
+          this.toast.error('Login failed. Please check your credentials.');
         },
       });
   }
@@ -197,8 +180,7 @@ export class AuthComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    const { name, surname, email, phone_number, password } =
-      this.signupForm.value;
+    const { name, surname, email, phone_number, password } = this.signupForm.value;
 
     // 1) Create the account
     this.authService
@@ -223,31 +205,29 @@ export class AuthComponent implements OnInit {
             .subscribe({
               next: () => {
                 this.isSubmitting = false;
-                this.router.navigate(["/profile"]);
+                this.router.navigate(['/profile']);
               },
               error: (err) => {
                 console.error(err);
                 this.isSubmitting = false;
                 this.toast.error(
-                  "Account created, but automatic sign in failed. Please sign in manually."
+                  'Account created, but automatic sign in failed. Please sign in manually.'
                 );
-                this.router.navigate(["/login"]);
+                this.router.navigate(['/login']);
               },
             });
         },
         error: (err) => {
           console.error(err);
           this.isSubmitting = false;
-          this.toast.error("Signup failed. Please try again.");
+          this.toast.error('Signup failed. Please try again.');
         },
       });
   }
 
   // ---------- VALIDATORS & HELPERS ----------
 
-  private passwordStrengthValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
+  private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value as string;
     if (!value) {
       return null; // handled by 'required'
@@ -259,24 +239,21 @@ export class AuthComponent implements OnInit {
     const hasNumber = /[0-9]/.test(value);
     const hasSymbol = /[^A-Za-z0-9]/.test(value);
 
-    const isStrong =
-      hasMinLength && hasUpper && hasLower && hasNumber && hasSymbol;
+    const isStrong = hasMinLength && hasUpper && hasLower && hasNumber && hasSymbol;
 
     return isStrong ? null : { passwordStrength: true };
   }
 
   private syncModeWithUrl(url: string): void {
-    if (url.includes("/signup")) {
+    if (url.includes('/signup')) {
       this.isLogin = false;
     } else {
       this.isLogin = true;
     }
   }
 
-  private phoneValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
-    const value = (control.value || "").trim();
+  private phoneValidator(control: AbstractControl): ValidationErrors | null {
+    const value = (control.value || '').trim();
     if (!value) return null;
 
     const phoneRegex = /^\+?[1-9]\d{6,14}$/;
@@ -284,8 +261,8 @@ export class AuthComponent implements OnInit {
   }
 
   passwordsMatch(): boolean {
-    const pass = this.signupForm.get("password")?.value;
-    const confirm = this.signupForm.get("confirmPassword")?.value;
+    const pass = this.signupForm.get('password')?.value;
+    const confirm = this.signupForm.get('confirmPassword')?.value;
 
     if (!pass || !confirm) {
       return true;
@@ -294,14 +271,8 @@ export class AuthComponent implements OnInit {
     return pass === confirm;
   }
 
-  hasError(
-    form: "login" | "signup",
-    controlName: string,
-    error: string
-  ): boolean {
-    const group = (form === "login"
-      ? this.loginForm
-      : this.signupForm) as FormGroup;
+  hasError(form: 'login' | 'signup', controlName: string, error: string): boolean {
+    const group = (form === 'login' ? this.loginForm : this.signupForm) as FormGroup;
 
     const control = group.get(controlName);
     return !!control && control.touched && control.hasError(error);

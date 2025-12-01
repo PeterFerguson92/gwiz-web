@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-cta',
   imports: [],
   templateUrl: './cta.component.html',
-  styles: ``
+  styles: ``,
 })
-export class CtaComponent {
-
-}
+export class CtaComponent {}

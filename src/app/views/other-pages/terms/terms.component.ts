@@ -5,8 +5,6 @@ import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.compo
   selector: 'app-terms',
   imports: [BreadcrumbComponent],
   templateUrl: './terms.component.html',
-  styleUrl: './terms.component.scss'
+  styleUrl: './terms.component.scss',
 })
-export class TermsComponent {
-
-}
+export class TermsComponent {}

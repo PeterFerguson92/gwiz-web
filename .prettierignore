@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+.angular
+.git
+coverage
+*.min.js
+package-lock.json
+yarn.lock
+public
+*.svg

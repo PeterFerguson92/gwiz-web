@@ -8,9 +8,8 @@ describe('ScrollToTopComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScrollToTopComponent]
-    })
-    .compileComponents();
+      imports: [ScrollToTopComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ScrollToTopComponent);
     component = fixture.componentInstance;

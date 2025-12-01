@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { blogs } from '../data';
 import { RouterLink } from '@angular/router';
+
+import { blogs } from '../data';
 
 @Component({
   selector: 'app-blogs-4',
-  imports: [CommonModule,RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './blogs-4.component.html',
-  styles: ``
+  styles: ``,
 })
 export class Blogs4Component {
-    blogPosts=blogs
+  blogPosts = blogs;
 }

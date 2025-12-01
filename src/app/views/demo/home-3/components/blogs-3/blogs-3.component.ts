@@ -5,8 +5,6 @@ import { RouterLink } from '@angular/router';
   selector: 'app-blogs-3',
   imports: [RouterLink],
   templateUrl: './blogs-3.component.html',
-  styles: ``
+  styles: ``,
 })
-export class Blogs3Component {
-
-}
+export class Blogs3Component {}

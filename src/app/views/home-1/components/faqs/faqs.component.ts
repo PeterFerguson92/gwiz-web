@@ -1,18 +1,19 @@
-import { Component, Input } from '@angular/core';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import { faqData } from '../data';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { faqData } from '../data';
 
 @Component({
   selector: 'app-faqs',
-  imports: [NgbAccordionModule,CommonModule,RouterLink],
+  imports: [NgbAccordionModule, CommonModule, RouterLink],
   templateUrl: './faqs.component.html',
-  styles: ``
+  styles: ``,
 })
 export class FaqsComponent {
-  faqData = faqData
+  faqData = faqData;
   @Input() faqs: any;
-	@Input() faqTitle = "";
-	@Input() faqDescription = "";
+  @Input() faqTitle = '';
+  @Input() faqDescription = '';
 }

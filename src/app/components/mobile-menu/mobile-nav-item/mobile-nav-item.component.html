@@ -1,18 +1,31 @@
 <li [ngClass]="{ 'has-sub hash-has-sub': item.isOpen }">
-	<!-- Link -->
-	<a [routerLink]="item.link" [class.hash-nav]="item.link === '#'" (click)="onItemClick($event)">
-		{{ item.title }}
-	</a>
+  <!-- Link -->
+  <a [routerLink]="item.link" [class.hash-nav]="item.link === '#'" (click)="onItemClick($event)">
+    {{ item.title }}
+  </a>
 
-	<!-- Submenu toggle -->
-	<span *ngIf="item.subMenu" class="submenu-button" [ngClass]="{ 'submenu-opened': item.isOpen }" (click)="toggleSubMenu(item, $event)">
-		<em></em>
-	</span>
+  <!-- Submenu toggle -->
+  <span
+    *ngIf="item.subMenu"
+    class="submenu-button"
+    [ngClass]="{ 'submenu-opened': item.isOpen }"
+    (click)="toggleSubMenu(item, $event)"
+  >
+    <em></em>
+  </span>
 
-	<!-- Submenu -->
-	<ul *ngIf="item.subMenu && item.isOpen" class="sub-menu" [ngClass]="{ 'open-sub': item.isOpen }" [ngStyle]="{ display: item.isOpen ? 'block' : 'none' }">
-		<ng-container *ngFor="let subItem of item.subMenu">
-			<app-mobile-nav-item [item]="subItem" (itemClicked)="onItemClick($event)"></app-mobile-nav-item>
-		</ng-container>
-	</ul>
+  <!-- Submenu -->
+  <ul
+    *ngIf="item.subMenu && item.isOpen"
+    class="sub-menu"
+    [ngClass]="{ 'open-sub': item.isOpen }"
+    [ngStyle]="{ display: item.isOpen ? 'block' : 'none' }"
+  >
+    <ng-container *ngFor="let subItem of item.subMenu">
+      <app-mobile-nav-item
+        [item]="subItem"
+        (itemClicked)="onItemClick($event)"
+      ></app-mobile-nav-item>
+    </ng-container>
+  </ul>
 </li>

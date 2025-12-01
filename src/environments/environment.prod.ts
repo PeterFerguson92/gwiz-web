@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-	production: true,
-	apiUrl: "https://gwiz-admin-ff2827c872e3.herokuapp.com/api",
+  production: true,
+  apiUrl: 'https://gwiz-admin-ff2827c872e3.herokuapp.com/api',
 };
 /*
  * For easier debugging in development mode, you can import the following file

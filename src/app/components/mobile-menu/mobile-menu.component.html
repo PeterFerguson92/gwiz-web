@@ -1,98 +1,108 @@
 <!-- Mobile Header -->
 <div class="mobile-header {{ mobileHeaderClass }} d-block d-lg-none">
-	<div class="container-fluid">
-		<div class="col-12">
-			<div class="mobile-header-elements" style="display: flex; align-items: center; justify-content: space-between">
-				<!-- Logo centered absolutely -->
-				<div class="mobile-logo" style="position: absolute; left: 50%; transform: translateX(-50%)">
-					<a routerLink="/home">
-						<img [src]="mobileLogo" alt="logo" style="width: 70%; max-width: 150px; height: auto; object-fit: contain" />
-					</a>
-				</div>
+  <div class="container-fluid">
+    <div class="col-12">
+      <div
+        class="mobile-header-elements"
+        style="display: flex; align-items: center; justify-content: space-between"
+      >
+        <!-- Logo centered absolutely -->
+        <div class="mobile-logo" style="position: absolute; left: 50%; transform: translateX(-50%)">
+          <a routerLink="/home">
+            <img
+              [src]="mobileLogo"
+              alt="logo"
+              style="width: 70%; max-width: 150px; height: auto; object-fit: contain"
+            />
+          </a>
+        </div>
 
-				<!-- Hamburger Menu -->
-				<div class="mobile-nav-icon dots-menu" (click)="toggleMenu()" style="margin-left: auto">
-					<i class="fa-solid fa-bars"></i>
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- Hamburger Menu -->
+        <div class="mobile-nav-icon dots-menu" (click)="toggleMenu()" style="margin-left: auto">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Sidebar -->
-<div class="mobile-sidebar {{ mobileSidebarClass }}" [ngClass]="{ 'mobile-menu-active': isMenuOpen }">
-	<div class="logosicon-area">
-		<div class="logos">
-			<img [src]="mobileLogo" alt="logo" />
-		</div>
-		<div class="menu-close" (click)="closeMenu()">
-			<i class="fa-solid fa-xmark"></i>
-		</div>
-	</div>
+<div
+  class="mobile-sidebar {{ mobileSidebarClass }}"
+  [ngClass]="{ 'mobile-menu-active': isMenuOpen }"
+>
+  <div class="logosicon-area">
+    <div class="logos">
+      <img [src]="mobileLogo" alt="logo" />
+    </div>
+    <div class="menu-close" (click)="closeMenu()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+  </div>
 
-	<div class="mobile-nav mobile-nav1">
-		<ul class="mobile-nav-list nav-list1">
-			<!-- Regular menu items -->
-			<ng-container *ngFor="let item of menuItems">
-				<app-mobile-nav-item [item]="item" (itemClicked)="closeMenu()"></app-mobile-nav-item>
-			</ng-container>
+  <div class="mobile-nav mobile-nav1">
+    <ul class="mobile-nav-list nav-list1">
+      <!-- Regular menu items -->
+      <ng-container *ngFor="let item of menuItems">
+        <app-mobile-nav-item [item]="item" (itemClicked)="closeMenu()"></app-mobile-nav-item>
+      </ng-container>
 
-			<!-- Auth links -->
-			<li *ngIf="isLoggedIn">
-				<a routerLink="/profile" (click)="closeMenu()">Profile</a>
-			</li>
-			<li *ngIf="isLoggedIn">
-				<a (click)="logout()" style="cursor: pointer">Logout</a>
-			</li>
-			<li *ngIf="!isLoggedIn">
-				<a routerLink="/login" (click)="closeMenu()">Login</a>
-			</li>
-		</ul>
+      <!-- Auth links -->
+      <li *ngIf="isLoggedIn">
+        <a routerLink="/profile" (click)="closeMenu()">Profile</a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a (click)="logout()" style="cursor: pointer">Logout</a>
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a routerLink="/login" (click)="closeMenu()">Login</a>
+      </li>
+    </ul>
 
-		<div class="allmobilesection" *ngIf="footer">
-			<!-- CTA (currently commented out)
+    <div class="allmobilesection" *ngIf="footer">
+      <!-- CTA (currently commented out)
       <a routerLink="/contact-us" [class]="btnClass">
         Get Started <i class="fa-solid fa-arrow-right"></i>
       </a>
       -->
 
-			<div class="single-footer">
-				<h3>Contact Info</h3>
-				<div class="footer1-contact-info">
-					<div class="contact-info-single">
-						<i class="fa-solid fa-phone-volume"></i>
-						<a [href]="'tel:' + footer.contact.phone">
-							{{ footer.contact.phone }}
-						</a>
-					</div>
-					<div class="contact-info-single">
-						<i class="fa-solid fa-envelope"></i>
-						<a href="mailto:info@example.com">
-							{{ footer.contact.email }}
-						</a>
-					</div>
-					<div class="contact-info-single">
-						<i class="fa-solid fa-location-dot"></i>
-						<span>{{ footer.contact.address }}</span>
-					</div>
-				</div>
-			</div>
+      <div class="single-footer">
+        <h3>Contact Info</h3>
+        <div class="footer1-contact-info">
+          <div class="contact-info-single">
+            <i class="fa-solid fa-phone-volume"></i>
+            <a [href]="'tel:' + footer.contact.phone">
+              {{ footer.contact.phone }}
+            </a>
+          </div>
+          <div class="contact-info-single">
+            <i class="fa-solid fa-envelope"></i>
+            <a href="mailto:info@example.com">
+              {{ footer.contact.email }}
+            </a>
+          </div>
+          <div class="contact-info-single">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>{{ footer.contact.address }}</span>
+          </div>
+        </div>
+      </div>
 
-			<div class="single-footer">
-				<h3>Social Links</h3>
-				<ul class="social-links-mobile-menu">
-					<li>
-						<a [href]="footer.tiktok_link">
-							<i class="fa-brands fa-tiktok"></i>
-						</a>
-					</li>
-					<li>
-						<a [href]="footer.instagram_link">
-							<i class="fa-brands fa-instagram"></i>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+      <div class="single-footer">
+        <h3>Social Links</h3>
+        <ul class="social-links-mobile-menu">
+          <li>
+            <a [href]="footer.tiktok_link">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+          </li>
+          <li>
+            <a [href]="footer.instagram_link">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

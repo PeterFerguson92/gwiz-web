@@ -8,9 +8,8 @@ describe('PrivacyPolicyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PrivacyPolicyComponent]
-    })
-    .compileComponents();
+      imports: [PrivacyPolicyComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PrivacyPolicyComponent);
     component = fixture.componentInstance;

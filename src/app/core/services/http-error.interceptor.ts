@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -6,10 +5,12 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 import { ToastService } from './toast.service';
 
 @Injectable()
@@ -29,9 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
         // Don't spam toasts for auth endpoints themselves
         const isAuthEndpoint =
-          url.includes('/login') ||
-          url.includes('/token') ||
-          url.includes('/register');
+          url.includes('/login') || url.includes('/token') || url.includes('/register');
 
         // Handle 401: expired / invalid JWT
         if (error.status === 401 && !isAuthEndpoint) {

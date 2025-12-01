@@ -1,38 +1,40 @@
 <div class="about1-section-area sp1">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="about-images-area">
-                    <div class="img1" data-aos="zoom-out" data-aos-duration="1000">
-                        <img [src]=aboutUs.about_us_homepage_image2 alt="">
-                    </div>
-                    <div class="img2" data-aos="zoom-out" data-aos-duration="1100">
-                        <img [src]=aboutUs.about_us_homepage_image1 alt="">
-                    </div>
-                    <div class="conter-area" data-aos="zoom-out" data-aos-duration="1200">
-                        <h3><span class="counter">12</span>+</h3>
-                        <p>Years of Experienced</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="about-header-area heading2">
-                    <h5>About Us</h5>
-                    <h2 class="tg-element-title">{{aboutUs.homepage_display_header}}</h2>
-                    <p data-aos="fade-left" data-aos-duration="1000">{{aboutUs.homepage_display_text}}</p>
-                    <div class="space10"></div>
-                    <ul data-aos="fade-left" data-aos-duration="1100">
-                        <li><img src="assets/img/icons/check1.svg" alt="">{{aboutUs.highlight_text1}}</li>
-                        <li><img src="assets/img/icons/check1.svg" alt="">{{aboutUs.highlight_text2}}</li>
-                        <li><img src="assets/img/icons/check1.svg" alt="">{{aboutUs.highlight_text3}}</li>
-                    </ul>
-
-                    <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
-                        <a routerLink="/about" class="header-btn1">About Us <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="about-images-area">
+          <div class="img1" data-aos="zoom-out" data-aos-duration="1000">
+            <img [src]="aboutUs.about_us_homepage_image2" alt="" />
+          </div>
+          <div class="img2" data-aos="zoom-out" data-aos-duration="1100">
+            <img [src]="aboutUs.about_us_homepage_image1" alt="" />
+          </div>
+          <div class="conter-area" data-aos="zoom-out" data-aos-duration="1200">
+            <h3><span class="counter">12</span>+</h3>
+            <p>Years of Experienced</p>
+          </div>
         </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="about-header-area heading2">
+          <h5>About Us</h5>
+          <h2 class="tg-element-title">{{ aboutUs.homepage_display_header }}</h2>
+          <p data-aos="fade-left" data-aos-duration="1000">{{ aboutUs.homepage_display_text }}</p>
+          <div class="space10"></div>
+          <ul data-aos="fade-left" data-aos-duration="1100">
+            <li><img src="assets/img/icons/check1.svg" alt="" />{{ aboutUs.highlight_text1 }}</li>
+            <li><img src="assets/img/icons/check1.svg" alt="" />{{ aboutUs.highlight_text2 }}</li>
+            <li><img src="assets/img/icons/check1.svg" alt="" />{{ aboutUs.highlight_text3 }}</li>
+          </ul>
+
+          <div class="btn-area" data-aos="fade-left" data-aos-duration="1200">
+            <a routerLink="/about" class="header-btn1"
+              >About Us <i class="fa-solid fa-arrow-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-case-sidebar',
   imports: [],
   templateUrl: './case-sidebar.component.html',
-  styles: ``
+  styles: ``,
 })
-export class CaseSidebarComponent {
-
-}
+export class CaseSidebarComponent {}

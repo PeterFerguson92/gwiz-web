@@ -5,8 +5,6 @@ import { RouterLink } from '@angular/router';
   selector: 'app-about',
   imports: [RouterLink],
   templateUrl: './about.component.html',
-  styles: ``
+  styles: ``,
 })
-export class AboutComponent {
-
-}
+export class AboutComponent {}

@@ -8,9 +8,8 @@ describe('CaseRightComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CaseRightComponent]
-    })
-    .compileComponents();
+      imports: [CaseRightComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CaseRightComponent);
     component = fixture.componentInstance;

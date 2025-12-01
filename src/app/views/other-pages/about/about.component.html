@@ -1,17 +1,20 @@
 <app-loading-api *ngIf="showLoader"></app-loading-api>
 <section *ngIf="!showNotification && aboutUs">
-	<app-about-hero [cover_image]="aboutUs.cover_image" />
-	<app-about-content
-		[section_display_header]="aboutUs.section_display_header"
-		[section_display_text]="aboutUs.section_display_text"
-		[section_highlight_text1]="aboutUs.section_highlight_text1"
-		[section_highlight_text2]="aboutUs.section_highlight_text2"
-		[section_highlight_text3]="aboutUs.section_highlight_text3"
-		[about_us_section_image1]="aboutUs.about_us_section_image1"
-		[about_us_section_image2]="aboutUs.about_us_section_image2"
-	/>
-	<app-team [team]="aboutUs.team" />
+  <app-about-hero [cover_image]="aboutUs.cover_image" />
+  <app-about-content
+    [section_display_header]="aboutUs.section_display_header"
+    [section_display_text]="aboutUs.section_display_text"
+    [section_highlight_text1]="aboutUs.section_highlight_text1"
+    [section_highlight_text2]="aboutUs.section_highlight_text2"
+    [section_highlight_text3]="aboutUs.section_highlight_text3"
+    [about_us_section_image1]="aboutUs.about_us_section_image1"
+    [about_us_section_image2]="aboutUs.about_us_section_image2"
+  />
+  <app-team [team]="aboutUs.team" />
 </section>
 <section *ngIf="showNotification">
-	<app-notification-message [showNotification]="showNotification" [message]="message"></app-notification-message>
+  <app-notification-message
+    [showNotification]="showNotification"
+    [message]="message"
+  ></app-notification-message>
 </section>

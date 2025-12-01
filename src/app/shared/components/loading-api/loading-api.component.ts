@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-loading-api',
   imports: [],
   templateUrl: './loading-api.component.html',
-  styleUrl: './loading-api.component.scss'
+  styleUrl: './loading-api.component.scss',
 })
-export class LoadingApiComponent {
-
-}
+export class LoadingApiComponent {}
