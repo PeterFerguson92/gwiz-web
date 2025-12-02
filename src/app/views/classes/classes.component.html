@@ -36,10 +36,7 @@
           <!-- scrollable classes container -->
           <div class="classes-scroll-container" *ngIf="!loadingClasses">
             <div *ngIf="classes.length" class="classes-list">
-              <div
-                class="class-card"
-                *ngFor="let cls of classes; trackBy: trackByClassId"
-              >
+              <div class="class-card" *ngFor="let cls of classes; trackBy: trackByClassId" (click)="onCardClick(cls, $event)">
                 <div class="class-card-inner">
                   <div class="class-main-row">
                     <!-- LEFT SIDE: thumbnail + info -->
@@ -60,14 +57,9 @@
                             {{ cls.genre | titlecase }}
                           </span>
 
-                          <span class="chip chip-outline">
-                            Capacity: {{ cls.capacity }}
-                          </span>
+                          <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
 
-                          <span
-                            class="chip chip-outline"
-                            *ngIf="cls.instructors?.length"
-                          >
+                          <span class="chip chip-outline" *ngIf="cls.instructors?.length">
                             {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
                             {{ cls.instructors.join(', ') }}
                           </span>
@@ -76,16 +68,68 @@
                         <p class="class-description">
                           {{ cls.description || 'No description available.' }}
                         </p>
+
+                        <!-- MOBILE META + BUTTON -->
+                        <div class="class-meta-mobile">
+                          <ng-container *ngIf="cls.next_session; else noMobileSession">
+                            <div class="class-meta-row-mobile">
+                              <div class="meta-item-mobile">
+                                <span class="meta-label">Next session</span>
+                                <span class="meta-value">
+                                  {{ sessionDateLabel(cls.next_session) }}
+                                </span>
+                                <span class="meta-sub">
+                                  {{ sessionTimeLabel(cls.next_session) }}
+                                </span>
+                              </div>
+
+                              <div class="meta-item-mobile">
+                                <span class="meta-label">Spaces left</span>
+                                <span class="meta-value">
+                                  {{ cls.next_session.spaces_left }}
+                                </span>
+                              </div>
+                            </div>
+
+                            <button
+                              type="button"
+                              class="btn-primary btn-primary-sm class-book-btn-mobile"
+                              [disabled]="
+                                cls.next_session.status === 'cancelled' ||
+                                cls.next_session.spaces_left <= 0 ||
+                                bookingLoading[cls.next_session.id]
+                              "
+                              (click)="onBook(cls)"
+                            >
+                              <ng-container *ngIf="isLoggedIn; else loginToBook">
+                                <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
+                                <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
+                              </ng-container>
+                            </button>
+                          </ng-container>
+
+                          <ng-template #noMobileSession>
+                            <div class="class-meta-row-mobile">
+                              <div class="meta-item-mobile">
+                                <span class="meta-label">Next session</span>
+                                <span class="meta-value">
+                                  No upcoming sessions in the next 30 days
+                                </span>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </div>
+                        <!-- /MOBILE META + BUTTON -->
                       </div>
                     </div>
 
-                    <!-- RIGHT SIDE: meta + CTA when there is a session -->
+                    <!-- RIGHT SIDE: meta + CTA (desktop / tablet) -->
                     <div class="class-right" *ngIf="cls.next_session">
                       <div class="right-meta">
                         <div class="meta-block">
                           <div class="meta-label">From</div>
                           <div class="meta-value price">
-                            {{ cls.price | currency : 'GBP' }}
+                            {{ cls.price | currency: 'GBP' }}
                           </div>
                         </div>
 
@@ -109,7 +153,7 @@
 
                       <button
                         type="button"
-                        class="btn-primary btn-primary-sm sidebar-btn class-book-btn"
+                        class="btn-primary btn-primary-sm class-book-btn"
                         [disabled]="
                           cls.next_session.status === 'cancelled' ||
                           cls.next_session.spaces_left <= 0 ||
@@ -118,36 +162,32 @@
                         (click)="onBook(cls)"
                       >
                         <ng-container *ngIf="isLoggedIn; else loginToBook">
-                          <span *ngIf="!bookingLoading[cls.next_session.id]">
-                            Book now
-                          </span>
-                          <span *ngIf="bookingLoading[cls.next_session.id]">
-                            Booking…
-                          </span>
+                          <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
+                          <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
                         </ng-container>
-
-                        <ng-template #loginToBook>
-                          Login to book
-                        </ng-template>
                       </button>
                     </div>
 
-                    <!-- RIGHT SIDE: no upcoming sessions -->
+                    <!-- RIGHT SIDE: no upcoming sessions (desktop / tablet) -->
                     <div class="class-right no-session" *ngIf="!cls.next_session">
                       <div class="right-meta">
                         <div class="meta-block">
                           <div class="meta-label">Next session</div>
-                          <div class="meta-value">
-                            No upcoming sessions in the next 30 days
-                          </div>
+                          <div class="meta-value">No upcoming sessions in the next 30 days</div>
                         </div>
                       </div>
                     </div>
-                  </div> <!-- /class-main-row -->
-                </div> <!-- /class-card-inner -->
-              </div> <!-- /class-card -->
+                  </div>
+                  <!-- /class-main-row -->
 
-              <!-- Infinite scroll loading indicator (hook to a flag like loadingMoreClasses) -->
+                  <!-- Shared template for login CTA -->
+                  <ng-template #loginToBook> Login to book </ng-template>
+                </div>
+                <!-- /class-card-inner -->
+              </div>
+              <!-- /class-card -->
+
+              <!-- Infinite scroll loading indicator (optional) -->
               <div class="classes-loading-more" *ngIf="loadingMoreClasses">
                 <span class="loading-spinner"></span>
                 <span>Loading more classes…</span>
@@ -193,7 +233,8 @@
               <h4 class="widget-title">Need an account?</h4>
             </div>
             <p class="small text-muted mb-0">
-              Create a free account to book classes, track your visits, and view your booking history.
+              Create a free account to book classes, track your visits, and view your booking
+              history.
             </p>
 
             <div class="sidebar-cta-group">
@@ -255,7 +296,8 @@
             </button>
           </div>
         </div>
-      </div> <!-- /RIGHT -->
+      </div>
+      <!-- /RIGHT -->
     </div>
   </div>
 </div>

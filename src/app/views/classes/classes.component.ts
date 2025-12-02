@@ -174,4 +174,31 @@ export class ClassesComponent implements OnInit {
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
+
+  onCardClick(cls: any, event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    // If user actually clicked a button, let the button handler deal with it
+    if (target.closest('button')) {
+      return;
+    }
+
+    // If there is no upcoming session, do nothing for now
+    if (!cls.next_session) {
+      return;
+    }
+
+    // If booking is disabled (cancelled / full / already loading), do nothing
+    const session = cls.next_session;
+    if (
+      session.status === 'cancelled' ||
+      session.spaces_left <= 0 ||
+      this.bookingLoading?.[session.id]
+    ) {
+      return;
+    }
+
+    // Otherwise behave like pressing the Book/Login button
+    this.onBook(cls);
+  }
 }

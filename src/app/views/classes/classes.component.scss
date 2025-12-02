@@ -28,7 +28,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;
-  -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Pretty scrollbar */
@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom: 24px; /* room above fade */
+  padding-bottom: 24px;
 }
 
 .class-card {
@@ -82,6 +82,11 @@
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   border: 1px solid rgba(148, 163, 184, 0.18);
   overflow: hidden;
+  cursor: pointer;
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .class-card-inner {
@@ -93,6 +98,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+}
+
+.class-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+/* Keep buttons looking like buttons */
+.class-card button {
+  cursor: pointer;
 }
 
 /* --------------------------------------------------------
@@ -170,7 +186,7 @@
 }
 
 /* --------------------------------------------------------
-   RIGHT SIDE (meta + CTA)
+   DESKTOP RIGHT SIDE (meta + CTA)
 --------------------------------------------------------- */
 
 .class-right {
@@ -218,9 +234,57 @@
   color: #6b7280;
 }
 
-/* Book button inside card (desktop) */
+/* desktop book button */
 .class-book-btn {
   margin-top: 6px;
+}
+
+/* --------------------------------------------------------
+   MOBILE META + BUTTON (hidden by default)
+--------------------------------------------------------- */
+
+.class-meta-mobile {
+  display: none;
+  margin-top: 10px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 10px;
+}
+
+.class-meta-row-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 10px;
+}
+
+.meta-item-mobile {
+  min-width: 150px;
+}
+
+.meta-item-mobile .meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.meta-item-mobile .meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+  display: block;
+}
+
+.meta-item-mobile .meta-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* mobile book button */
+.class-book-btn-mobile {
+  width: 100%;
 }
 
 /* --------------------------------------------------------
@@ -280,7 +344,10 @@
   padding: 20px 22px 22px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
   border: 1px solid rgba(148, 163, 184, 0.12);
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 /* subtle lift on hover */
@@ -336,7 +403,7 @@
 }
 
 .sidebar-list li::before {
-  content: "•";
+  content: '•';
   position: absolute;
   left: 0;
   top: 0;
@@ -356,7 +423,6 @@
   margin-top: 14px;
 }
 
-/* All sidebar buttons share same size & alignment */
 .sidebar-btn {
   width: 100%;
   height: 52px;
@@ -373,13 +439,11 @@
   padding-right: 0 !important;
 }
 
-/* Make outline button visually match primary */
 .btn-secondary.sidebar-btn {
   border-width: 2px;
   line-height: 1 !important;
 }
 
-/* Specific spacing for Contact us button */
 .help-section .sidebar-btn {
   margin-top: 12px;
 }
@@ -393,29 +457,45 @@
     max-height: calc(100vh - 200px);
   }
 
+  .service-sidebar {
+    position: static;
+    margin-top: 30px;
+  }
+}
+
+/* Phone-specific layout */
+@media (max-width: 767.98px) {
   .class-main-row {
     flex-direction: column;
     align-items: flex-start;
   }
 
+  .class-card-inner {
+    padding: 16px 16px 14px;
+  }
+
+  .class-left {
+    width: 100%;
+  }
+
+  .class-description {
+    margin-bottom: 6px;
+  }
+
+  /* Hide desktop right side on phones */
   .class-right {
-    align-items: flex-start;
-    min-width: 0;
-    width: 100%;
+    display: none;
   }
 
-  .right-meta {
-    align-items: flex-start;
+  /* Show mobile meta section */
+  .class-meta-mobile {
+    display: block;
   }
 
-  /* Mobile: make book button full width under meta */
-  .class-book-btn {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .service-sidebar {
-    position: static;
-    margin-top: 30px;
+  .class-book-btn-mobile {
+    width: 90%; /* slightly inset looks nicer */
+    margin: 12px auto 0; /* center horizontally + top spacing */
+    display: block;
+    text-align: center;
   }
 }
