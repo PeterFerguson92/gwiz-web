@@ -33,10 +33,13 @@
             <app-loading-api></app-loading-api>
           </div>
 
-          <!-- classes -->
-          <div class="classes-scroll-container">
-            <div *ngIf="!loadingClasses && classes.length" class="classes-list">
-              <div class="class-card" *ngFor="let cls of classes; trackBy: trackByClassId">
+          <!-- scrollable classes container -->
+          <div class="classes-scroll-container" *ngIf="!loadingClasses">
+            <div *ngIf="classes.length" class="classes-list">
+              <div
+                class="class-card"
+                *ngFor="let cls of classes; trackBy: trackByClassId"
+              >
                 <div class="class-card-inner">
                   <div class="class-main-row">
                     <!-- LEFT SIDE: thumbnail + info -->
@@ -57,9 +60,14 @@
                             {{ cls.genre | titlecase }}
                           </span>
 
-                          <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
+                          <span class="chip chip-outline">
+                            Capacity: {{ cls.capacity }}
+                          </span>
 
-                          <span class="chip chip-outline" *ngIf="cls.instructors?.length">
+                          <span
+                            class="chip chip-outline"
+                            *ngIf="cls.instructors?.length"
+                          >
                             {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
                             {{ cls.instructors.join(', ') }}
                           </span>
@@ -77,7 +85,7 @@
                         <div class="meta-block">
                           <div class="meta-label">From</div>
                           <div class="meta-value price">
-                            {{ cls.price | currency: 'GBP' }}
+                            {{ cls.price | currency : 'GBP' }}
                           </div>
                         </div>
 
@@ -101,7 +109,7 @@
 
                       <button
                         type="button"
-                        class="btn-primary btn-primary-sm sidebar-btn"
+                        class="btn-primary btn-primary-sm sidebar-btn class-book-btn"
                         [disabled]="
                           cls.next_session.status === 'cancelled' ||
                           cls.next_session.spaces_left <= 0 ||
@@ -110,11 +118,17 @@
                         (click)="onBook(cls)"
                       >
                         <ng-container *ngIf="isLoggedIn; else loginToBook">
-                          <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
-                          <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
+                          <span *ngIf="!bookingLoading[cls.next_session.id]">
+                            Book now
+                          </span>
+                          <span *ngIf="bookingLoading[cls.next_session.id]">
+                            Booking…
+                          </span>
                         </ng-container>
 
-                        <ng-template #loginToBook> Login to book </ng-template>
+                        <ng-template #loginToBook>
+                          Login to book
+                        </ng-template>
                       </button>
                     </div>
 
@@ -123,22 +137,30 @@
                       <div class="right-meta">
                         <div class="meta-block">
                           <div class="meta-label">Next session</div>
-                          <div class="meta-value">No upcoming sessions in the next 30 days</div>
+                          <div class="meta-value">
+                            No upcoming sessions in the next 30 days
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- /class-main-row -->
-                </div>
-                <!-- /class-card-inner -->
-              </div>
-              <!-- /class-card -->
-            </div>
-          </div>
+                  </div> <!-- /class-main-row -->
+                </div> <!-- /class-card-inner -->
+              </div> <!-- /class-card -->
 
-          <!-- empty state -->
-          <div *ngIf="!loadingClasses && !classes.length" class="classes-empty">
-            <p>No fitness classes available yet. Please check back soon.</p>
+              <!-- Infinite scroll loading indicator (hook to a flag like loadingMoreClasses) -->
+              <div class="classes-loading-more" *ngIf="loadingMoreClasses">
+                <span class="loading-spinner"></span>
+                <span>Loading more classes…</span>
+              </div>
+            </div>
+
+            <!-- empty state inside scroll area -->
+            <div *ngIf="!classes.length" class="classes-empty">
+              <p>No fitness classes available yet. Please check back soon.</p>
+            </div>
+
+            <!-- gradient fade at bottom -->
+            <div class="classes-scroll-fade"></div>
           </div>
         </div>
       </div>
@@ -171,8 +193,7 @@
               <h4 class="widget-title">Need an account?</h4>
             </div>
             <p class="small text-muted mb-0">
-              Create a free account to book classes, track your visits, and view your booking
-              history.
+              Create a free account to book classes, track your visits, and view your booking history.
             </p>
 
             <div class="sidebar-cta-group">
@@ -234,8 +255,7 @@
             </button>
           </div>
         </div>
-      </div>
-      <!-- /RIGHT -->
+      </div> <!-- /RIGHT -->
     </div>
   </div>
 </div>

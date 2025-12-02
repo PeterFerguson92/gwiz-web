@@ -25,6 +25,8 @@ import { ToastService } from '@core/services/toast.service';
 export class ClassesComponent implements OnInit {
   classes: FitnessClassWithNextSession[] = [];
   loadingClasses = false;
+  loadingMoreClasses = false;
+
   placeholderImage = 'assets/img/placeholder.jpg';
 
   // per-session loading state for the Book button
