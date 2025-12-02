@@ -1,0 +1,361 @@
+/* --------------------------------------------------------
+   PAGE HEADER
+--------------------------------------------------------- */
+
+.classes-header {
+  margin-bottom: 40px; /* spacing before first card */
+
+  .classes-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .classes-subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+/* --------------------------------------------------------
+   CLASSES LIST + CARDS
+--------------------------------------------------------- */
+
+.classes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-bottom: 40px; /* spacing after last card */
+}
+
+.class-card {
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  overflow: hidden;
+}
+
+.class-card-inner {
+  padding: 22px 26px 18px;
+}
+
+/* --------------------------------------------------------
+   CARD TOP: Thumbnail + content layout
+--------------------------------------------------------- */
+
+.class-card-top {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.class-thumb {
+  width: 105px;
+  height: 105px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.class-main {
+  flex: 1;
+}
+
+/* --------------------------------------------------------
+   HEADER ROW (name + price)
+--------------------------------------------------------- */
+
+.class-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.class-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+/* Pill chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.chip-primary {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.chip-outline {
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #4b5563;
+}
+
+/* Price block */
+.right-price {
+  text-align: right;
+  min-width: 120px;
+
+  .label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+  }
+
+  .value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+/* --------------------------------------------------------
+   DESCRIPTION
+--------------------------------------------------------- */
+
+.class-description {
+  margin: 10px 0 16px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* Divider */
+.divider {
+  border-top: 1px solid #f3f4f6;
+  margin: 0 -26px 0;
+}
+
+/* --------------------------------------------------------
+   META ROW (session + spaces + button)
+--------------------------------------------------------- */
+
+.class-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 22px;
+  padding-top: 14px;
+}
+
+.meta-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 170px;
+}
+
+.meta-item i {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.meta-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.meta-value.muted {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* --------------------------------------------------------
+   STATUS PILL + BUTTON COLUMN
+--------------------------------------------------------- */
+
+.action-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.status-pill {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.status-open {
+  background: rgba(16, 185, 129, 0.16);
+  color: #059669;
+}
+
+.status-full {
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+}
+
+.status-cancelled {
+  background: rgba(239, 68, 68, 0.16);
+  color: #b91c1c;
+}
+
+/* --------------------------------------------------------
+   BOOK NOW BUTTON (Brand Red)
+   *** THIS IS THE FIX THAT MAKES IT RED ***
+--------------------------------------------------------- */
+
+button.theme-btn.theme-btn-sm.class-book-btn {
+  background: var(--brand-red) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+
+  padding: 10px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 10px 25px rgba(201, 15, 22, 0.35) !important;
+  transition: all 0.25s ease !important;
+}
+
+/* Hover */
+button.theme-btn.theme-btn-sm.class-book-btn:hover:not(:disabled) {
+  background: #a00c12 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(201, 15, 22, 0.45) !important;
+}
+
+/* Disabled */
+button.theme-btn.theme-btn-sm.class-book-btn:disabled {
+  background: #d1d5db !important;
+  color: #ffffff !important;
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* --------------------------------------------------------
+   EMPTY STATE
+--------------------------------------------------------- */
+
+.classes-empty {
+  margin-top: 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* --------------------------------------------------------
+   SIDEBAR (Upgraded UI)
+--------------------------------------------------------- */
+
+.service-sidebar {
+  position: sticky;
+  top: 120px;
+}
+
+.sidebar-widget {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 22px 24px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.sidebar-widget + .sidebar-widget {
+  margin-top: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sidebar-icon {
+  font-size: 18px;
+  color: var(--brand-red);
+}
+
+.widget-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sidebar-list li + li {
+  margin-top: 4px;
+}
+
+.sidebar-cta-group a {
+  margin-bottom: 8px;
+}
+
+/* --------------------------------------------------------
+   RESPONSIVE TWEAKS
+--------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  .class-card-inner {
+    padding: 16px 18px 14px;
+  }
+
+  .class-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-block {
+    align-items: flex-start;
+  }
+
+  .service-sidebar {
+    position: static;
+    margin-top: 30px;
+  }
+}

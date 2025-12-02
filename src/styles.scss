@@ -7,3 +7,66 @@
 @use 'slick-carousel/slick/slick-theme.css';
 @use 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
 @use './assets/scss/main.scss';
+
+/* ------------------------------------------------------
+   GLOBAL PRIMARY BUTTON (BRAND RED)
+   Reusable everywhere
+------------------------------------------------------- */
+
+:root {
+  --brand-red: #c90f16;
+}
+
+.btn-primary {
+  background: var(--brand-red) !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.8rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(201, 15, 22, 0.35);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(201, 15, 22, 0.45);
+}
+
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  opacity: 0.7;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Smaller version for smaller spaces */
+.btn-primary-sm {
+  @extend .btn-primary;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 18px rgba(201, 15, 22, 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--brand-red);
+  color: var(--brand-red);
+  border-radius: 999px;
+  padding: 0.8rem 1.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover:not([disabled]) {
+  background: rgba(201, 15, 22, 0.1);
+}

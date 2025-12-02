@@ -14,6 +14,11 @@ export const VIEWS_ROUTES: Routes = [
   },
   {
     path: '',
+    loadChildren: () => import('./bookings.route').then((mod) => mod.BOOKINGS_ROUTES),
+  },
+
+  {
+    path: '',
     loadChildren: () => import('./services/services.route').then((mod) => mod.SERVICES_ROUTES),
   },
   {
