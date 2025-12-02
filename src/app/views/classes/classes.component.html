@@ -34,104 +34,106 @@
           </div>
 
           <!-- classes -->
-          <div *ngIf="!loadingClasses && classes.length" class="classes-list">
-            <div class="class-card" *ngFor="let cls of classes; trackBy: trackByClassId">
-              <div class="class-card-inner">
-                <div class="class-main-row">
-                  <!-- LEFT SIDE: thumbnail + info -->
-                  <div class="class-left">
-                    <div class="class-thumb">
-                      <img
-                        [src]="cls.image_url || placeholderImage"
-                        (error)="onImageError($event)"
-                        [alt]="cls.name"
-                      />
-                    </div>
-
-                    <div class="class-body">
-                      <h3 class="class-name">{{ cls.name }}</h3>
-
-                      <div class="chip-row">
-                        <span *ngIf="cls.genre" class="chip chip-primary">
-                          {{ cls.genre | titlecase }}
-                        </span>
-
-                        <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
-
-                        <span class="chip chip-outline" *ngIf="cls.instructors?.length">
-                          {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
-                          {{ cls.instructors.join(', ') }}
-                        </span>
+          <div class="classes-scroll-container">
+            <div *ngIf="!loadingClasses && classes.length" class="classes-list">
+              <div class="class-card" *ngFor="let cls of classes; trackBy: trackByClassId">
+                <div class="class-card-inner">
+                  <div class="class-main-row">
+                    <!-- LEFT SIDE: thumbnail + info -->
+                    <div class="class-left">
+                      <div class="class-thumb">
+                        <img
+                          [src]="cls.image_url || placeholderImage"
+                          (error)="onImageError($event)"
+                          [alt]="cls.name"
+                        />
                       </div>
 
-                      <p class="class-description">
-                        {{ cls.description || 'No description available.' }}
-                      </p>
+                      <div class="class-body">
+                        <h3 class="class-name">{{ cls.name }}</h3>
+
+                        <div class="chip-row">
+                          <span *ngIf="cls.genre" class="chip chip-primary">
+                            {{ cls.genre | titlecase }}
+                          </span>
+
+                          <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
+
+                          <span class="chip chip-outline" *ngIf="cls.instructors?.length">
+                            {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
+                            {{ cls.instructors.join(', ') }}
+                          </span>
+                        </div>
+
+                        <p class="class-description">
+                          {{ cls.description || 'No description available.' }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- RIGHT SIDE: meta + CTA when there is a session -->
+                    <div class="class-right" *ngIf="cls.next_session">
+                      <div class="right-meta">
+                        <div class="meta-block">
+                          <div class="meta-label">From</div>
+                          <div class="meta-value price">
+                            {{ cls.price | currency: 'GBP' }}
+                          </div>
+                        </div>
+
+                        <div class="meta-block">
+                          <div class="meta-label">Next session</div>
+                          <div class="meta-value">
+                            {{ sessionDateLabel(cls.next_session) }}
+                          </div>
+                          <div class="meta-sub">
+                            {{ sessionTimeLabel(cls.next_session) }}
+                          </div>
+                        </div>
+
+                        <div class="meta-block">
+                          <div class="meta-label">Spaces left</div>
+                          <div class="meta-value">
+                            {{ cls.next_session.spaces_left }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn-primary btn-primary-sm sidebar-btn"
+                        [disabled]="
+                          cls.next_session.status === 'cancelled' ||
+                          cls.next_session.spaces_left <= 0 ||
+                          bookingLoading[cls.next_session.id]
+                        "
+                        (click)="onBook(cls)"
+                      >
+                        <ng-container *ngIf="isLoggedIn; else loginToBook">
+                          <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
+                          <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
+                        </ng-container>
+
+                        <ng-template #loginToBook> Login to book </ng-template>
+                      </button>
+                    </div>
+
+                    <!-- RIGHT SIDE: no upcoming sessions -->
+                    <div class="class-right no-session" *ngIf="!cls.next_session">
+                      <div class="right-meta">
+                        <div class="meta-block">
+                          <div class="meta-label">Next session</div>
+                          <div class="meta-value">No upcoming sessions in the next 30 days</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <!-- RIGHT SIDE: meta + CTA when there is a session -->
-                  <div class="class-right" *ngIf="cls.next_session">
-                    <div class="right-meta">
-                      <div class="meta-block">
-                        <div class="meta-label">From</div>
-                        <div class="meta-value price">
-                          {{ cls.price | currency: 'GBP' }}
-                        </div>
-                      </div>
-
-                      <div class="meta-block">
-                        <div class="meta-label">Next session</div>
-                        <div class="meta-value">
-                          {{ sessionDateLabel(cls.next_session) }}
-                        </div>
-                        <div class="meta-sub">
-                          {{ sessionTimeLabel(cls.next_session) }}
-                        </div>
-                      </div>
-
-                      <div class="meta-block">
-                        <div class="meta-label">Spaces left</div>
-                        <div class="meta-value">
-                          {{ cls.next_session.spaces_left }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      class="btn-primary btn-primary-sm sidebar-btn"
-                      [disabled]="
-                        cls.next_session.status === 'cancelled' ||
-                        cls.next_session.spaces_left <= 0 ||
-                        bookingLoading[cls.next_session.id]
-                      "
-                      (click)="onBook(cls)"
-                    >
-                      <ng-container *ngIf="isLoggedIn; else loginToBook">
-                        <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
-                        <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
-                      </ng-container>
-
-                      <ng-template #loginToBook> Login to book </ng-template>
-                    </button>
-                  </div>
-
-                  <!-- RIGHT SIDE: no upcoming sessions -->
-                  <div class="class-right no-session" *ngIf="!cls.next_session">
-                    <div class="right-meta">
-                      <div class="meta-block">
-                        <div class="meta-label">Next session</div>
-                        <div class="meta-value">No upcoming sessions in the next 30 days</div>
-                      </div>
-                    </div>
-                  </div>
+                  <!-- /class-main-row -->
                 </div>
-                <!-- /class-main-row -->
+                <!-- /class-card-inner -->
               </div>
-              <!-- /class-card-inner -->
+              <!-- /class-card -->
             </div>
-            <!-- /class-card -->
           </div>
 
           <!-- empty state -->

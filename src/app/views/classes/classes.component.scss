@@ -18,6 +18,51 @@
   }
 }
 
+/* ----------------------------------------------
+   SCROLLABLE CLASSES LIST (Desktop + Mobile)
+---------------------------------------------- */
+
+.classes-scroll-container {
+  max-height: calc(100vh - 260px); /* adjust if needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px; /* room for scrollbar */
+
+  /* smooth scrolling on iOS + Android */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional: pretty scrollbar (Chrome, Edge, Safari) */
+.classes-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.classes-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.classes-scroll-container::-webkit-scrollbar-thumb {
+  background: #d1d5db; /* gray-300 */
+  border-radius: 10px;
+}
+
+.classes-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af; /* gray-400 */
+}
+
+/* Firefox scrollbar */
+.classes-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* MOBILE: slightly taller list */
+@media (max-width: 991.98px) {
+  .classes-scroll-container {
+    max-height: calc(100vh - 200px);
+  }
+}
+
 /* --------------------------------------------------------
    CLASSES LIST + CARDS
 --------------------------------------------------------- */
