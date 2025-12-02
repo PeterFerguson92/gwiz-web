@@ -18,10 +18,9 @@
 <div class="service-leftside-area sp8">
   <div class="container">
     <div class="row">
-      <!-- LEFT: Class list -->
+      <!-- LEFT: class list -->
       <div class="col-xl-8 col-lg-8">
         <div class="service-details-content">
-          <!-- Section header -->
           <div class="classes-header">
             <h2 class="classes-title">Find your next class</h2>
             <p class="classes-subtitle">
@@ -29,131 +28,79 @@
             </p>
           </div>
 
-          <!-- Loader -->
+          <!-- loader -->
           <div *ngIf="loadingClasses" class="mb-30">
             <app-loading-api></app-loading-api>
           </div>
 
-          <!-- Classes list -->
+          <!-- classes -->
           <div *ngIf="!loadingClasses && classes.length" class="classes-list">
             <div class="class-card" *ngFor="let cls of classes; trackBy: trackByClassId">
               <div class="class-card-inner">
-                <!-- Card content layout: thumbnail + main content -->
-                <div class="class-card-top">
-                  <!-- Optional thumbnail -->
-                  <div class="class-thumb" *ngIf="cls.image_url">
-                    <img [src]="cls.image_url" [alt]="cls.name" class="img-fluid" />
+                <div class="class-main-row">
+                  <!-- LEFT SIDE: thumbnail + info -->
+                  <div class="class-left">
+                    <div class="class-thumb">
+                      <img
+                        [src]="cls.image_url || placeholderImage"
+                        (error)="onImageError($event)"
+                        [alt]="cls.name"
+                      />
+                    </div>
+
+                    <div class="class-body">
+                      <h3 class="class-name">{{ cls.name }}</h3>
+
+                      <div class="chip-row">
+                        <span *ngIf="cls.genre" class="chip chip-primary">
+                          {{ cls.genre | titlecase }}
+                        </span>
+
+                        <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
+
+                        <span class="chip chip-outline" *ngIf="cls.instructors?.length">
+                          {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
+                          {{ cls.instructors.join(', ') }}
+                        </span>
+                      </div>
+
+                      <p class="class-description">
+                        {{ cls.description || 'No description available.' }}
+                      </p>
+                    </div>
                   </div>
 
-                  <!-- Main content -->
-                  <div class="class-main">
-                    <!-- Header row -->
-                    <div class="class-card-header">
-                      <div class="left">
-                        <h3 class="class-name">{{ cls.name }}</h3>
-
-                        <div class="chip-row">
-                          <span *ngIf="cls.genre" class="chip chip-primary">
-                            {{ cls.genre | titlecase }}
-                          </span>
-
-                          <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
-
-                          <span class="chip chip-outline" *ngIf="cls.instructors?.length">
-                            {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
-                            {{ cls.instructors.join(', ') }}
-                          </span>
+                  <!-- RIGHT SIDE: meta + CTA when there is a session -->
+                  <div class="class-right" *ngIf="cls.next_session">
+                    <div class="right-meta">
+                      <div class="meta-block">
+                        <div class="meta-label">From</div>
+                        <div class="meta-value price">
+                          {{ cls.price | currency: 'GBP' }}
                         </div>
                       </div>
 
-                      <div class="right-price">
-                        <span class="label">From</span>
-                        <span class="value">{{ cls.price | currency: 'GBP' }}</span>
-                      </div>
-                    </div>
-
-                    <!-- Description -->
-                    <p class="class-description">
-                      {{ cls.description || 'No description available.' }}
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Divider -->
-                <div class="divider"></div>
-
-                <!-- Meta + action row -->
-                <div class="class-meta-row">
-                  <!-- Left meta -->
-                  <div class="meta-block">
-                    <div class="meta-item">
-                      <i class="far fa-calendar-alt"></i>
-                      <div>
+                      <div class="meta-block">
                         <div class="meta-label">Next session</div>
-
-                        <ng-container *ngIf="cls.next_session; else noNext">
-                          <div class="meta-value">
-                            {{ sessionDateLabel(cls.next_session) }}
-                          </div>
-                          <div class="meta-sub">
-                            {{ sessionTimeLabel(cls.next_session) }}
-                          </div>
-                        </ng-container>
-
-                        <ng-template #noNext>
-                          <div class="meta-value muted">No upcoming sessions in next 30 days</div>
-                        </ng-template>
+                        <div class="meta-value">
+                          {{ sessionDateLabel(cls.next_session) }}
+                        </div>
+                        <div class="meta-sub">
+                          {{ sessionTimeLabel(cls.next_session) }}
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="meta-item" *ngIf="cls.next_session">
-                      <i class="far fa-user"></i>
-                      <div>
+                      <div class="meta-block">
                         <div class="meta-label">Spaces left</div>
                         <div class="meta-value">
                           {{ cls.next_session.spaces_left }}
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Right action column -->
-                  <div class="action-block" *ngIf="cls.next_session">
-                    <span
-                      class="status-pill"
-                      [ngClass]="{
-                        'status-cancelled': cls.next_session.status === 'cancelled',
-                        'status-full': cls.next_session.spaces_left <= 0,
-                        'status-open':
-                          cls.next_session.status === 'scheduled' &&
-                          cls.next_session.spaces_left > 0,
-                      }"
-                    >
-                      <ng-container *ngIf="cls.next_session.status === 'cancelled'">
-                        Cancelled
-                      </ng-container>
-
-                      <ng-container
-                        *ngIf="
-                          cls.next_session.status !== 'cancelled' &&
-                          cls.next_session.spaces_left <= 0
-                        "
-                      >
-                        Full
-                      </ng-container>
-
-                      <ng-container
-                        *ngIf="
-                          cls.next_session.status === 'scheduled' &&
-                          cls.next_session.spaces_left > 0
-                        "
-                      >
-                        Open
-                      </ng-container>
-                    </span>
 
                     <button
-                      class="btn-primary btn-primary-sm"
+                      type="button"
+                      class="btn-primary btn-primary-sm sidebar-btn"
                       [disabled]="
                         cls.next_session.status === 'cancelled' ||
                         cls.next_session.spaces_left <= 0 ||
@@ -162,35 +109,50 @@
                       (click)="onBook(cls)"
                     >
                       <ng-container *ngIf="isLoggedIn; else loginToBook">
-                        <span *ngIf="!bookingLoading[cls.next_session.id]">Book now</span>
-                        <span *ngIf="bookingLoading[cls.next_session.id]">Booking…</span>
+                        <span *ngIf="!bookingLoading[cls.next_session.id]"> Book now </span>
+                        <span *ngIf="bookingLoading[cls.next_session.id]"> Booking… </span>
                       </ng-container>
 
                       <ng-template #loginToBook> Login to book </ng-template>
                     </button>
                   </div>
+
+                  <!-- RIGHT SIDE: no upcoming sessions -->
+                  <div class="class-right no-session" *ngIf="!cls.next_session">
+                    <div class="right-meta">
+                      <div class="meta-block">
+                        <div class="meta-label">Next session</div>
+                        <div class="meta-value">No upcoming sessions in the next 30 days</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <!-- /class-main-row -->
               </div>
+              <!-- /class-card-inner -->
             </div>
+            <!-- /class-card -->
           </div>
 
-          <!-- Empty state -->
+          <!-- empty state -->
           <div *ngIf="!loadingClasses && !classes.length" class="classes-empty">
             <p>No fitness classes available yet. Please check back soon.</p>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: Sidebar -->
+      <!-- RIGHT: sidebar -->
       <div class="col-xl-4 col-lg-4">
         <div class="service-sidebar">
           <!-- How booking works -->
-          <div class="sidebar-widget mb-30">
+          <div class="sidebar-widget">
             <div class="sidebar-header">
-              <i class="far fa-check-circle sidebar-icon"></i>
+              <div class="sidebar-icon">
+                <i class="far fa-check-circle"></i>
+              </div>
               <h4 class="widget-title">How booking works</h4>
             </div>
-            <ul class="list-unstyled small mb-0 sidebar-list">
+            <ul class="list-unstyled sidebar-list">
               <li>Choose a class that fits your goals.</li>
               <li>Check the next available session.</li>
               <li>Book your spot instantly.</li>
@@ -199,63 +161,75 @@
           </div>
 
           <!-- Account -->
-          <div class="sidebar-widget mb-30">
+          <div class="sidebar-widget">
             <div class="sidebar-header">
-              <i class="far fa-user sidebar-icon"></i>
+              <div class="sidebar-icon">
+                <i class="far fa-user"></i>
+              </div>
               <h4 class="widget-title">Need an account?</h4>
             </div>
-            <p class="small text-muted mb-15">
+            <p class="small text-muted mb-0">
               Create a free account to book classes, track your visits, and view your booking
               history.
             </p>
 
             <div class="sidebar-cta-group">
-              <a
+              <button
                 *ngIf="!isLoggedIn"
-                routerLink="/signup"
-                class="theme-btn theme-btn-sm w-100 text-center mb-2"
+                type="button"
+                class="btn-primary btn-primary-sm sidebar-btn"
+                (click)="navigateTo('/signup')"
               >
                 Create account
-              </a>
+              </button>
 
-              <a
+              <button
                 *ngIf="!isLoggedIn"
-                routerLink="/login"
-                class="theme-btn theme-btn-border theme-btn-sm w-100 text-center"
+                type="button"
+                class="btn-secondary sidebar-btn"
+                (click)="navigateTo('/login')"
               >
                 Login
-              </a>
+              </button>
 
               <ng-container *ngIf="isLoggedIn">
-                <a routerLink="/profile" class="theme-btn theme-btn-sm w-100 text-center mb-2">
+                <button
+                  type="button"
+                  class="btn-primary btn-primary-sm sidebar-btn"
+                  (click)="navigateTo('/profile')"
+                >
                   Go to my profile
-                </a>
+                </button>
 
-                <a
-                  routerLink="/my-bookings"
-                  class="theme-btn theme-btn-border theme-btn-sm w-100 text-center"
+                <button
+                  type="button"
+                  class="btn-secondary sidebar-btn"
+                  (click)="navigateTo('/my-bookings')"
                 >
                   View my bookings
-                </a>
+                </button>
               </ng-container>
             </div>
           </div>
 
           <!-- Help -->
-          <div class="sidebar-widget">
+          <div class="sidebar-widget help-section">
             <div class="sidebar-header">
-              <i class="far fa-life-ring sidebar-icon"></i>
+              <div class="sidebar-icon">
+                <i class="far fa-life-ring"></i>
+              </div>
               <h4 class="widget-title">Need help?</h4>
             </div>
-            <p class="small text-muted mb-10">
+            <p class="small text-muted mb-0">
               Not sure which class to choose? Our team can help guide you based on your goals.
             </p>
-            <a
-              routerLink="/contact-us"
-              class="theme-btn theme-btn-border theme-btn-sm w-100 text-center"
+            <button
+              type="button"
+              class="btn-secondary sidebar-btn"
+              (click)="navigateTo('/contact-us')"
             >
               Contact us
-            </a>
+            </button>
           </div>
         </div>
       </div>

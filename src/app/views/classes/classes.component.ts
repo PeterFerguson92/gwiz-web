@@ -25,6 +25,7 @@ import { ToastService } from '@core/services/toast.service';
 export class ClassesComponent implements OnInit {
   classes: FitnessClassWithNextSession[] = [];
   loadingClasses = false;
+  placeholderImage = 'assets/img/placeholder.jpg';
 
   // per-session loading state for the Book button
   bookingLoading: Record<string | number, boolean> = {};
@@ -158,5 +159,17 @@ export class ClassesComponent implements OnInit {
 
   trackByClassId(_index: number, item: FitnessClassWithNextSession): number | string {
     return item.id;
+  }
+  onImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    if (img.src.includes(this.placeholderImage)) {
+      // already tried placeholder – avoid infinite loop
+      return;
+    }
+    img.src = this.placeholderImage;
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 }
