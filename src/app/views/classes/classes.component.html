@@ -26,7 +26,7 @@
                 *ngFor="let cls of classes"
                 [cls]="cls"
                 [placeholderImage]="placeholderImage"
-                (openDetails)="openClassDetails($event)"
+                (openDetails)="openClassDetails(cls)"
               ></app-class-card>
               <!-- END CLASS CARD -->
 

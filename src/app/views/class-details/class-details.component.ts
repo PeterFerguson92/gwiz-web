@@ -1,184 +1,162 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
+import { AuthService } from '@/app/core/services/auth.service';
+import { ToastService } from '@/app/core/services/toast.service';
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SessionListComponent } from '@/app/shared/components/session-list/session-list.component';
 import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
-import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
-import { AuthService } from '@core/services/auth.service';
-
-// IMPORT YOUR API SERVICES HERE
-// import { ClassesService } from 'src/app/services/classes.service';
-// import { SessionsService } from 'src/app/services/sessions.service';
-// import { ToastService } from 'src/app/services/toast.service';
+import { BookSessionResponse, ClassSession, FitnessClass } from '@core/models/fitness.models';
+import {
+  FitnessClassService,
+  FitnessClassWithSessions,
+} from '@core/services/fitness-class.service';
 
 @Component({
   selector: 'app-class-details',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    SessionListComponent,
-    SidebarComponent,
-    PageHeroComponent,
-    SHARED_IMPORTS,
-    // import shared components if needed
-    // Loading component example:
-    // LoadingApiComponent
-  ],
+  imports: [CommonModule, PageHeroComponent, SessionListComponent, SidebarComponent],
   templateUrl: './class-details.component.html',
   styleUrls: ['./class-details.component.scss'],
 })
 export class ClassDetailsComponent implements OnInit {
-  classId!: number;
+  classId!: string;
+  classData: FitnessClass | null = null;
+  sessions: ClassSession[] = [];
 
-  classData: any = null;
-  sessions: any[] = [];
-
-  loadingClass = false;
+  loading = false;
   loadingSessions = false;
+  bookingLoading: Record<string, boolean> = {};
 
-  bookingLoading: Record<number, boolean> = {};
-  placeholderImage = 'assets/img/placeholder.jpg';
+  placeholderImage = 'assets/img/placeholder/fitness-placeholder.jpg';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private fitnessClass: FitnessClassService,
+    private toast: ToastService,
     private authService: AuthService
-
-    // private classesService: ClassesService,
-    // private sessionsService: SessionsService,
-    // private toast: ToastService
   ) {}
-
-  ngOnInit(): void {
-    this.classId = Number(this.route.snapshot.paramMap.get('id'));
-
-    this.loadClass();
-    this.loadSessions();
-  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
 
-  /* -----------------------------------------------
-     LOAD CLASS
-  ------------------------------------------------- */
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.classId = id || '';
 
-  loadClass() {
-    this.loadingClass = true;
+    if (!this.classId) {
+      this.toast.error('Invalid class.');
+      this.router.navigate(['/classes']);
+      return;
+    }
 
-    // Replace this with your real API call:
-    // this.classesService.getClassById(this.classId).subscribe( ... )
-
-    setTimeout(() => {
-      this.loadingClass = false;
-      this.classData = {
-        id: this.classId,
-        name: 'Strength Training',
-        description: 'This is placeholder class data.',
-        genre: 'Strength',
-        capacity: 20,
-        price: 12.99,
-        instructors: ['Maria'],
-        image_url: null, // triggers placeholder image
-      };
-    }, 600);
+    this.loadClassWithSessions();
   }
 
-  /* -----------------------------------------------
-     LOAD SESSIONS
-  ------------------------------------------------- */
+  /* ------------------ LOAD CLASS + SESSIONS ------------------ */
 
-  loadSessions() {
+  loadClassWithSessions(days = 30): void {
+    this.loading = true;
     this.loadingSessions = true;
 
-    // Replace with real API:
-    // this.sessionsService.getSessions(this.classId).subscribe( ... )
-
-    setTimeout(() => {
-      this.loadingSessions = false;
-      this.sessions = [
-        {
-          id: 1,
-          start: new Date(Date.now() + 86400000).toISOString(),
-          spaces_left: 5,
-          status: 'active',
+    this.fitnessClass
+      .getFitnessClassWithSessions(this.classId, days)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.loadingSessions = false;
+        })
+      )
+      .subscribe({
+        next: (fitnessClass: FitnessClassWithSessions) => {
+          this.classData = fitnessClass;
+          this.sessions = fitnessClass.upcoming_sessions || [];
         },
-        {
-          id: 2,
-          start: new Date(Date.now() + 172800000).toISOString(),
-          spaces_left: 0,
-          status: 'active',
+        error: (err) => {
+          console.error('Failed to load class with sessions', err);
+          this.toast.error('Failed to load this class. Please try again.');
+          this.router.navigate(['/classes']);
         },
-      ];
-    }, 700);
+      });
   }
 
-  /* -----------------------------------------------
-     NAVIGATION
-  ------------------------------------------------- */
+  /* ------------------ MOBILE SCROLL HELPER ------------------ */
 
-  navigateTo(route: string) {
-    this.router.navigate([route]);
+  scrollToSessions(): void {
+    const el = document.querySelector('.session-section');
+    el?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  /* -----------------------------------------------
-     IMAGE FALLBACK
-  ------------------------------------------------- */
+  /* ------------------ BOOK SESSION ------------------ */
 
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.src = this.placeholderImage;
+  bookSession(session: ClassSession): void {
+    if (!this.isLoggedIn) {
+      this.toast.info('Please login to book this class.');
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+      return;
+    }
+
+    if (session.status === 'cancelled') {
+      this.toast.error('This session has been cancelled.');
+      return;
+    }
+
+    if (session.spaces_left <= 0) {
+      this.toast.error('This session is fully booked.');
+      return;
+    }
+
+    this.bookingLoading[session.id] = true;
+
+    this.fitnessClass
+      .bookSession(session.id)
+      .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
+      .subscribe({
+        next: (res: BookSessionResponse) => {
+          this.toast.success(res.message || 'Your class has been booked!');
+          this.loadClassWithSessions(); // refresh spaces_left
+        },
+        error: (err) => {
+          console.error('Booking failed', err);
+
+          const backendMsg =
+            err?.error?.detail || err?.error?.message || err?.error?.non_field_errors?.[0];
+
+          this.toast.error(backendMsg || 'Failed to book this session. Please try again.');
+        },
+      });
   }
 
-  /* -----------------------------------------------
-     LABEL HELPERS
-  ------------------------------------------------- */
+  /* ------------------ DATE / TIME LABELS ------------------ */
 
-  sessionDateLabel(session: any) {
-    return new Date(session.start).toLocaleDateString('en-GB', {
+  sessionDateLabel(session: ClassSession): string {
+    const dateTime = new Date(`${session.date}T${session.start_time}`);
+    return dateTime.toLocaleDateString('en-GB', {
       weekday: 'short',
       day: 'numeric',
       month: 'short',
     });
   }
 
-  sessionTimeLabel(session: any) {
-    return new Date(session.start).toLocaleTimeString('en-GB', {
+  sessionTimeLabel(session: ClassSession): string {
+    const start = new Date(`${session.date}T${session.start_time}`);
+    const end = new Date(`${session.date}T${session.end_time}`);
+
+    const startStr = start.toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
     });
-  }
+    const endStr = end.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
-  /* -----------------------------------------------
-     BOOK SESSION
-  ------------------------------------------------- */
-
-  bookSession(session: any) {
-    if (!this.isLoggedIn) {
-      this.navigateTo('/login');
-      return;
-    }
-
-    this.bookingLoading[session.id] = true;
-
-    // Replace with real booking API
-    setTimeout(() => {
-      this.bookingLoading[session.id] = false;
-      alert('Session booked (placeholder)');
-    }, 900);
-  }
-
-  /* -----------------------------------------------
-     MOBILE SCROLL
-  ------------------------------------------------- */
-
-  scrollToSessions() {
-    const block = document.querySelector('.session-section');
-    block?.scrollIntoView({ behavior: 'smooth' });
+    return `${startStr} – ${endStr}`;
   }
 }

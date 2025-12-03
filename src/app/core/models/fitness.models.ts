@@ -1,21 +1,25 @@
+// src/app/core/models/booking.models.ts
+
 export interface FitnessClass {
-  id: number; // or string – adjust to backend
+  id: string;
   name: string;
   description: string | null;
   genre: string | null;
   capacity: number;
   price: number;
   image_url: string | null;
-  instructors: string[]; // e.g. ["Alex", "Sam"]
+  instructors: string[];
   is_active: boolean;
+  // when using /with-sessions/ endpoint:
+  upcoming_sessions?: ClassSession[];
 }
 
 export interface ClassSession {
-  id: number; // or string
-  fitness_class_id: number; // or string
-  date: string; // "2025-12-04"
-  start_time: string; // "18:00"
-  end_time: string; // "19:00"
+  id: string;
+  fitness_class_id: string;
+  date: string; // 'YYYY-MM-DD'
+  start_time: string; // 'HH:MM:SS'
+  end_time: string; // 'HH:MM:SS'
   status: 'scheduled' | 'cancelled';
   capacity: number;
   spaces_left: number;
@@ -23,13 +27,12 @@ export interface ClassSession {
 }
 
 export interface Booking {
-  id: number; // or string
-  class_session_id: number;
+  id: string;
+  class_session_id: string;
   status: 'booked' | 'cancelled' | 'no_show';
   payment_status: 'included' | 'pending' | 'paid' | 'void';
   attendance_status: 'unknown' | 'present' | 'absent' | 'no_show';
   created_at: string;
-  // if your backend returns nested objects, add them here:
   class_session?: ClassSession;
   fitness_class?: FitnessClass;
 }
@@ -42,4 +45,9 @@ export interface FitnessClassWithNextSession extends FitnessClass {
 export interface BookingWithDetails extends Booking {
   class_session?: ClassSession;
   fitness_class?: FitnessClass;
+}
+
+export interface BookSessionResponse {
+  booking: Booking;
+  message?: string;
 }

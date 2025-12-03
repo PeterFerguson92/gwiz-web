@@ -2,7 +2,7 @@
 <app-page-hero
   [title]="classData?.name || 'Class details'"
   [breadcrumbTitle]="classData?.name"
-  [backgroundImage]="classData?.image_url"
+  [backgroundImage]="classData?.image_url || undefined"
 ></app-page-hero>
 
 <!-- MAIN CONTENT -->
@@ -22,14 +22,14 @@
             <!-- CHIPS (genre, capacity, instructors) -->
             <div class="chip-row mt-3">
               <span *ngIf="classData?.genre" class="chip chip-primary">
-                {{ classData.genre | titlecase }}
+                {{ classData?.genre | titlecase }}
               </span>
 
               <span class="chip chip-outline"> Capacity: {{ classData?.capacity }} </span>
 
               <span *ngIf="classData?.instructors?.length" class="chip chip-outline">
-                {{ classData.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
-                {{ classData.instructors.join(', ') }}
+                {{ classData?.instructors?.length === 1 ? 'Instructor' : 'Instructors' }}:
+                {{ classData?.instructors?.join(', ') }}
               </span>
             </div>
           </div>
