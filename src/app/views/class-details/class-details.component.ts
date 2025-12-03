@@ -8,6 +8,7 @@ import { ToastService } from '@/app/core/services/toast.service';
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SessionListComponent } from '@/app/shared/components/session-list/session-list.component';
 import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
+import { FormattersService } from '@/app/shared/service/formatters.service';
 import { BookSessionResponse, ClassSession, FitnessClass } from '@core/models/fitness.models';
 import {
   FitnessClassService,
@@ -37,7 +38,8 @@ export class ClassDetailsComponent implements OnInit {
     private router: Router,
     private fitnessClass: FitnessClassService,
     private toast: ToastService,
-    private authService: AuthService
+    private authService: AuthService,
+    private formattersService: FormattersService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -45,10 +47,7 @@ export class ClassDetailsComponent implements OnInit {
   }
 
   get instructorNames(): string {
-    const instructors = this.classData?.instructors;
-    if (!instructors || !Array.isArray(instructors)) return '';
-
-    return instructors.map((i) => i.name).join(', ');
+    return this.formattersService.formatInstructorNames(this.classData?.instructors);
   }
 
   ngOnInit(): void {
@@ -143,27 +142,10 @@ export class ClassDetailsComponent implements OnInit {
   /* ------------------ DATE / TIME LABELS ------------------ */
 
   sessionDateLabel(session: ClassSession): string {
-    const dateTime = new Date(`${session.date}T${session.start_time}`);
-    return dateTime.toLocaleDateString('en-GB', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-    });
+    return this.formattersService.formatSessionDate(session);
   }
 
   sessionTimeLabel(session: ClassSession): string {
-    const start = new Date(`${session.date}T${session.start_time}`);
-    const end = new Date(`${session.date}T${session.end_time}`);
-
-    const startStr = start.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    const endStr = end.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    return `${startStr} – ${endStr}`;
+    return this.formattersService.formatSessionTime(session);
   }
 }
