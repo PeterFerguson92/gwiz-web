@@ -1,8 +1,13 @@
 <section>
-  <div class="hero1-section-area about-bg-area">
-    <img [src]="heroImage" alt="hero background" class="header-img1" />
+  <div class="hero1-section-area about-bg-area page-hero" [class.page-hero--scrolled]="scrolled">
+    <!-- Background image + dark gradient overlay -->
+    <div class="hero-bg">
+      <img [src]="heroImage" alt="hero background" class="header-img1 hero-bg-img" />
+      <div class="hero-bg-overlay"></div>
+    </div>
 
-    <div class="container">
+    <!-- Foreground content -->
+    <div class="container hero-content">
       <div class="row">
         <div class="col-lg-4 m-auto">
           <div class="hero-heading-area heading1 text-center">

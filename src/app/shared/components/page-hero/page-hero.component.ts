@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 
 import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
@@ -10,19 +10,33 @@ import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.compo
   templateUrl: './page-hero.component.html',
   styleUrls: ['./page-hero.component.scss'],
 })
-export class PageHeroComponent {
+export class PageHeroComponent implements OnInit {
   @Input() title = '';
   @Input() breadcrumbTitle?: string;
 
-  /** Background hero image */
+  /** Optional background image (e.g. class image) */
   @Input() backgroundImage?: string;
 
-  /** Used when no class image provided */
+  /** Fallback if no image passed */
   readonly fallbackImage = 'assets/img/placeholder.jpg';
 
-  /** Computed final image */
+  /** Whether page has been scrolled a bit (for subtle animation) */
+  scrolled = false;
+
   get heroImage(): string {
-    console.log('heroImage', this.backgroundImage, this.fallbackImage);
     return this.backgroundImage || this.fallbackImage;
+  }
+
+  ngOnInit(): void {
+    this.updateScrollState();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.updateScrollState();
+  }
+
+  private updateScrollState(): void {
+    this.scrolled = window.scrollY > 10;
   }
 }

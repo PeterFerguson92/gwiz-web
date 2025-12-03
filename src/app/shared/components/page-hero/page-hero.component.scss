@@ -1,56 +1,60 @@
-.page-hero-area {
+.page-hero {
   position: relative;
-  padding: 60px 0 40px;
+  overflow: hidden;
 }
 
-.hero-bg-img {
+/* Background wrapper */
+.hero-bg {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.9;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
 }
 
-.hero-heading-area h1 {
-  font-size: 38px;
-  font-weight: 700;
-  margin-bottom: 10px;
+/* Background image (no blur, just slight zoom for parallax feel) */
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.65); /* No blur, but darker for contrast */
+  transform: scale(1.05);
+  transition: transform 0.6s ease;
 }
 
-.hero-subtitle {
-  font-size: 16px;
-  color: #6b7280;
-  margin-bottom: 8px;
+/* Dark gradient overlay above the image */
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.75));
 }
 
+/* Foreground content (title, breadcrumb) */
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Subtle scroll animation */
+.hero-heading-area {
+  transition: transform 0.45s ease;
+}
+
+.page-hero--scrolled .hero-heading-area {
+  transform: translateY(-6px);
+}
+
+.page-hero--scrolled .hero-bg-img {
+  transform: scale(1.08) translateY(4px);
+}
+
+/* Responsive tweaks */
 @media (max-width: 991.98px) {
   .hero-bg-img {
-    width: 200px;
-    opacity: 0.7;
-  }
-
-  .page-hero-area {
-    padding: 40px 0 26px;
-  }
-
-  .hero-heading-area h1 {
-    font-size: 30px;
+    filter: brightness(0.6);
   }
 }
 
 @media (max-width: 767.98px) {
-  .hero-bg-img {
-    width: 160px;
-    opacity: 0.65;
-  }
-
-  .page-hero-area {
-    padding: 34px 0 18px;
-  }
-
   .hero-heading-area h1 {
     font-size: 26px;
   }
