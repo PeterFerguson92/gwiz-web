@@ -8,10 +8,18 @@ export interface FitnessClass {
   capacity: number;
   price: number;
   image_url: string | null;
-  instructors: string[];
+  instructors: Instructor[];
   is_active: boolean;
   // when using /with-sessions/ endpoint:
   upcoming_sessions?: ClassSession[];
+}
+
+export interface Instructor {
+  id: string;
+  name: string;
+  role: string;
+  instagram_link: string;
+  profile_image: string | null;
 }
 
 export interface ClassSession {

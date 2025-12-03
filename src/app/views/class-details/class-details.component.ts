@@ -44,6 +44,13 @@ export class ClassDetailsComponent implements OnInit {
     return this.authService.isLoggedIn();
   }
 
+  get instructorNames(): string {
+    const instructors = this.classData?.instructors;
+    if (!instructors || !Array.isArray(instructors)) return '';
+
+    return instructors.map((i) => i.name).join(', ');
+  }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.classId = id || '';
