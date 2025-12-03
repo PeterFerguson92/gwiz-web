@@ -1,5 +1,5 @@
 <div class="details-sidebar">
-  <!-- CLASS INFO (Optional) -->
+  <!-- CLASS INFO (optional, only when classData is provided) -->
   <div class="sidebar-card" *ngIf="classData">
     <h4>Class info</h4>
     <ul>
@@ -9,64 +9,61 @@
     </ul>
   </div>
 
-  <!-- NEED ACCOUNT -->
+  <!-- ACCOUNT / BOOKINGS BLOCK -->
   <div class="sidebar-card">
-    <h4>Need an account?</h4>
+    <!-- Heading changes based on login -->
+    <h4 *ngIf="!isLoggedIn">Need an account?</h4>
+    <h4 *ngIf="isLoggedIn">My account</h4>
 
-    <p class="small text-muted mb-0">
+    <!-- Text changes based on login -->
+    <p class="small text-muted mb-0" *ngIf="!isLoggedIn">
       Create a free account to book classes and manage your schedule.
+    </p>
+    <p class="small text-muted mb-0" *ngIf="isLoggedIn">
+      Quickly access your upcoming classes and manage your bookings.
     </p>
 
     <div class="sidebar-cta-group">
-      <!-- Not logged in -->
-      <button
-        *ngIf="!isLoggedIn"
-        type="button"
-        class="btn-primary btn-primary-sm sidebar-btn"
-        (click)="navigateTo('/signup')"
-      >
-        Create account
-      </button>
+      <!-- NOT LOGGED IN -->
+      <ng-container *ngIf="!isLoggedIn">
+        <button
+          type="button"
+          class="btn-primary btn-primary-sm sidebar-btn"
+          (click)="navigateTo('/signup')"
+        >
+          Create account
+        </button>
 
-      <button
-        *ngIf="!isLoggedIn"
-        type="button"
-        class="btn-secondary sidebar-btn"
-        (click)="navigateTo('/login')"
-      >
-        Login
-      </button>
+        <button type="button" class="btn-secondary sidebar-btn" (click)="navigateTo('/login')">
+          Login
+        </button>
+      </ng-container>
 
-      <!-- Logged in -->
+      <!-- LOGGED IN -->
       <ng-container *ngIf="isLoggedIn">
         <button
           type="button"
           class="btn-primary btn-primary-sm sidebar-btn"
-          (click)="navigateTo('/profile')"
-        >
-          Go to my profile
-        </button>
-
-        <button
-          type="button"
-          class="btn-secondary sidebar-btn"
           (click)="navigateTo('/my-bookings')"
         >
-          View my bookings
+          My bookings
+        </button>
+
+        <button type="button" class="btn-secondary sidebar-btn" (click)="navigateTo('/profile')">
+          My profile
         </button>
       </ng-container>
     </div>
   </div>
 
-  <!-- HELP -->
+  <!-- HELP BLOCK -->
   <div class="sidebar-card">
     <h4>Need help?</h4>
-
     <p class="small text-muted mb-0">
       Not sure if this class is right for you? Our trainers can guide you.
     </p>
 
-    <button class="btn-secondary sidebar-btn" (click)="navigateTo('/contact-us')">
+    <button type="button" class="btn-secondary sidebar-btn" (click)="navigateTo('/contact-us')">
       Contact us
     </button>
   </div>

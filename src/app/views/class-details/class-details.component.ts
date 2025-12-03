@@ -7,6 +7,7 @@ import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.c
 import { SessionListComponent } from '@/app/shared/components/session-list/session-list.component';
 import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
+import { AuthService } from '@core/services/auth.service';
 
 // IMPORT YOUR API SERVICES HERE
 // import { ClassesService } from 'src/app/services/classes.service';
@@ -42,11 +43,11 @@ export class ClassDetailsComponent implements OnInit {
   bookingLoading: Record<number, boolean> = {};
   placeholderImage = 'assets/img/placeholder.jpg';
 
-  isLoggedIn = false; // your AuthService should override this
-
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
+
     // private classesService: ClassesService,
     // private sessionsService: SessionsService,
     // private toast: ToastService
@@ -55,14 +56,12 @@ export class ClassDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.classId = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.checkAuth();
     this.loadClass();
     this.loadSessions();
   }
 
-  checkAuth() {
-    // replace with your real auth check
-    this.isLoggedIn = !!localStorage.getItem('token');
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   /* -----------------------------------------------

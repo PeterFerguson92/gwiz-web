@@ -1,50 +1,55 @@
+<!-- PAGE HERO -->
 <app-page-hero
-  [title]="classData?.name"
+  [title]="classData?.name || 'Class details'"
   [breadcrumbTitle]="classData?.name"
   [backgroundImage]="classData?.image_url"
 ></app-page-hero>
 
+<!-- MAIN CONTENT -->
 <section class="class-details-body sp8">
   <div class="container">
     <div class="row">
-      <!-- LEFT MAIN CONTENT -->
+      <!-- LEFT COLUMN: MAIN CLASS INFO -->
       <div class="col-xl-8 col-lg-8">
         <div class="details-content-card">
-          <!-- DESCRIPTION -->
+          <!-- ABOUT THE CLASS -->
           <div class="section-block">
             <h2 class="block-title">About this class</h2>
             <p class="description">
               {{ classData?.description || 'No description available.' }}
             </p>
+
+            <!-- CHIPS (genre, capacity, instructors) -->
+            <div class="chip-row mt-3">
+              <span *ngIf="classData?.genre" class="chip chip-primary">
+                {{ classData.genre | titlecase }}
+              </span>
+
+              <span class="chip chip-outline"> Capacity: {{ classData?.capacity }} </span>
+
+              <span *ngIf="classData?.instructors?.length" class="chip chip-outline">
+                {{ classData.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
+                {{ classData.instructors.join(', ') }}
+              </span>
+            </div>
           </div>
 
           <!-- UPCOMING SESSIONS -->
-          <div class="section-block">
+          <div class="section-block session-section">
             <h2 class="block-title">Upcoming sessions</h2>
 
-            <div *ngIf="loadingSessions">
-              <app-loading-api></app-loading-api>
-            </div>
-
-            <div *ngIf="!loadingSessions && sessions?.length; else noSessions">
-              <app-session-list
-                class="session-section"
-                [sessions]="sessions"
-                [loading]="loadingSessions"
-                [isLoggedIn]="isLoggedIn"
-                [bookingLoading]="bookingLoading"
-                (book)="bookSession($event)"
-              ></app-session-list>
-            </div>
-
-            <ng-template #noSessions>
-              <p class="text-muted">No upcoming sessions at the moment.</p>
-            </ng-template>
+            <app-session-list
+              [sessions]="sessions"
+              [loading]="loadingSessions"
+              [isLoggedIn]="isLoggedIn"
+              [bookingLoading]="bookingLoading"
+              (book)="bookSession($event)"
+            ></app-session-list>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT SIDEBAR -->
+      <!-- RIGHT COLUMN: SIDEBAR -->
       <div class="col-xl-4 col-lg-4">
         <app-sidebar [classData]="classData" [isLoggedIn]="isLoggedIn"></app-sidebar>
       </div>
@@ -52,7 +57,7 @@
   </div>
 </section>
 
-<!-- MOBILE BOTTOM BAR -->
+<!-- MOBILE BOOKING CTA -->
 <div class="mobile-book-bar" *ngIf="sessions?.length">
   <button class="btn-primary mobile-book-btn" (click)="scrollToSessions()">
     View sessions & book

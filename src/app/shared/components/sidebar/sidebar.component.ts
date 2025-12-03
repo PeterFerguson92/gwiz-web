@@ -10,12 +10,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
-  @Input() classData: any = null; // optional — shows “Class info”
+  /** Optional class info (for class details page) */
+  @Input() classData: any = null;
+
+  /** Auth state passed from parent (must be wired correctly) */
   @Input() isLoggedIn = false;
 
   constructor(private router: Router) {}
 
   navigateTo(route: string) {
-    this.router.navigate([route]);
+    // Small safety: strip double slashes
+    const clean = route.startsWith('/') ? route : `/${route}`;
+    this.router.navigateByUrl(clean);
   }
 }
