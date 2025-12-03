@@ -1,0 +1,73 @@
+<div class="details-sidebar">
+  <!-- CLASS INFO (Optional) -->
+  <div class="sidebar-card" *ngIf="classData">
+    <h4>Class info</h4>
+    <ul>
+      <li><strong>Price:</strong> {{ classData?.price | currency: 'GBP' }}</li>
+      <li><strong>Capacity:</strong> {{ classData?.capacity }}</li>
+      <li *ngIf="classData?.genre"><strong>Category:</strong> {{ classData.genre }}</li>
+    </ul>
+  </div>
+
+  <!-- NEED ACCOUNT -->
+  <div class="sidebar-card">
+    <h4>Need an account?</h4>
+
+    <p class="small text-muted mb-0">
+      Create a free account to book classes and manage your schedule.
+    </p>
+
+    <div class="sidebar-cta-group">
+      <!-- Not logged in -->
+      <button
+        *ngIf="!isLoggedIn"
+        type="button"
+        class="btn-primary btn-primary-sm sidebar-btn"
+        (click)="navigateTo('/signup')"
+      >
+        Create account
+      </button>
+
+      <button
+        *ngIf="!isLoggedIn"
+        type="button"
+        class="btn-secondary sidebar-btn"
+        (click)="navigateTo('/login')"
+      >
+        Login
+      </button>
+
+      <!-- Logged in -->
+      <ng-container *ngIf="isLoggedIn">
+        <button
+          type="button"
+          class="btn-primary btn-primary-sm sidebar-btn"
+          (click)="navigateTo('/profile')"
+        >
+          Go to my profile
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary sidebar-btn"
+          (click)="navigateTo('/my-bookings')"
+        >
+          View my bookings
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- HELP -->
+  <div class="sidebar-card">
+    <h4>Need help?</h4>
+
+    <p class="small text-muted mb-0">
+      Not sure if this class is right for you? Our trainers can guide you.
+    </p>
+
+    <button class="btn-secondary sidebar-btn" (click)="navigateTo('/contact-us')">
+      Contact us
+    </button>
+  </div>
+</div>

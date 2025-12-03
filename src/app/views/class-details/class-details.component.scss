@@ -1,0 +1,191 @@
+/* -------------------------------------------
+   HERO SECTION
+-------------------------------------------- */
+
+.class-details-hero {
+  padding: 40px 0 20px;
+  background: #fafafa;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.hero-left {
+  flex: 1;
+}
+
+.class-title {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.chip-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hero-right {
+  flex-shrink: 0;
+}
+
+.hero-image {
+  width: 280px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+/* -------------------------------------------
+   BODY + CARD
+-------------------------------------------- */
+
+.details-content-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 24px 28px;
+  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.section-block {
+  margin-bottom: 40px;
+}
+
+.block-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.description {
+  font-size: 15px;
+  color: #374151;
+}
+
+/* -------------------------------------------
+   SESSIONS
+-------------------------------------------- */
+
+.session-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 14px;
+  background: #fff;
+}
+
+.session-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session-date {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.session-time {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.session-spaces {
+  font-size: 13px;
+  color: #111827;
+}
+
+.session-btn {
+  white-space: nowrap;
+}
+
+/* -------------------------------------------
+   SIDEBAR
+-------------------------------------------- */
+
+.details-sidebar {
+  position: sticky;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-card {
+  padding: 20px 22px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.sidebar-card h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.sidebar-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-card li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* -------------------------------------------
+   MOBILE BOTTOM BOOKING BAR
+-------------------------------------------- */
+
+.mobile-book-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 12px 20px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  display: none;
+}
+
+.mobile-book-btn {
+  width: 100%;
+}
+
+@media (max-width: 991.98px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image {
+    width: 100%;
+    max-width: 350px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .mobile-book-bar {
+    display: block;
+  }
+
+  .details-sidebar {
+    position: static;
+  }
+}

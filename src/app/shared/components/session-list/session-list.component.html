@@ -1,0 +1,31 @@
+<div *ngIf="loading">
+  <app-loading-api></app-loading-api>
+</div>
+
+<div *ngIf="!loading && sessions?.length; else noSessions">
+  <div class="session-card" *ngFor="let session of sessions">
+    <div class="session-info">
+      <div class="session-date">{{ sessionDateLabel(session) }}</div>
+      <div class="session-time">{{ sessionTimeLabel(session) }}</div>
+      <div class="session-spaces">
+        <strong>{{ session.spaces_left }}</strong> spaces left
+      </div>
+    </div>
+
+    <button
+      class="btn-primary btn-primary-sm session-btn"
+      [disabled]="
+        session.status === 'cancelled' || session.spaces_left <= 0 || bookingLoading[session.id]
+      "
+      (click)="onBook(session)"
+    >
+      <span *ngIf="!bookingLoading[session.id]"> Book now </span>
+
+      <span *ngIf="bookingLoading[session.id]"> Booking… </span>
+    </button>
+  </div>
+</div>
+
+<ng-template #noSessions>
+  <p class="text-muted">No upcoming sessions at the moment.</p>
+</ng-template>

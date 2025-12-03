@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
+import { ClassCardComponent } from '@/app/shared/components/class-card/class-card.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 import {
@@ -18,7 +19,7 @@ import { ToastService } from '@core/services/toast.service';
 @Component({
   selector: 'app-classes-page',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, ...SHARED_IMPORTS],
+  imports: [CommonModule, BreadcrumbComponent, ClassCardComponent, ...SHARED_IMPORTS],
   templateUrl: './classes.component.html',
   styleUrls: ['./classes.component.scss'],
 })
@@ -178,27 +179,15 @@ export class ClassesComponent implements OnInit {
   onCardClick(cls: any, event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    // If user actually clicked a button, let the button handler deal with it
+    // If clicking inside ANY button, we still go to details
     if (target.closest('button')) {
       return;
     }
 
-    // If there is no upcoming session, do nothing for now
-    if (!cls.next_session) {
-      return;
-    }
+    this.openClassDetails(cls);
+  }
 
-    // If booking is disabled (cancelled / full / already loading), do nothing
-    const session = cls.next_session;
-    if (
-      session.status === 'cancelled' ||
-      session.spaces_left <= 0 ||
-      this.bookingLoading?.[session.id]
-    ) {
-      return;
-    }
-
-    // Otherwise behave like pressing the Book/Login button
-    this.onBook(cls);
+  openClassDetails(cls: any): void {
+    this.router.navigate(['/classes', cls.id]);
   }
 }

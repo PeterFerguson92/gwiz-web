@@ -1,0 +1,236 @@
+/* --------------------------------------------------------
+   BASE CARD
+--------------------------------------------------------- */
+
+.class-card {
+  cursor: pointer;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+}
+
+.class-card-inner {
+  padding: 18px 22px;
+}
+
+.class-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* --------------------------------------------------------
+   LEFT SIDE: Thumbnail + Info
+--------------------------------------------------------- */
+
+.class-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+}
+
+.class-thumb {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.class-body {
+  flex: 1;
+}
+
+.class-name {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.class-description {
+  margin: 0;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* --------------------------------------------------------
+   CHIPS
+--------------------------------------------------------- */
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.chip {
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.chip-primary {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.chip-outline {
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #4b5563;
+}
+
+/* --------------------------------------------------------
+   RIGHT SIDE (Desktop Meta)
+--------------------------------------------------------- */
+
+.class-right {
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.class-right.no-session {
+  align-items: flex-start;
+}
+
+.right-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.meta-block {
+  text-align: right;
+}
+
+.meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.meta-value.price {
+  font-size: 17px;
+}
+
+.meta-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Desktop button */
+.class-book-btn {
+  margin-top: 6px;
+}
+
+/* --------------------------------------------------------
+   MOBILE META
+--------------------------------------------------------- */
+
+.class-meta-mobile {
+  display: none;
+  margin-top: 12px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 12px;
+}
+
+.class-meta-row-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 12px;
+}
+
+.meta-item-mobile {
+  min-width: 150px;
+}
+
+.meta-item-mobile .meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.meta-item-mobile .meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+  display: block;
+}
+
+.meta-item-mobile .meta-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.class-book-btn-mobile {
+  width: 90%;
+  margin: 12px auto 0;
+  text-align: center;
+}
+
+/* --------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+  .class-main-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .class-right {
+    display: none; /* hide desktop meta */
+  }
+
+  .class-meta-mobile {
+    display: block; /* show mobile meta */
+  }
+
+  .class-card-inner {
+    padding: 16px 16px 14px;
+  }
+
+  .class-left {
+    width: 100%;
+  }
+}

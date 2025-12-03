@@ -1,0 +1,131 @@
+<div class="class-card" (click)="onCardClick($event)">
+  <div class="class-card-inner">
+    <div class="class-main-row">
+      <!-- LEFT -->
+      <div class="class-left">
+        <div class="class-thumb">
+          <img
+            [src]="cls.image_url || placeholderImage"
+            (error)="onImageError($event)"
+            [alt]="cls.name"
+          />
+        </div>
+
+        <div class="class-body">
+          <h3 class="class-name">{{ cls.name }}</h3>
+
+          <div class="chip-row">
+            <span *ngIf="cls.genre" class="chip chip-primary">
+              {{ cls.genre | titlecase }}
+            </span>
+
+            <span class="chip chip-outline"> Capacity: {{ cls.capacity }} </span>
+
+            <span class="chip chip-outline" *ngIf="cls.instructors?.length">
+              {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
+              {{ cls.instructors.join(', ') }}
+            </span>
+          </div>
+
+          <p class="class-description">
+            {{ cls.description || 'No description available.' }}
+          </p>
+
+          <!-- MOBILE BLOCK -->
+          <div class="class-meta-mobile">
+            <ng-container *ngIf="cls.next_session; else noMobileSession">
+              <div class="class-meta-row-mobile">
+                <div class="meta-item-mobile">
+                  <span class="meta-label">Next session</span>
+                  <span class="meta-value">
+                    {{ sessionDateLabel(cls.next_session) }}
+                  </span>
+                  <span class="meta-sub">
+                    {{ sessionTimeLabel(cls.next_session) }}
+                  </span>
+                </div>
+
+                <div class="meta-item-mobile">
+                  <span class="meta-label">Spaces left</span>
+                  <span class="meta-value">
+                    {{ cls.next_session.spaces_left }}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                class="btn-primary btn-primary-sm class-book-btn-mobile"
+                (click)="onViewDetails($event)"
+              >
+                View details
+              </button>
+            </ng-container>
+
+            <ng-template #noMobileSession>
+              <div class="class-meta-row-mobile">
+                <div class="meta-item-mobile">
+                  <span class="meta-label">Next session</span>
+                  <span class="meta-value"> No upcoming sessions </span>
+                </div>
+              </div>
+
+              <button
+                class="btn-primary btn-primary-sm class-book-btn-mobile"
+                (click)="onViewDetails($event)"
+              >
+                View details
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT (DESKTOP) -->
+      <div class="class-right" *ngIf="cls.next_session">
+        <div class="right-meta">
+          <div class="meta-block">
+            <div class="meta-label">From</div>
+            <div class="meta-value price">
+              {{ cls.price | currency: 'GBP' }}
+            </div>
+          </div>
+
+          <div class="meta-block">
+            <div class="meta-label">Next session</div>
+            <div class="meta-value">
+              {{ sessionDateLabel(cls.next_session) }}
+            </div>
+            <div class="meta-sub">
+              {{ sessionTimeLabel(cls.next_session) }}
+            </div>
+          </div>
+
+          <div class="meta-block">
+            <div class="meta-label">Spaces left</div>
+            <div class="meta-value">
+              {{ cls.next_session.spaces_left }}
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary btn-primary-sm class-book-btn" (click)="onViewDetails($event)">
+          View details
+        </button>
+      </div>
+
+      <!-- RIGHT (NO SESSION) -->
+      <div class="class-right no-session" *ngIf="!cls.next_session">
+        <div class="right-meta">
+          <div class="meta-block">
+            <div class="meta-label">Next session</div>
+            <div class="meta-value">No upcoming sessions</div>
+          </div>
+        </div>
+
+        <button class="btn-primary btn-primary-sm class-book-btn" (click)="onViewDetails($event)">
+          View details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
