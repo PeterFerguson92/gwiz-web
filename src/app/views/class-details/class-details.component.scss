@@ -147,6 +147,27 @@
   font-size: 14px;
 }
 
+.session-scroll-wrapper {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 10px;
+  scroll-behavior: smooth;
+
+  /* optional: nice scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #c90f16 #f1f1f1;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c90f16;
+    border-radius: 10px;
+  }
+}
+
+
 /* -------------------------------------------
    MOBILE BOTTOM BOOKING BAR
 -------------------------------------------- */

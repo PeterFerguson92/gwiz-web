@@ -37,14 +37,15 @@
           <!-- UPCOMING SESSIONS -->
           <div class="section-block session-section">
             <h2 class="block-title">Upcoming sessions</h2>
-
-            <app-session-list
-              [sessions]="sessions"
-              [loading]="loadingSessions"
-              [isLoggedIn]="isLoggedIn"
-              [bookingLoading]="bookingLoading"
-              (book)="bookSession($event)"
-            ></app-session-list>
+            <div class="session-scroll-wrapper">
+              <app-session-list
+                [sessions]="sessions"
+                [loading]="loadingSessions"
+                [isLoggedIn]="isLoggedIn"
+                [bookingLoading]="bookingLoading"
+                (book)="bookSession($event)"
+              ></app-session-list>
+            </div>
           </div>
         </div>
       </div>
