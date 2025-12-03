@@ -5,6 +5,7 @@ import { forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { ClassCardComponent } from '@/app/shared/components/class-card/class-card.component';
+import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 import {
@@ -19,7 +20,13 @@ import { ToastService } from '@core/services/toast.service';
 @Component({
   selector: 'app-classes-page',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, ClassCardComponent, ...SHARED_IMPORTS],
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    ClassCardComponent,
+    PageHeroComponent,
+    ...SHARED_IMPORTS,
+  ],
   templateUrl: './classes.component.html',
   styleUrls: ['./classes.component.scss'],
 })

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SessionListComponent } from '@/app/shared/components/session-list/session-list.component';
 import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
@@ -20,6 +21,7 @@ import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
     FormsModule,
     SessionListComponent,
     SidebarComponent,
+    PageHeroComponent,
     SHARED_IMPORTS,
     // import shared components if needed
     // Loading component example:

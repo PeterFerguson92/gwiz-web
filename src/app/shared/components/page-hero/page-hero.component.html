@@ -1,0 +1,17 @@
+<section>
+  <div class="hero1-section-area about-bg-area">
+    <img [src]="heroImage" alt="hero background" class="header-img1" />
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 m-auto">
+          <div class="hero-heading-area heading1 text-center">
+            <h1>{{ title }}</h1>
+
+            <app-breadcrumb [title]="breadcrumbTitle || title"></app-breadcrumb>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

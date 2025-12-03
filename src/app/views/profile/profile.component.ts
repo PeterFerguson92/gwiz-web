@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
+import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { ToastService } from '@core/services/toast.service';
 
 import { UserProfile } from '../../core/models/auth.models';
@@ -21,7 +21,7 @@ const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BreadcrumbComponent],
+  imports: [CommonModule, ReactiveFormsModule, PageHeroComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })

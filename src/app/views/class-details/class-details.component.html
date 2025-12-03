@@ -1,34 +1,8 @@
-<section class="class-details-hero">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-left">
-        <h1 class="class-title">{{ classData?.name }}</h1>
-
-        <div class="chip-row">
-          <span *ngIf="classData?.genre" class="chip chip-primary">
-            {{ classData.genre | titlecase }}
-          </span>
-
-          <span class="chip chip-outline"> Capacity: {{ classData?.capacity }} </span>
-
-          <span class="chip chip-outline" *ngIf="classData?.instructors?.length">
-            {{ classData.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
-            {{ classData.instructors.join(', ') }}
-          </span>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <img
-          class="hero-image"
-          [src]="classData?.image_url || placeholderImage"
-          (error)="onImageError($event)"
-          [alt]="classData?.name"
-        />
-      </div>
-    </div>
-  </div>
-</section>
+<app-page-hero
+  [title]="classData?.name"
+  [breadcrumbTitle]="classData?.name"
+  [backgroundImage]="classData?.image_url"
+></app-page-hero>
 
 <section class="class-details-body sp8">
   <div class="container">
