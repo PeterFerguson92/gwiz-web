@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { FitnessClass } from '@core/models/fitness.models';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -11,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   /** Optional class info (for class details page) */
-  @Input() classData: any = null;
+  @Input() classData: FitnessClass | null = null;
 
   /** Auth state passed from parent (must be wired correctly) */
   @Input() isLoggedIn = false;

@@ -3,9 +3,9 @@
   <div class="sidebar-card" *ngIf="classData">
     <h4>Class info</h4>
     <ul>
-      <li><strong>Price:</strong> {{ classData?.price | currency: 'GBP' }}</li>
-      <li><strong>Capacity:</strong> {{ classData?.capacity }}</li>
-      <li *ngIf="classData?.genre"><strong>Category:</strong> {{ classData.genre }}</li>
+      <li><strong>Price:</strong> {{ classData.base_price | currency: 'GBP' }}</li>
+      <li><strong>Capacity:</strong> {{ classData.capacity }}</li>
+      <li *ngIf="classData.genre"><strong>Category:</strong> {{ classData.genre }}</li>
     </ul>
   </div>
 
