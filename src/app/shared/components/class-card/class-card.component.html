@@ -12,10 +12,14 @@
 
       <!-- CENTER: TEXT CONTENT -->
       <div class="class-body">
-        <!-- TITLE -->
+        <!-- TITLE + NEW BADGE -->
         <h3 class="class-name">
           {{ cls.name }}
+          <span *ngIf="isNewClass" class="badge-new">New</span>
         </h3>
+
+        <!-- COMPACT NEXT SESSION LABEL -->
+        <div class="class-subtitle" *ngIf="hasNextSession">Next: {{ compactNextSessionLabel }}</div>
 
         <!-- CHIPS -->
         <div class="chip-row">
@@ -42,10 +46,7 @@
               <div class="meta-item-mobile">
                 <span class="meta-label">Next session</span>
                 <span class="meta-value">
-                  {{ nextSessionDateLabel() }}
-                </span>
-                <span class="meta-sub">
-                  {{ nextSessionTimeLabel() }}
+                  {{ compactNextSessionLabel }}
                 </span>
               </div>
 
@@ -93,22 +94,11 @@
 
       <!-- RIGHT: DESKTOP META -->
       <div class="class-right d-none d-md-flex">
-        <!-- PRICE -->
-        <div class="meta-block">
-          <div class="meta-label">From</div>
-          <div class="meta-value price">
-            {{ cls.base_price| currency: 'GBP' }}
-          </div>
-        </div>
-
-        <!-- NEXT SESSION DATE/TIME -->
+        <!-- NEXT SESSION DATE/TIME (COMPACT) -->
         <div class="meta-block" *ngIf="hasNextSession; else noDesktopSession">
           <div class="meta-label">Next session</div>
           <div class="meta-value">
-            {{ nextSessionDateLabel() }}
-          </div>
-          <div class="meta-sub">
-            {{ nextSessionTimeLabel() }}
+            {{ compactNextSessionLabel }}
           </div>
         </div>
 
