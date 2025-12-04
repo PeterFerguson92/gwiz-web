@@ -42,6 +42,22 @@ export class SessionListComponent {
     return this.formattersService.getSessionPrice(session, this.fitnessClass);
   }
 
+  isFull(session: ClassSession): boolean {
+    return session.spaces_left <= 0 || session.status === 'cancelled';
+  }
+
+  getSpacesLabel(session: ClassSession): string {
+    if (session.status === 'cancelled') {
+      return 'Cancelled';
+    }
+
+    if (session.spaces_left <= 0) {
+      return 'CLASS FULL';
+    }
+
+    return `${session.spaces_left} spaces left`;
+  }
+
   getSpacesClass(session: ClassSession): string {
     if (session.spaces_left <= 0) return 'badge-spaces sold-out';
     if (session.spaces_left <= 20) return 'badge-spaces low';

@@ -71,3 +71,32 @@
   background: #fee2e2;
   color: #b91c1c;
 }
+
+.session-spaces {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.session-spaces-full {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.session-spaces-cancelled {
+  background: #e5e7eb;
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.session-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

@@ -7,8 +7,14 @@
     <div class="session-info">
       <div class="session-date">{{ sessionDateLabel(session) }}</div>
       <div class="session-time">{{ sessionTimeLabel(session) }}</div>
-      <div [ngClass]="getSpacesClass(session)">
-        {{ session.spaces_left <= 0 ? 'Sold out' : session.spaces_left + ' spots left' }}
+      <div
+        class="session-spaces"
+        [ngClass]="{
+          'session-spaces-full': session.spaces_left <= 0,
+          'session-spaces-cancelled': session.status === 'cancelled',
+        }"
+      >
+        {{ getSpacesLabel(session) }}
       </div>
     </div>
 
@@ -24,14 +30,32 @@
 
     <button
       class="btn-primary btn-primary-sm session-btn"
-      [disabled]="
-        session.status === 'cancelled' || session.spaces_left <= 0 || bookingLoading[session.id]
-      "
+      [disabled]="isFull(session) || bookingLoading[session.id]"
       (click)="onBook(session)"
     >
-      <span *ngIf="!bookingLoading[session.id]"> Book now </span>
-
+      <!-- Loading -->
       <span *ngIf="bookingLoading[session.id]"> Booking… </span>
+
+      <!-- Cancelled -->
+      <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'"> Cancelled </span>
+
+      <!-- Full -->
+      <span
+        *ngIf="
+          !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left <= 0
+        "
+      >
+        Full
+      </span>
+
+      <!-- Normal -->
+      <span
+        *ngIf="
+          !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left > 0
+        "
+      >
+        Book now
+      </span>
     </button>
   </div>
 </div>
