@@ -2,13 +2,13 @@
   <app-loading-api></app-loading-api>
 </div>
 
-<div *ngIf="!loading && sessions?.length; else noSessions">
+<div *ngIf="!loading && sessions.length; else noSessions">
   <div class="session-card" *ngFor="let session of sessions">
     <div class="session-info">
       <div class="session-date">{{ sessionDateLabel(session) }}</div>
       <div class="session-time">{{ sessionTimeLabel(session) }}</div>
       <div class="session-spaces">
-        <strong>{{ session.spaces_left }}</strong> spaces left93939
+        <strong>{{ session.spaces_left }}</strong> spaces left
       </div>
     </div>
 
