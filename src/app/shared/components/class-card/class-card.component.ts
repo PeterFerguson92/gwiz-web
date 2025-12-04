@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { ClassSession } from '@core/models/fitness.models';
+
+import { FormattersService } from '../../service/formatters.service';
+
 @Component({
   selector: 'app-class-card',
   standalone: true,
@@ -12,6 +16,12 @@ export class ClassCardComponent {
   @Input() cls: any; // full class object
   @Input() placeholderImage!: string; // fallback image
   @Output() openDetails = new EventEmitter<any>();
+
+  constructor(private formattersService: FormattersService) {}
+
+  get instructorNames(): string {
+    return this.formattersService.formatInstructorNames(this.cls?.instructors);
+  }
 
   onCardClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
@@ -32,18 +42,11 @@ export class ClassCardComponent {
     img.src = this.placeholderImage;
   }
 
-  sessionDateLabel(session: any) {
-    return new Date(session.start).toLocaleDateString('en-GB', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-    });
+  sessionDateLabel(session: ClassSession): string {
+    return this.formattersService.formatSessionDate(session);
   }
 
-  sessionTimeLabel(session: any) {
-    return new Date(session.start).toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  sessionTimeLabel(session: ClassSession): string {
+    return this.formattersService.formatSessionTime(session);
   }
 }

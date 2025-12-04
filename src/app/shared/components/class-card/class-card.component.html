@@ -23,7 +23,7 @@
 
             <span class="chip chip-outline" *ngIf="cls.instructors?.length">
               {{ cls.instructors.length === 1 ? 'Instructor' : 'Instructors' }}:
-              {{ cls.instructors.join(', ') }}
+              {{ instructorNames }}
             </span>
           </div>
 

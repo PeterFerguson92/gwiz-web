@@ -138,14 +138,4 @@ export class ClassDetailsComponent implements OnInit {
         },
       });
   }
-
-  /* ------------------ DATE / TIME LABELS ------------------ */
-
-  sessionDateLabel(session: ClassSession): string {
-    return this.formattersService.formatSessionDate(session);
-  }
-
-  sessionTimeLabel(session: ClassSession): string {
-    return this.formattersService.formatSessionTime(session);
-  }
 }

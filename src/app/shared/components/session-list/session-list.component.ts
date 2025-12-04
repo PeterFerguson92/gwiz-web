@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { ClassSession } from '@core/models/fitness.models';
+
+import { FormattersService } from '../../service/formatters.service';
 import { SHARED_IMPORTS } from '../../shared-imports';
 
 @Component({
@@ -17,20 +20,14 @@ export class SessionListComponent {
   @Input() bookingLoading: Record<number, boolean> = {};
 
   @Output() book = new EventEmitter<any>();
+  constructor(private formattersService: FormattersService) {}
 
-  sessionDateLabel(session: any) {
-    return new Date(session.start).toLocaleDateString('en-GB', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-    });
+  sessionDateLabel(session: ClassSession): string {
+    return this.formattersService.formatSessionDate(session);
   }
 
-  sessionTimeLabel(session: any) {
-    return new Date(session.start).toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  sessionTimeLabel(session: ClassSession): string {
+    return this.formattersService.formatSessionTime(session);
   }
 
   onBook(session: any) {
