@@ -45,3 +45,29 @@
 .session-price {
   font-weight: 600;
 }
+
+.session-spaces {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.badge-spaces {
+  display: inline-block;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #111827;
+}
+
+.badge-spaces.low {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-spaces.sold-out {
+  background: #fee2e2;
+  color: #b91c1c;
+}

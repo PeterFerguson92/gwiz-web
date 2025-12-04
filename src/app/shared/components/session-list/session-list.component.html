@@ -7,8 +7,8 @@
     <div class="session-info">
       <div class="session-date">{{ sessionDateLabel(session) }}</div>
       <div class="session-time">{{ sessionTimeLabel(session) }}</div>
-      <div class="session-spaces">
-        <strong>{{ session.spaces_left }}</strong> spaces left
+      <div [ngClass]="getSpacesClass(session)">
+        {{ session.spaces_left <= 0 ? 'Sold out' : session.spaces_left + ' spots left' }}
       </div>
     </div>
 

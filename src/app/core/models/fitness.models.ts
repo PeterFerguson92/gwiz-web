@@ -37,6 +37,7 @@ export interface ClassSession {
   price_override: string | null;
   capacity_effective: number;
   price_effective: string;
+  spaces_left: number;
   created_from_rule: string | null;
 }
 

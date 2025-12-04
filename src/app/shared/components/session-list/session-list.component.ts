@@ -42,6 +42,12 @@ export class SessionListComponent {
     return this.formattersService.getSessionPrice(session, this.fitnessClass);
   }
 
+  getSpacesClass(session: ClassSession): string {
+    if (session.spaces_left <= 0) return 'badge-spaces sold-out';
+    if (session.spaces_left <= 20) return 'badge-spaces low';
+    return 'badge-spaces';
+  }
+
   onBook(session: any) {
     this.book.emit(session);
   }
