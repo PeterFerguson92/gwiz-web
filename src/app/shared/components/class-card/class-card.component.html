@@ -10,15 +10,12 @@
         />
       </div>
 
-      <!-- CENTER: TEXT CONTENT -->
       <div class="class-body">
-        <!-- TITLE + NEW BADGE -->
         <h3 class="class-name">
           {{ cls.name }}
           <span *ngIf="isNewClass" class="badge-new">New</span>
         </h3>
 
-        <!-- COMPACT NEXT SESSION LABEL -->
         <div class="class-subtitle" *ngIf="hasNextSession">Next: {{ compactNextSessionLabel }}</div>
 
         <!-- CHIPS -->

@@ -208,6 +208,82 @@
   text-align: center;
 }
 
+/* ---------------------------
+   NEW BADGE
+---------------------------- */
+.badge-new {
+  display: inline-block;
+  background: var(--brand-red, #c90f16);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  margin-left: 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  box-shadow: 0 2px 6px rgba(201, 15, 22, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* ---------------------------
+   SUBTITLE (Compact Date/Time)
+---------------------------- */
+.class-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280; /* Tailwind gray-500 tone */
+  margin-top: 2px;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+/* ---------------------------
+   TITLE + SUBTITLE STACKING
+---------------------------- */
+.class-name {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+}
+
+.class-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Extra spacing refinement for tight, premium layout */
+.chip-row {
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.class-description {
+  margin-bottom: 12px;
+  color: #4b5563; /* gray-600 */
+  font-size: 0.9rem;
+}
+
+/* ---------------------------
+   RESPONSIVE TWEAKS
+---------------------------- */
+@media (max-width: 768px) {
+  .badge-new {
+    font-size: 0.62rem;
+    padding: 1px 6px;
+    margin-left: 6px;
+  }
+
+  .class-name {
+    font-size: 1.05rem;
+  }
+
+  .class-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+  }
+}
+
 /* --------------------------------------------------------
    RESPONSIVE
 --------------------------------------------------------- */
