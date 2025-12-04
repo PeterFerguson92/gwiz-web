@@ -4,59 +4,86 @@
 
 <div *ngIf="!loading && sessions.length; else noSessions">
   <div class="session-card" *ngFor="let session of sessions">
-    <div class="session-info">
-      <div class="session-date">{{ sessionDateLabel(session) }}</div>
-      <div class="session-time">{{ sessionTimeLabel(session) }}</div>
+    <div class="session-header">
+      <div class="session-date">
+        {{ sessionDateLabel(session) }}
+      </div>
+      <div class="session-time">
+        {{ sessionTimeLabel(session) }}
+      </div>
+    </div>
+
+    <div class="session-body">
       <div
-        class="session-spaces"
+        class="session-spaces-pill"
         [ngClass]="{
           'session-spaces-full': session.spaces_left <= 0,
           'session-spaces-cancelled': session.status === 'cancelled',
         }"
       >
-        {{ getSpacesLabel(session) }}
+        <div class="spaces-count">
+          <!-- Show number only if > 0 -->
+          {{ session.spaces_left > 0 ? session.spaces_left : '' }}
+        </div>
+        <div class="spaces-label">
+          {{ getSpacesLabel(session) }}
+        </div>
+      </div>
+
+      <!-- Capacity + price -->
+      <div class="session-meta">
+        <div class="meta-row" *ngIf="effectiveCapacity(session) !== null">
+          <span class="meta-label">Capacity:</span>
+          <span class="meta-value">
+            {{ effectiveCapacity(session) }}
+          </span>
+        </div>
+        <div class="meta-row" *ngIf="effectivePrice(session) !== null">
+          <span class="meta-label">Price:</span>
+          <span class="meta-value">
+            {{ effectivePrice(session) | currency: 'GBP' }}
+          </span>
+        </div>
       </div>
     </div>
 
-    <div class="session-meta-row">
-      <span *ngIf="effectiveCapacity(session) !== null" class="session-capacity">
-        Capacity: {{ effectiveCapacity(session) }}
-      </span>
+    <!-- BOTTOM: BUTTON -->
+    <div class="session-actions">
+      <button
+        class="btn-primary session-btn"
+        [disabled]="isFull(session) || bookingLoading[session.id]"
+        (click)="onBook(session)"
+        type="button"
+      >
+        <!-- Loading -->
+        <span *ngIf="bookingLoading[session.id]"> Booking… </span>
 
-      <span *ngIf="effectivePrice(session) !== null" class="session-price">
-        {{ effectivePrice(session) | currency: 'GBP' }}
-      </span>
+        <!-- Cancelled -->
+        <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'">
+          Cancelled
+        </span>
+
+        <!-- Full -->
+        <span
+          *ngIf="
+            !bookingLoading[session.id] &&
+            session.status !== 'cancelled' &&
+            session.spaces_left <= 0
+          "
+        >
+          Full
+        </span>
+
+        <!-- Normal -->
+        <span
+          *ngIf="
+            !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left > 0
+          "
+        >
+          Book now
+        </span>
+      </button>
     </div>
-
-    <button
-      class="btn-primary btn-primary-sm session-btn"
-      [disabled]="isFull(session) || bookingLoading[session.id]"
-      (click)="onBook(session)"
-    >
-      <!-- Loading -->
-      <span *ngIf="bookingLoading[session.id]"> Booking… </span>
-
-      <!-- Cancelled -->
-      <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'"> Cancelled </span>
-
-      <!-- Full -->
-      <span
-        *ngIf="
-          !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left <= 0
-        "
-      >
-        Full
-      </span>
-
-      <!-- Normal -->
-      <span
-        *ngIf="
-          !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left > 0
-        "
-      >
-        Book now
-      </span>
-    </button>
   </div>
 </div>
 
