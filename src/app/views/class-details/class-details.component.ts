@@ -113,10 +113,10 @@ export class ClassDetailsComponent implements OnInit {
       return;
     }
 
-    if (session.spaces_left <= 0) {
-      this.toast.error('This session is fully booked.');
-      return;
-    }
+    // if (session.spaces_left <= 0) {
+    //   this.toast.error('This session is fully booked.');
+    //   return;
+    // }
 
     this.bookingLoading[session.id] = true;
 

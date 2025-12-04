@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ClassSession, Instructor } from '@core/models/fitness.models';
+import { ClassSession, FitnessClass, Instructor } from '@core/models/fitness.models';
 
 @Injectable({ providedIn: 'root' })
 export class FormattersService {
@@ -58,5 +58,26 @@ export class FormattersService {
     });
 
     return `${startStr} – ${endStr}`;
+  }
+
+  getSessionCapacity(session: ClassSession, fitnessClass?: FitnessClass | null): number | null {
+    if (session.capacity_effective !== undefined && session.capacity_effective !== null) {
+      return session.capacity_effective;
+    }
+    if (fitnessClass) {
+      return fitnessClass.capacity;
+    }
+    return null;
+  }
+
+  getSessionPrice(session: ClassSession, fitnessClass?: FitnessClass | null): number | null {
+    if (session.price_effective !== undefined && session.price_effective !== null) {
+      // price_effective is a string like "12.00"
+      return Number(session.price_effective);
+    }
+    if (fitnessClass) {
+      return Number(fitnessClass.base_price);
+    }
+    return null;
   }
 }

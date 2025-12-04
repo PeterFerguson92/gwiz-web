@@ -8,8 +8,18 @@
       <div class="session-date">{{ sessionDateLabel(session) }}</div>
       <div class="session-time">{{ sessionTimeLabel(session) }}</div>
       <div class="session-spaces">
-        <strong>{{ session.spaces_left }}</strong> spaces left
+        <strong>{{ session.spaces_left }}</strong> spaces left93939
       </div>
+    </div>
+
+    <div class="session-meta-row">
+      <span *ngIf="effectiveCapacity(session) !== null" class="session-capacity">
+        Capacity: {{ effectiveCapacity(session) }}
+      </span>
+
+      <span *ngIf="effectivePrice(session) !== null" class="session-price">
+        {{ effectivePrice(session) | currency: 'GBP' }}
+      </span>
     </div>
 
     <button

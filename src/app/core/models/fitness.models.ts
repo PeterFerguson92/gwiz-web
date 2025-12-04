@@ -1,16 +1,19 @@
 // src/app/core/models/booking.models.ts
-
 export interface FitnessClass {
   id: string;
+  cover_image: string | null;
   name: string;
-  description: string | null;
-  genre: string | null;
+  description: string;
+  genre: string;
+  base_price: string;
+  default_duration_minutes: number;
   capacity: number;
-  price: number;
-  image_url: string | null;
   instructors: Instructor[];
+  additional_notes: string;
   is_active: boolean;
-  // when using /with-sessions/ endpoint:
+  created_at: string;
+  updated_at: string;
+
   upcoming_sessions?: ClassSession[];
 }
 
@@ -24,14 +27,17 @@ export interface Instructor {
 
 export interface ClassSession {
   id: string;
-  fitness_class_id: string;
-  date: string; // 'YYYY-MM-DD'
-  start_time: string; // 'HH:MM:SS'
-  end_time: string; // 'HH:MM:SS'
+  fitness_class: string;
+  date: string;
+  start_time: string;
+  end_time: string;
   status: 'scheduled' | 'cancelled';
-  capacity: number;
-  spaces_left: number;
-  price: number;
+  created_at: string;
+  capacity_override: number | null;
+  price_override: string | null;
+  capacity_effective: number;
+  price_effective: string;
+  created_from_rule: string | null;
 }
 
 export interface Booking {

@@ -33,3 +33,15 @@
 .session-btn {
   white-space: nowrap;
 }
+
+.session-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.session-price {
+  font-weight: 600;
+}

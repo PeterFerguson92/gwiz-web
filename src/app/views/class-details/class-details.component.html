@@ -2,7 +2,7 @@
 <app-page-hero
   [title]="classData?.name || 'Class details'"
   [breadcrumbTitle]="classData?.name"
-  [backgroundImage]="classData?.image_url || undefined"
+  [backgroundImage]="classData?.cover_image || undefined"
 ></app-page-hero>
 
 <!-- MAIN CONTENT -->
@@ -43,6 +43,7 @@
                 [loading]="loadingSessions"
                 [isLoggedIn]="isLoggedIn"
                 [bookingLoading]="bookingLoading"
+                [fitnessClass]="classData"
                 (book)="bookSession($event)"
               ></app-session-list>
             </div>
