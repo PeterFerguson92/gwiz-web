@@ -23,11 +23,12 @@
             <div *ngIf="classes.length" class="classes-list">
               <!-- CLASS CARD -->
               <app-class-card
-                *ngFor="let cls of classes"
+                *ngFor="let cls of classes; trackBy: trackByClassId"
                 [cls]="cls"
                 [placeholderImage]="placeholderImage"
-                (openDetails)="openClassDetails(cls)"
+                (openDetails)="openClassDetails($event)"
               ></app-class-card>
+
               <!-- END CLASS CARD -->
 
               <!-- OPTIONAL LOADING MORE -->
