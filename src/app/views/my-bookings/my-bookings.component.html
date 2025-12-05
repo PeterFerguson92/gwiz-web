@@ -189,7 +189,7 @@
               *ngIf="canCancel(booking)"
               type="button"
               class="cancel-booking-btn"
-              (click)="cancelBooking(booking)"
+              (click)="openCancelModal(booking)"
               [disabled]="cancellingBookingId === booking.id"
             >
               {{ cancellingBookingId === booking.id ? 'Cancelling…' : 'Cancel booking' }}
@@ -204,4 +204,53 @@
       No bookings match your filters.
     </p>
   </ng-template>
+
+  <!-- CANCEL CONFIRMATION MODAL -->
+  <div class="cancel-modal-backdrop" *ngIf="bookingPendingCancel as b" (click)="closeCancelModal()">
+    <div
+      class="cancel-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cancel-modal-title"
+      aria-describedby="cancel-modal-description"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 id="cancel-modal-title">Cancel booking?</h3>
+
+      <p id="cancel-modal-description" class="cancel-modal-text">
+        You’re about to cancel your booking for
+        <strong>{{ b.class_session.fitness_class.name }}</strong>
+        on
+        <strong>{{ formatter.formatSessionDate(b.class_session) }}</strong>
+        at
+        <strong>{{ formatter.formatSessionTime(b.class_session) }}</strong
+        >.
+      </p>
+
+      <p class="cancel-modal-warning">
+        Cancellations are allowed up to 2 hours before the session start time. This action can’t be
+        undone.
+      </p>
+
+      <div class="cancel-modal-actions">
+        <button
+          type="button"
+          class="btn-keep-booking"
+          (click)="closeCancelModal()"
+          [disabled]="isCancelling"
+        >
+          Keep booking
+        </button>
+
+        <button
+          type="button"
+          class="btn-confirm-cancel"
+          (click)="confirmCancelBooking()"
+          [disabled]="isCancelling"
+        >
+          {{ isCancelling ? 'Cancelling…' : 'Yes, cancel booking' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

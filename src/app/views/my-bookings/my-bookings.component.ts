@@ -57,6 +57,7 @@ export class MyBookingsComponent implements OnInit {
   // SORTING STATE
   sortOption: SortOption = 'newest';
 
+  bookingPendingCancel: BookingWithDetails | null = null;
   cancellingBookingId: string | null = null;
 
   constructor(
@@ -188,45 +189,73 @@ export class MyBookingsComponent implements OnInit {
   trackByBookingId(_: number, b: BookingWithDetails): string {
     return b.id;
   }
+
+  // Track global cancelling state (used to disable modal buttons)
+  isCancelling = false;
+
+  // ---- Helpers ----
+
+  // Only allow cancelling for active, upcoming bookings
   canCancel(booking: BookingWithDetails): boolean {
-    // Only allow UI cancellation for active, upcoming bookings
     return booking.status === 'booked' && this.isUpcoming(booking);
   }
 
-  cancelBooking(booking: BookingWithDetails): void {
+  // ---- Modal open/close ----
+
+  openCancelModal(booking: BookingWithDetails): void {
     if (!this.canCancel(booking)) {
       return;
     }
+    this.bookingPendingCancel = booking;
+  }
 
-    const confirmMsg = `Cancel your booking for "${booking.class_session.fitness_class.name}"?`;
-    const confirmed = window.confirm(confirmMsg);
-    if (!confirmed) return;
+  closeCancelModal(): void {
+    // Don’t close while a cancel request is in flight
+    if (this.isCancelling) return;
+    this.bookingPendingCancel = null;
+  }
 
+  // ---- Confirm + call API ----
+
+  confirmCancelBooking(): void {
+    const booking = this.bookingPendingCancel;
+    if (!booking) {
+      return;
+    }
+
+    this.isCancelling = true;
     this.cancellingBookingId = booking.id;
 
     this.fitnessClassService.cancelBooking(booking.id).subscribe({
       next: (updated) => {
-        // Merge updated fields into existing booking
+        // Merge updated booking from backend into local list
         const idx = this.bookings.findIndex((b) => b.id === updated.id);
         if (idx !== -1) {
           this.bookings[idx] = {
             ...this.bookings[idx],
-            ...updated, // status, payment_status, etc. from backend
+            ...updated,
           };
         }
 
-        // Recompute filters/grouping since status changed
-        this.computeGroupedBookings();
+        // 🔁 Rebuild filtered/sorted/grouped view
+        // Replace this with whatever method you already use
+        // to recompute groupedBookings from this.bookings.
+        // e.g. this.applyFiltersAndSorting(); or this.computeGroupedBookings();
+        this.computeGroupedBookings?.();
+        // If your method is named differently, change the line above.
 
         this.toast.success('Your booking has been cancelled.');
+
+        this.isCancelling = false;
         this.cancellingBookingId = null;
+        this.bookingPendingCancel = null;
       },
       error: (err) => {
+        this.isCancelling = false;
         this.cancellingBookingId = null;
 
         const detail = err?.error?.detail;
 
-        // Map known backend messages
         if (detail === 'This booking is not active.') {
           this.toast.error('This booking is already cancelled.');
         } else if (
@@ -238,6 +267,9 @@ export class MyBookingsComponent implements OnInit {
         } else {
           this.toast.error('Could not cancel this booking. Please try again.');
         }
+
+        // keep the modal open so they can read the message;
+        // they can press "Keep booking" to close it
       },
     });
   }
