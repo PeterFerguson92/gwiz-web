@@ -185,6 +185,15 @@
             <span class="chip" [ngClass]="'attendance-' + booking.attendance_status">
               {{ booking.attendance_status | titlecase }}
             </span>
+            <button
+              *ngIf="canCancel(booking)"
+              type="button"
+              class="cancel-booking-btn"
+              (click)="cancelBooking(booking)"
+              [disabled]="cancellingBookingId === booking.id"
+            >
+              {{ cancellingBookingId === booking.id ? 'Cancelling…' : 'Cancel booking' }}
+            </button>
           </div>
         </article>
       </div>

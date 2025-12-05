@@ -77,4 +77,9 @@ export class FitnessClassService {
   getMyBookings(): Observable<BookingWithDetails[]> {
     return this.http.get<BookingWithDetails[]>(`${this.baseUrl}/my-bookings/`);
   }
+
+  cancelBooking(bookingId: string): Observable<BookingWithDetails> {
+    const url = `${environment.apiUrl}/bookings/${bookingId}/cancel/`;
+    return this.http.post<BookingWithDetails>(url, {});
+  }
 }

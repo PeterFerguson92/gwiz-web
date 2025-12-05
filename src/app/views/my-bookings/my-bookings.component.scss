@@ -322,6 +322,33 @@
   }
 }
 
+.cancel-booking-btn {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  background: var(--brand-red, #c90f16);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 0.4rem;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+
+  &:hover:not(:disabled) {
+    background: #a40c13;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
 /* Upcoming / Past pill (reverted to neutral) */
 
 .pill {

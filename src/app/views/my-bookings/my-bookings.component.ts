@@ -57,6 +57,8 @@ export class MyBookingsComponent implements OnInit {
   // SORTING STATE
   sortOption: SortOption = 'newest';
 
+  cancellingBookingId: string | null = null;
+
   constructor(
     private fitnessClassService: FitnessClassService,
     public formatter: FormattersService,
@@ -185,5 +187,58 @@ export class MyBookingsComponent implements OnInit {
 
   trackByBookingId(_: number, b: BookingWithDetails): string {
     return b.id;
+  }
+  canCancel(booking: BookingWithDetails): boolean {
+    // Only allow UI cancellation for active, upcoming bookings
+    return booking.status === 'booked' && this.isUpcoming(booking);
+  }
+
+  cancelBooking(booking: BookingWithDetails): void {
+    if (!this.canCancel(booking)) {
+      return;
+    }
+
+    const confirmMsg = `Cancel your booking for "${booking.class_session.fitness_class.name}"?`;
+    const confirmed = window.confirm(confirmMsg);
+    if (!confirmed) return;
+
+    this.cancellingBookingId = booking.id;
+
+    this.fitnessClassService.cancelBooking(booking.id).subscribe({
+      next: (updated) => {
+        // Merge updated fields into existing booking
+        const idx = this.bookings.findIndex((b) => b.id === updated.id);
+        if (idx !== -1) {
+          this.bookings[idx] = {
+            ...this.bookings[idx],
+            ...updated, // status, payment_status, etc. from backend
+          };
+        }
+
+        // Recompute filters/grouping since status changed
+        this.computeGroupedBookings();
+
+        this.toast.success('Your booking has been cancelled.');
+        this.cancellingBookingId = null;
+      },
+      error: (err) => {
+        this.cancellingBookingId = null;
+
+        const detail = err?.error?.detail;
+
+        // Map known backend messages
+        if (detail === 'This booking is not active.') {
+          this.toast.error('This booking is already cancelled.');
+        } else if (
+          detail === 'Cancellation window has passed. Please contact the gym if you need help.'
+        ) {
+          this.toast.error('Cancellation window has passed. Please contact the gym.');
+        } else if (detail === 'Not found.') {
+          this.toast.error('Booking not found or not owned by this account.');
+        } else {
+          this.toast.error('Could not cancel this booking. Please try again.');
+        }
+      },
+    });
   }
 }
