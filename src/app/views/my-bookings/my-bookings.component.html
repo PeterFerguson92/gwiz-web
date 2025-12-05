@@ -11,24 +11,95 @@
       <a routerLink="/classes" class="link">Browse classes</a>
     </p>
 
-    <div *ngIf="bookings.length" class="bookings-list scroll-y-panel">
-      <article class="booking-card" *ngFor="let booking of bookings; trackBy: trackByBookingId">
+    <!-- Filters -->
+    <div *ngIf="bookings.length" class="filters">
+      <div class="filter-group">
+        <span class="filter-label">When:</span>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="timeFilter === 'upcoming'"
+          (click)="setTimeFilter('upcoming')"
+        >
+          Upcoming
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="timeFilter === 'past'"
+          (click)="setTimeFilter('past')"
+        >
+          Past
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="timeFilter === 'all'"
+          (click)="setTimeFilter('all')"
+        >
+          All
+        </button>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Status:</span>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="statusFilter === 'all'"
+          (click)="setStatusFilter('all')"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="statusFilter === 'booked'"
+          (click)="setStatusFilter('booked')"
+        >
+          Booked
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="statusFilter === 'cancelled'"
+          (click)="setStatusFilter('cancelled')"
+        >
+          Cancelled
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="statusFilter === 'no_show'"
+          (click)="setStatusFilter('no_show')"
+        >
+          No-show
+        </button>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div *ngIf="filteredBookings.length" class="bookings-list scroll-y-panel">
+      <article
+        class="booking-card"
+        *ngFor="let booking of filteredBookings; trackBy: trackByBookingId"
+      >
         <div class="booking-main">
           <h3 class="class-name">
             {{ booking.class_session.fitness_class.name }}
           </h3>
 
-          <p class="class-genre" *ngIf="booking.class_session.fitness_class.genre">
+          <p class="class-genre">
             {{ booking.class_session.fitness_class.genre }}
           </p>
 
-          <p class="session-meta" *ngIf="booking.class_session as session">
+          <p class="session-meta">
             <span class="date">
-              {{ display.formatSessionDate(session) }}
+              {{ display.formatSessionDate(booking.class_session) }}
             </span>
             <span class="dot">•</span>
             <span class="time">
-              {{ display.formatSessionTime(session) }}
+              {{ display.formatSessionTime(booking.class_session) }}
             </span>
           </p>
 
@@ -36,6 +107,14 @@
             Booked:
             {{ booking.created_at | date: 'medium' }}
           </p>
+
+          <!-- View class link -->
+          <a
+            class="view-class-link"
+            [routerLink]="['/classes', booking.class_session.fitness_class.id]"
+          >
+            View class
+          </a>
         </div>
 
         <div class="booking-status">
@@ -53,5 +132,10 @@
         </div>
       </article>
     </div>
+
+    <!-- If filters hide everything -->
+    <p *ngIf="bookings.length && !filteredBookings.length" class="empty-state empty-state--filters">
+      No bookings match the selected filters.
+    </p>
   </ng-template>
 </div>
