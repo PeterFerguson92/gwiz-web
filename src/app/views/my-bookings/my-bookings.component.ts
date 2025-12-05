@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
-import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
 import { FallbackImageDirective } from '@/app/shared/directives/fallback-image.directive';
 import { FormattersService } from '@/app/shared/service/formatters.service';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
@@ -38,7 +37,6 @@ interface GroupedMonth {
     RouterModule,
     FormsModule,
     PageHeroComponent,
-    SidebarComponent,
     FallbackImageDirective,
     ...SHARED_IMPORTS,
   ],
