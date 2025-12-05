@@ -20,10 +20,11 @@
                 <li><a routerLink="/about">About</a></li>
                 <li><a routerLink="/services">Services</a></li>
                 <li><a routerLink="/classes">Classes</a></li>
-                <li><a routerLink="/contact-us">Contact Us</a></li>
 
                 <!-- 🔐 Auth links (Option 2 clean inline style) -->
                 <li *ngIf="isLoggedIn"><a routerLink="/profile">Profile</a></li>
+                <li *ngIf="isLoggedIn"><a routerLink="/my-bookings">My Bookings</a></li>
+                <li><a routerLink="/contact-us">Contact Us</a></li>
                 <li *ngIf="isLoggedIn"><a (click)="logout()" style="cursor: pointer">Logout</a></li>
                 <li *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
               </ul>
