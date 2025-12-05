@@ -1,0 +1,57 @@
+<app-page-hero title="My bookings" breadcrumbTitle="My bookings"></app-page-hero>
+
+<div class="my-bookings container py-4">
+  <ng-container *ngIf="loading; else bookingsLoaded">
+    <div class="loading-state">Loading your bookings…</div>
+  </ng-container>
+
+  <ng-template #bookingsLoaded>
+    <p *ngIf="!bookings.length" class="empty-state">
+      You don’t have any bookings yet.
+      <a routerLink="/classes" class="link">Browse classes</a>
+    </p>
+
+    <div *ngIf="bookings.length" class="bookings-list scroll-y-panel">
+      <article class="booking-card" *ngFor="let booking of bookings; trackBy: trackByBookingId">
+        <div class="booking-main">
+          <h3 class="class-name">
+            {{ booking.class_session.fitness_class.name }}
+          </h3>
+
+          <p class="class-genre" *ngIf="booking.class_session.fitness_class.genre">
+            {{ booking.class_session.fitness_class.genre }}
+          </p>
+
+          <p class="session-meta" *ngIf="booking.class_session as session">
+            <span class="date">
+              {{ display.formatSessionDate(session) }}
+            </span>
+            <span class="dot">•</span>
+            <span class="time">
+              {{ display.formatSessionTime(session) }}
+            </span>
+          </p>
+
+          <p class="created-at">
+            Booked:
+            {{ booking.created_at | date: 'medium' }}
+          </p>
+        </div>
+
+        <div class="booking-status">
+          <span class="chip chip-status" [ngClass]="'status-' + booking.status">
+            {{ booking.status | titlecase }}
+          </span>
+
+          <span class="chip chip-payment" [ngClass]="'payment-' + booking.payment_status">
+            {{ booking.payment_status | titlecase }}
+          </span>
+
+          <span class="chip chip-attendance" [ngClass]="'attendance-' + booking.attendance_status">
+            {{ booking.attendance_status | titlecase }}
+          </span>
+        </div>
+      </article>
+    </div>
+  </ng-template>
+</div>

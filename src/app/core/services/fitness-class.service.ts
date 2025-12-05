@@ -5,7 +5,12 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { environment } from '@/environments/environment';
-import { BookSessionResponse, ClassSession, FitnessClass } from '@core/models/fitness.models';
+import {
+  BookingWithDetails,
+  BookSessionResponse,
+  ClassSession,
+  FitnessClass,
+} from '@core/models/fitness.models';
 
 export interface FitnessClassWithSessions extends FitnessClass {
   upcoming_sessions: ClassSession[];
@@ -67,5 +72,9 @@ export class FitnessClassService {
   /** POST /api/booking/sessions/:id/book/ */
   bookSession(sessionId: string): Observable<BookSessionResponse> {
     return this.http.post<BookSessionResponse>(`${this.baseUrl}/sessions/${sessionId}/book/`, {});
+  }
+
+  getMyBookings(): Observable<BookingWithDetails[]> {
+    return this.http.get<BookingWithDetails[]>(`${this.baseUrl}/my-bookings/`);
   }
 }
