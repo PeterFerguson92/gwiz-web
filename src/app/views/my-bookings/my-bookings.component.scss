@@ -1,194 +1,332 @@
+/* ------------------------------------
+   Layout
+------------------------------------ */
+
 .my-bookings {
   max-width: 900px;
   margin: 0 auto;
 }
 
-/* Loading / Empty States */
+/* Loading & empty states */
 
 .loading-state,
 .empty-state {
   text-align: center;
   padding: 2rem 1rem;
   color: #555;
-  font-size: 0.95rem;
 
   .link {
     margin-left: 0.25rem;
     text-decoration: underline;
-    font-weight: 500;
   }
 }
 
-/* Filters */
+/* ------------------------------------
+   Filters
+------------------------------------ */
 
 .filters {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
   gap: 0.75rem;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .filter-label {
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: #666;
-  margin-right: 0.25rem;
+  text-transform: uppercase;
 }
 
 .filter-pill {
-  border: none;
-  border-radius: 999px;
   padding: 0.3rem 0.75rem;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
   background: #f4f4f5;
-  color: #444;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
+  border: none;
 
   &.active {
     background: #111827;
-    color: #ffffff;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    color: #fff;
   }
 }
 
-/* List */
+/* Sorting */
 
-.bookings-list {
-  margin-top: 1rem;
+.sorting {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  select {
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.4rem;
+    border: 1px solid #d1d5db;
+  }
 }
 
-/* CARD — redesigned to match Class Cards */
+/* ------------------------------------
+   Group heading
+------------------------------------ */
+
+.month-heading {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* ------------------------------------
+   Instructor avatars
+------------------------------------ */
+
+.instructor-row {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+
+  .inst-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* ------------------------------------
+   Booking Card (matches Classes style)
+------------------------------------ */
 
 .booking-card {
   display: flex;
-  justify-content: space-between;
+  padding: 1.25rem;
   gap: 1.25rem;
+  border-radius: 1rem;
+  background: #fff;
 
-  padding: 1.25rem 1.5rem;
   margin-bottom: 1rem;
 
-  border-radius: 1rem;
-  background: #ffffff;
-
-  /* Same style used in class cards */
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.04),
-    0 6px 20px rgba(0, 0, 0, 0.06);
+    0 4px 10px rgba(0, 0, 0, 0.05),
+    0 8px 30px rgba(0, 0, 0, 0.06);
 
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow:
-      0 6px 12px rgba(0, 0, 0, 0.05),
-      0 10px 24px rgba(0, 0, 0, 0.08);
+      0 6px 14px rgba(0, 0, 0, 0.05),
+      0 12px 32px rgba(0, 0, 0, 0.09);
   }
 }
 
-/* LEFT SIDE CONTENT */
+/* Slide-in animation */
+
+.slide-in {
+  opacity: 0;
+  animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------
+   Media (image + time-of-day bar)
+------------------------------------ */
+
+.card-media {
+  width: 110px;
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.class-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.time-of-day-bar {
+  height: 6px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.time-of-day-bar.morning {
+  background: #fde68a;
+}
+.time-of-day-bar.afternoon {
+  background: #93c5fd;
+}
+.time-of-day-bar.evening {
+  background: #c084fc;
+}
+
+/* ------------------------------------
+   Main content
+------------------------------------ */
 
 .booking-main {
   flex: 1;
+}
 
-  .class-name {
-    margin: 0 0 0.35rem;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: -0.01em;
-    color: #111827;
-  }
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .class-genre {
-    margin: 0 0 0.6rem;
-    font-size: 0.86rem;
-    color: #6b7280;
-    text-transform: capitalize;
-  }
+.class-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
 
-  .session-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    font-size: 0.9rem;
-    color: #374151;
-    margin-bottom: 0.45rem;
+.class-genre {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0.3rem 0 0.75rem;
+}
 
-    .dot {
-      margin: 0 0.25rem;
-      color: #9ca3af;
-    }
-  }
+.session-meta {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: #374151;
 
-  .created-at {
-    margin: 0.5rem 0 0.3rem;
-    font-size: 0.8rem;
+  .dot {
     color: #9ca3af;
-  }
-
-  .view-class-link {
-    margin-top: 0.4rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #0d6efd;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
 
-/* RIGHT SIDE STATUS CHIPS */
+.created-at {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.view-class-link {
+  margin-top: 0.6rem;
+  display: inline-block;
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+/* time pill */
+
+.pill {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.pill-upcoming {
+  background: #dcfce7;
+  color: #15803d;
+}
+.pill-past {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* ------------------------------------
+   Status chips
+------------------------------------ */
 
 .booking-status {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.35rem;
-  font-size: 0.75rem;
+  gap: 0.4rem;
 }
 
 .chip {
   padding: 0.25rem 0.7rem;
+  font-size: 0.7rem;
   border-radius: 999px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.7rem;
-  white-space: nowrap;
 }
-
-/* Status chips */
 
 .status-booked {
   background: #e6f7f0;
-  color: #157347;
+  color: #15803d;
 }
-
 .status-cancelled {
-  background: #fdeaea;
-  color: #b02a37;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.status-no_show {
+  background: #fef3c7;
+  color: #b45309;
 }
 
-.status-no_show {
-  background: #fff3cd;
-  color: #856404;
+.payment-paid,
+.payment-included {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.payment-pending {
+  background: #fff7ed;
+  color: #b45309;
+}
+.payment-void {
+  background: #f1f5f9;
+  color: #6b7280;
+}
+
+.attendance-present {
+  background: #e6f7f0;
+  color: #15803d;
+}
+.attendance-unknown {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.attendance-no_show,
+.attendance-absent {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ------------------------------------
+   Mobile responsiveness
+------------------------------------ */
+
+@media (max-width: 767px) {
+  .booking-card {
+    flex-direction: column;
+  }
+
+  .card-media {
+    width: 100%;
+    height: 160px;
+  }
+
+  .booking-status {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }

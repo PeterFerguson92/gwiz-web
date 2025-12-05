@@ -1,22 +1,24 @@
 <app-page-hero title="My bookings" breadcrumbTitle="My bookings"></app-page-hero>
 
 <div class="my-bookings container py-4">
-  <ng-container *ngIf="loading; else bookingsLoaded">
+  <!-- LOADER -->
+  <ng-container *ngIf="loading; else loaded">
     <div class="loading-state">Loading your bookings…</div>
   </ng-container>
 
-  <ng-template #bookingsLoaded>
+  <!-- CONTENT -->
+  <ng-template #loaded>
+    <!-- EMPTY -->
     <p *ngIf="!bookings.length" class="empty-state">
       You don’t have any bookings yet.
       <a routerLink="/classes" class="link">Browse classes</a>
     </p>
 
-    <!-- Filters -->
+    <!-- FILTERS -->
     <div *ngIf="bookings.length" class="filters">
       <div class="filter-group">
         <span class="filter-label">When:</span>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="timeFilter === 'upcoming'"
           (click)="setTimeFilter('upcoming')"
@@ -24,7 +26,6 @@
           Upcoming
         </button>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="timeFilter === 'past'"
           (click)="setTimeFilter('past')"
@@ -32,7 +33,6 @@
           Past
         </button>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="timeFilter === 'all'"
           (click)="setTimeFilter('all')"
@@ -44,7 +44,6 @@
       <div class="filter-group">
         <span class="filter-label">Status:</span>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="statusFilter === 'all'"
           (click)="setStatusFilter('all')"
@@ -52,7 +51,6 @@
           All
         </button>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="statusFilter === 'booked'"
           (click)="setStatusFilter('booked')"
@@ -60,7 +58,6 @@
           Booked
         </button>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="statusFilter === 'cancelled'"
           (click)="setStatusFilter('cancelled')"
@@ -68,7 +65,6 @@
           Cancelled
         </button>
         <button
-          type="button"
           class="filter-pill"
           [class.active]="statusFilter === 'no_show'"
           (click)="setStatusFilter('no_show')"
@@ -76,66 +72,118 @@
           No-show
         </button>
       </div>
+
+      <!-- SORTING -->
+      <div class="sorting">
+        <label>Sort by:</label>
+        <select [(ngModel)]="sortOption">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="class_name_asc">Class A–Z</option>
+          <option value="class_name_desc">Class Z–A</option>
+          <option value="session_date_asc">Session ↑</option>
+          <option value="session_date_desc">Session ↓</option>
+        </select>
+      </div>
     </div>
 
-    <!-- List -->
-    <div *ngIf="filteredBookings.length" class="bookings-list scroll-y-panel">
-      <article
-        class="booking-card"
-        *ngFor="let booking of filteredBookings; trackBy: trackByBookingId"
-      >
-        <div class="booking-main">
-          <h3 class="class-name">
-            {{ booking.class_session.fitness_class.name }}
-          </h3>
+    <!-- GROUPED BOOKINGS -->
+    <div class="bookings-list" *ngIf="groupedBookings.length">
+      <div *ngFor="let group of groupedBookings">
+        <!-- MONTH HEADING -->
+        <h2 class="month-heading">{{ group.monthLabel }}</h2>
 
-          <p class="class-genre">
-            {{ booking.class_session.fitness_class.genre }}
-          </p>
+        <!-- BOOKING CARDS -->
+        <article
+          class="booking-card slide-in"
+          *ngFor="let booking of group.bookings; trackBy: trackByBookingId"
+        >
+          <!-- Instructor avatars -->
+          <div class="instructor-row">
+            <img
+              *ngFor="let inst of getInstructors(booking)"
+              class="inst-avatar"
+              [src]="inst.profile_image || 'assets/images/avatar-placeholder.png'"
+              [alt]="inst.name"
+            />
+          </div>
 
-          <p class="session-meta">
-            <span class="date">
-              {{ display.formatSessionDate(booking.class_session) }}
+          <!-- Left: class image + time-of-day bar -->
+          <div class="card-media">
+            <div
+              class="time-of-day-bar"
+              [ngClass]="formatter.getSessionTimeOfDay(booking.class_session)"
+            ></div>
+
+            <img
+              class="class-image"
+              [src]="
+                booking.class_session.fitness_class.cover_image ||
+                'assets/images/class-placeholder.png'
+              "
+              alt="{{ booking.class_session.fitness_class.name }}"
+            />
+          </div>
+
+          <!-- Main content -->
+          <div class="booking-main">
+            <div class="title-row">
+              <h3 class="class-name">
+                {{ booking.class_session.fitness_class.name }}
+              </h3>
+
+              <!-- UPCOMING / PAST -->
+              <span class="pill" [ngClass]="isUpcoming(booking) ? 'pill-upcoming' : 'pill-past'">
+                {{ isUpcoming(booking) ? 'Upcoming' : 'Past' }}
+              </span>
+            </div>
+
+            <p class="class-genre">
+              {{ booking.class_session.fitness_class.genre }}
+            </p>
+
+            <p class="session-meta">
+              <span class="date">
+                {{ formatter.formatSessionDate(booking.class_session) }}
+              </span>
+              <span class="dot">•</span>
+              <span class="time">
+                {{ formatter.formatSessionTime(booking.class_session) }}
+              </span>
+            </p>
+
+            <p class="created-at">
+              Booked:
+              {{ booking.created_at | date: 'medium' }}
+            </p>
+
+            <a
+              class="view-class-link"
+              [routerLink]="['/classes', booking.class_session.fitness_class.id]"
+            >
+              View class →
+            </a>
+          </div>
+
+          <!-- status chips -->
+          <div class="booking-status">
+            <span class="chip" [ngClass]="'status-' + booking.status">
+              {{ booking.status | titlecase }}
             </span>
-            <span class="dot">•</span>
-            <span class="time">
-              {{ display.formatSessionTime(booking.class_session) }}
+
+            <span class="chip" [ngClass]="'payment-' + booking.payment_status">
+              {{ booking.payment_status | titlecase }}
             </span>
-          </p>
 
-          <p class="created-at">
-            Booked:
-            {{ booking.created_at | date: 'medium' }}
-          </p>
+            <span class="chip" [ngClass]="'attendance-' + booking.attendance_status">
+              {{ booking.attendance_status | titlecase }}
+            </span>
+          </div>
+        </article>
+      </div>
 
-          <!-- View class link -->
-          <a
-            class="view-class-link"
-            [routerLink]="['/classes', booking.class_session.fitness_class.id]"
-          >
-            View class
-          </a>
-        </div>
-
-        <div class="booking-status">
-          <span class="chip chip-status" [ngClass]="'status-' + booking.status">
-            {{ booking.status | titlecase }}
-          </span>
-
-          <span class="chip chip-payment" [ngClass]="'payment-' + booking.payment_status">
-            {{ booking.payment_status | titlecase }}
-          </span>
-
-          <span class="chip chip-attendance" [ngClass]="'attendance-' + booking.attendance_status">
-            {{ booking.attendance_status | titlecase }}
-          </span>
-        </div>
-      </article>
+      <!-- Filter hides everything -->
+      <p *ngIf="!groupedBookings.length" class="empty-state">No bookings match your filters.</p>
     </div>
-
-    <!-- If filters hide everything -->
-    <p *ngIf="bookings.length && !filteredBookings.length" class="empty-state empty-state--filters">
-      No bookings match the selected filters.
-    </p>
   </ng-template>
 </div>

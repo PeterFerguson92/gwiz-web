@@ -80,4 +80,12 @@ export class FormattersService {
     }
     return null;
   }
+
+  getSessionTimeOfDay(session: ClassSession): 'morning' | 'afternoon' | 'evening' {
+    const hour = Number(session.start_time.split(':')[0]);
+
+    if (hour < 12) return 'morning';
+    if (hour < 17) return 'afternoon';
+    return 'evening';
+  }
 }
