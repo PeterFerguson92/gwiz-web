@@ -54,12 +54,24 @@
           <!-- Password -->
           <div class="form-group">
             <label for="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              formControlName="password"
-              placeholder="Your password"
-            />
+
+            <div class="password-field">
+              <input
+                id="login-password"
+                [type]="showLoginPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Your password"
+              />
+
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="showLoginPassword = !showLoginPassword"
+                [attr.aria-pressed]="showLoginPassword"
+              >
+                {{ showLoginPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
 
             <div class="error" *ngIf="hasError('login', 'password', 'required')">
               Password is required.
@@ -105,12 +117,9 @@
               <div class="error" *ngIf="hasError('signup', 'name', 'required')">
                 Name is required.
               </div>
-              <!-- Too short -->
               <div class="error" *ngIf="hasError('signup', 'name', 'minlength')">
                 Must be at least 2 characters.
               </div>
-
-              <!-- Contains numbers / invalid chars -->
               <div class="error" *ngIf="hasError('signup', 'name', 'pattern')">
                 Cannot contain numbers or special characters.
               </div>
@@ -122,12 +131,9 @@
               <div class="error" *ngIf="hasError('signup', 'surname', 'required')">
                 Surname is required.
               </div>
-              <!-- Too short -->
               <div class="error" *ngIf="hasError('signup', 'surname', 'minlength')">
                 Must be at least 2 characters.
               </div>
-
-              <!-- Contains numbers / invalid chars -->
               <div class="error" *ngIf="hasError('signup', 'surname', 'pattern')">
                 Cannot contain numbers or special characters.
               </div>
@@ -171,15 +177,27 @@
             </div>
           </div>
 
-          <!-- Password + Confirm -->
+          <!-- Password -->
           <div class="form-group">
             <label for="signup-password">Password</label>
-            <input
-              id="signup-password"
-              type="password"
-              formControlName="password"
-              placeholder="Min 8 chars, upper, lower, number & symbol"
-            />
+
+            <div class="password-field">
+              <input
+                id="signup-password"
+                [type]="showSignupPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Min 8 chars, upper, lower, number & symbol"
+              />
+
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="showSignupPassword = !showSignupPassword"
+                [attr.aria-pressed]="showSignupPassword"
+              >
+                {{ showSignupPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
 
             <!-- Validation messages -->
             <div class="error" *ngIf="hasError('signup', 'password', 'required')">
@@ -223,12 +241,24 @@
           <!-- Confirm Password -->
           <div class="form-group">
             <label for="signup-confirm">Confirm password</label>
-            <input
-              id="signup-confirm"
-              type="password"
-              formControlName="confirmPassword"
-              placeholder="Repeat password"
-            />
+
+            <div class="password-field">
+              <input
+                id="signup-confirm"
+                [type]="showSignupConfirmPassword ? 'text' : 'password'"
+                formControlName="confirmPassword"
+                placeholder="Repeat password"
+              />
+
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="showSignupConfirmPassword = !showSignupConfirmPassword"
+                [attr.aria-pressed]="showSignupConfirmPassword"
+              >
+                {{ showSignupConfirmPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
 
             <div class="error" *ngIf="hasError('signup', 'confirmPassword', 'required')">
               Please confirm your password.

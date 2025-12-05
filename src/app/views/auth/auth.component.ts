@@ -29,6 +29,10 @@ export class AuthComponent implements OnInit {
   loginForm: FormGroup;
   signupForm: FormGroup;
 
+  showLoginPassword = false;
+  showSignupPassword = false;
+  showSignupConfirmPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,

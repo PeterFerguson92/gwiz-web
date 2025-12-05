@@ -309,6 +309,35 @@ input:focus {
   text-decoration: underline;
 }
 
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 100%;
+    padding-right: 3rem; // space for the toggle button
+  }
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  line-height: 1;
+
+  &:hover {
+    color: #111827;
+  }
+}
+
+
 /* Password strength meter */
 .password-strength {
   margin-top: 0.35rem;
