@@ -1,20 +1,20 @@
 <app-page-hero title="My bookings" breadcrumbTitle="My bookings"></app-page-hero>
 
 <div class="my-bookings container py-4">
-  <!-- LOADER -->
+  <!-- LOADING -->
   <ng-container *ngIf="loading; else loaded">
     <div class="loading-state">Loading your bookings…</div>
   </ng-container>
 
   <!-- CONTENT -->
   <ng-template #loaded>
-    <!-- EMPTY -->
+    <!-- NO BOOKINGS AT ALL -->
     <p *ngIf="!bookings.length" class="empty-state">
       You don’t have any bookings yet.
       <a routerLink="/classes" class="link">Browse classes</a>
     </p>
 
-    <!-- FILTERS -->
+    <!-- FILTERS & SORTING -->
     <div *ngIf="bookings.length" class="filters">
       <div class="filter-group">
         <span class="filter-label">When:</span>
@@ -73,10 +73,9 @@
         </button>
       </div>
 
-      <!-- SORTING -->
       <div class="sorting">
         <label>Sort by:</label>
-        <select [(ngModel)]="sortOption">
+        <select [(ngModel)]="sortOption" (ngModelChange)="onSortChange()">
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
           <option value="class_name_asc">Class A–Z</option>
@@ -88,27 +87,28 @@
     </div>
 
     <!-- GROUPED BOOKINGS -->
-    <div class="bookings-list" *ngIf="groupedBookings.length">
+    <div *ngIf="groupedBookings.length" class="bookings-list">
       <div *ngFor="let group of groupedBookings">
         <!-- MONTH HEADING -->
         <h2 class="month-heading">{{ group.monthLabel }}</h2>
 
-        <!-- BOOKING CARDS -->
+        <!-- BOOKINGS IN MONTH -->
         <article
           class="booking-card slide-in"
           *ngFor="let booking of group.bookings; trackBy: trackByBookingId"
         >
-          <!-- Instructor avatars -->
-          <div class="instructor-row">
+          <!-- INSTRUCTOR AVATARS -->
+          <div class="instructor-row" *ngIf="getInstructors(booking).length">
             <img
               *ngFor="let inst of getInstructors(booking)"
               class="inst-avatar"
-              [src]="inst.profile_image || 'assets/images/avatar-placeholder.png'"
+              [src]="inst.profile_image || 'assets/img/placeholder.jpg'"
+              appFallbackImage="assets/img/placeholder.jpg"
               [alt]="inst.name"
             />
           </div>
 
-          <!-- Left: class image + time-of-day bar -->
+          <!-- LEFT: IMAGE + TIME-OF-DAY BAR -->
           <div class="card-media">
             <div
               class="time-of-day-bar"
@@ -118,21 +118,20 @@
             <img
               class="class-image"
               [src]="
-                booking.class_session.fitness_class.cover_image ||
-                'assets/images/class-placeholder.png'
+                booking.class_session.fitness_class.cover_image || 'assets/img/placeholder.jpg'
               "
+              appFallbackImage="assets/img/placeholder.jpg"
               alt="{{ booking.class_session.fitness_class.name }}"
             />
           </div>
 
-          <!-- Main content -->
+          <!-- MIDDLE: MAIN CONTENT -->
           <div class="booking-main">
             <div class="title-row">
               <h3 class="class-name">
                 {{ booking.class_session.fitness_class.name }}
               </h3>
 
-              <!-- UPCOMING / PAST -->
               <span class="pill" [ngClass]="isUpcoming(booking) ? 'pill-upcoming' : 'pill-past'">
                 {{ isUpcoming(booking) ? 'Upcoming' : 'Past' }}
               </span>
@@ -165,7 +164,7 @@
             </a>
           </div>
 
-          <!-- status chips -->
+          <!-- RIGHT: STATUS CHIPS -->
           <div class="booking-status">
             <span class="chip" [ngClass]="'status-' + booking.status">
               {{ booking.status | titlecase }}
@@ -181,9 +180,11 @@
           </div>
         </article>
       </div>
-
-      <!-- Filter hides everything -->
-      <p *ngIf="!groupedBookings.length" class="empty-state">No bookings match your filters.</p>
     </div>
+
+    <!-- FILTERS RETURN NO RESULTS -->
+    <p *ngIf="bookings.length && !groupedBookings.length" class="empty-state">
+      No bookings match your filters.
+    </p>
   </ng-template>
 </div>

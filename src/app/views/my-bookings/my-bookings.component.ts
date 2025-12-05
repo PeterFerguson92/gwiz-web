@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
+import { FallbackImageDirective } from '@/app/shared/directives/fallback-image.directive';
 import { FormattersService } from '@/app/shared/service/formatters.service';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { BookingWithDetails, FitnessClass, Instructor } from '@core/models/fitness.models';
@@ -30,7 +31,14 @@ interface GroupedMonth {
 @Component({
   selector: 'app-my-bookings',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, PageHeroComponent, ...SHARED_IMPORTS],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    PageHeroComponent,
+    FallbackImageDirective,
+    ...SHARED_IMPORTS,
+  ],
   templateUrl: './my-bookings.component.html',
   styleUrls: ['./my-bookings.component.scss'],
 })
