@@ -1,7 +1,9 @@
-/* Layout */
+/* ----------------------------------------------
+   Layout
+---------------------------------------------- */
 
 .my-bookings {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -20,7 +22,74 @@
   }
 }
 
-/* Filters & Sorting */
+/* ----------------------------------------------
+   Quick Actions - Brand Red Buttons Only
+---------------------------------------------- */
+
+.quick-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+}
+
+.quick-actions-inner {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.qa-btn {
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  border: none;
+  transition: 0.18s ease;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+
+  /* ONLY QUICK LINKS USE BRAND COLOR */
+  background: black;
+  color: #ffffff;
+
+  &:hover {
+    background: #a80d13;
+  }
+
+  &.outline {
+    background: transparent;
+    border: 2px solid black;
+    color: black;
+
+    &:hover {
+      background: var(--brand-red, #c90f16);
+      color: #ffffff;
+    }
+  }
+}
+
+/* Mobile quick actions */
+
+@media (max-width: 600px) {
+  .quick-actions-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .qa-btn {
+    width: auto;
+    min-width: 180px;
+    max-width: 260px;
+    text-align: center;
+    padding: 0.65rem 1rem;
+  }
+}
+
+/* ----------------------------------------------
+   Filters (neutral colors again)
+---------------------------------------------- */
 
 .filters {
   display: flex;
@@ -56,10 +125,12 @@
     color 0.15s ease;
 
   &.active {
-    background: #111827;
+    background: #111827; /* BLACK AGAIN */
     color: #ffffff;
   }
 }
+
+/* Sort dropdown (reset to neutral) */
 
 .sorting {
   display: flex;
@@ -75,7 +146,9 @@
   }
 }
 
-/* Month heading */
+/* ----------------------------------------------
+   Month heading
+---------------------------------------------- */
 
 .month-heading {
   margin-top: 1.5rem;
@@ -84,7 +157,9 @@
   font-weight: 700;
 }
 
-/* Instructor avatars */
+/* ----------------------------------------------
+   Instructor avatars
+---------------------------------------------- */
 
 .instructor-row {
   display: flex;
@@ -101,13 +176,13 @@
   }
 }
 
-/* Bookings list */
+/* ----------------------------------------------
+   Bookings list & Card
+---------------------------------------------- */
 
 .bookings-list {
   margin-top: 1rem;
 }
-
-/* Booking card */
 
 .booking-card {
   display: flex;
@@ -152,7 +227,9 @@
   }
 }
 
-/* Media (image + time-of-day bar) */
+/* ----------------------------------------------
+   Media (image + time-of-day bar)
+---------------------------------------------- */
 
 .card-media {
   width: 110px;
@@ -188,7 +265,9 @@
   background: #c084fc;
 }
 
-/* Main content */
+/* ----------------------------------------------
+   Main content
+---------------------------------------------- */
 
 .booking-main {
   flex: 1;
@@ -243,7 +322,7 @@
   }
 }
 
-/* Upcoming / Past pill */
+/* Upcoming / Past pill (reverted to neutral) */
 
 .pill {
   padding: 0.25rem 0.6rem;
@@ -262,7 +341,9 @@
   color: #6b7280;
 }
 
-/* Status chips */
+/* ----------------------------------------------
+   Status chips (unchanged)
+---------------------------------------------- */
 
 .booking-status {
   display: flex;
@@ -325,73 +406,12 @@
   background: #fee2e2;
   color: #b91c1c;
 }
+
 /* ----------------------------------------------
-   Quick Actions - Centered on full page width
+   Responsive Layout
 ---------------------------------------------- */
 
-.quick-actions {
-  width: 100%; /* Full page width */
-  display: flex;
-  justify-content: center; /* Center children horizontally */
-  margin: 1.5rem 0 2rem;
-}
-
-.quick-actions-inner {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.qa-btn {
-  padding: 0.65rem 1.4rem;
-  font-weight: 600;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  border: none;
-  transition: 0.18s ease;
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
-  background: #111827;
-  color: white;
-
-  &:hover {
-    background: #000;
-  }
-
-  &.outline {
-    background: transparent;
-    border: 2px solid #111827;
-    color: #111827;
-
-    &:hover {
-      background: #111827;
-      color: white;
-    }
-  }
-}
-
-/* Mobile UX */
-@media (max-width: 600px) {
-  .quick-actions-inner {
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-  }
-
-  .qa-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-/* Mobile */
-
 @media (max-width: 767px) {
-  .filters {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .booking-card {
     flex-direction: column;
   }
@@ -404,21 +424,5 @@
   .booking-status {
     flex-direction: row;
     flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 600px) {
-  .quick-actions-inner {
-    flex-direction: column;
-    align-items: center; /* center each button */
-    gap: 0.75rem;
-  }
-
-  .qa-btn {
-    width: auto; /* no stretching */
-    min-width: 180px; /* reasonable button size */
-    max-width: 260px; /* stop them growing too wide */
-    text-align: center;
-    padding: 0.65rem 1rem; /* tighten */
   }
 }
