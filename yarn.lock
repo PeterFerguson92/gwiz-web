@@ -1655,6 +1655,11 @@
   "resolved" "https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz"
   "version" "3.1.2"
 
+"@stripe/stripe-js@^8.5.3":
+  "integrity" "sha512-UM0GHAxlTN7v0lCK2P6t0VOlvBIdApIQxhnM3yZ2kupQ4PpSrLsK/n/NyYKtw2NJGMaNRRD1IicWS7fSL2sFtA=="
+  "resolved" "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-8.5.3.tgz"
+  "version" "8.5.3"
+
 "@tufjs/canonical-json@2.0.0":
   "integrity" "sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA=="
   "resolved" "https://registry.npmjs.org/@tufjs/canonical-json/-/canonical-json-2.0.0.tgz"

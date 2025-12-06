@@ -14,13 +14,21 @@ import { SHARED_IMPORTS } from '../../shared-imports';
   styleUrl: './session-list.component.scss',
 })
 export class SessionListComponent {
-  @Input() sessions: any[] = [];
+  @Input() sessions: ClassSession[] = [];
   @Input() loading = false;
   @Input() isLoggedIn = false;
-  @Input() bookingLoading: Record<number, boolean> = {};
+
+  /**
+   * Map of session.id -> loading boolean.
+   * Parent sets bookingLoading[session.id] = true while it calls the booking API
+   * and (if needed) shows Stripe payment UI.
+   */
+  @Input() bookingLoading: Record<string, boolean> = {};
+
   @Input() fitnessClass: FitnessClass | null = null;
 
-  @Output() book = new EventEmitter<any>();
+  @Output() book = new EventEmitter<ClassSession>();
+
   constructor(private formattersService: FormattersService) {}
 
   sessionDateLabel(session: ClassSession): string {
@@ -32,9 +40,6 @@ export class SessionListComponent {
   }
 
   effectiveCapacity(session: ClassSession): number | null {
-    console.log('fitnessClass in effectiveCapacity:', this.fitnessClass);
-    console.log('session in effectiveCapacity:', session);
-    console.log('formattersService in effectiveCapacity:', this.formattersService);
     return this.formattersService.getSessionCapacity(session, this.fitnessClass);
   }
 
@@ -59,12 +64,18 @@ export class SessionListComponent {
   }
 
   getSpacesClass(session: ClassSession): string {
+    if (session.status === 'cancelled') return 'badge-spaces cancelled';
     if (session.spaces_left <= 0) return 'badge-spaces sold-out';
     if (session.spaces_left <= 20) return 'badge-spaces low';
     return 'badge-spaces';
   }
 
-  onBook(session: any) {
+  onBook(session: ClassSession): void {
+    // Parent component will:
+    // 1) set bookingLoading[session.id] = true
+    // 2) call BookingService.bookSession(session.id)
+    // 3) if stripe_client_secret exists, open Stripe payment UI
+    // 4) when finished, clear bookingLoading[session.id]
     this.book.emit(session);
   }
 }

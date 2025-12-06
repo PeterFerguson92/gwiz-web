@@ -65,3 +65,65 @@
     View sessions & book
   </button>
 </div>
+
+<!-- STRIPE PAYMENT MODAL -->
+<div
+  class="payment-modal-backdrop"
+  *ngIf="showPaymentModal && pendingBooking && stripeClientSecret"
+  (click)="closePaymentModal()"
+>
+  <div class="payment-modal" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="payment-modal-header">
+      <h3>Complete your payment</h3>
+      <button type="button" class="modal-close-btn" (click)="closePaymentModal()">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="payment-modal-body">
+      <p class="payment-summary">
+        You’re booking:
+        <strong>{{ getPendingClassName() }}</strong>
+        <br />
+        <!-- Safe date/time using ng-container -->
+        <ng-container *ngIf="pendingBooking?.booking?.class_session as cs">
+          On {{ formattersService.formatSessionDate(cs) }} at
+          {{ formattersService.formatSessionTime(cs) }}
+        </ng-container>
+      </p>
+
+      <p class="payment-note">
+        Enter your card details below to confirm your spot. Your seat is reserved while the payment
+        is processed.
+      </p>
+
+      <!-- Stripe Payment Element placeholder -->
+      <div id="payment-element" #paymentElementRef></div>
+
+      <!-- Error message -->
+      <div class="payment-error" *ngIf="paymentError">
+        {{ paymentError }}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="payment-modal-footer">
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="closePaymentModal()"
+        [disabled]="isProcessingPayment"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="submitPayment()"
+        [disabled]="isProcessingPayment"
+      >
+        {{ isProcessingPayment ? 'Processing…' : 'Pay & Confirm' }}
+      </button>
+    </div>
+  </div>
+</div>

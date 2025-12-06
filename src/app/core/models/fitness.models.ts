@@ -95,4 +95,5 @@ export interface BookingWithDetails extends Booking {
 export interface BookSessionResponse {
   booking: Booking;
   message?: string;
+  stripe_client_secret?: string | null;
 }

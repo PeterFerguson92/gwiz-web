@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { loadStripe, Stripe, StripeElements, StripePaymentElement } from '@stripe/stripe-js';
 import { finalize } from 'rxjs/operators';
 
 import { AuthService } from '@/app/core/services/auth.service';
@@ -9,6 +10,7 @@ import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.c
 import { SessionListComponent } from '@/app/shared/components/session-list/session-list.component';
 import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.component';
 import { FormattersService } from '@/app/shared/service/formatters.service';
+import { environment } from '@/environments/environment';
 import { BookSessionResponse, ClassSession, FitnessClass } from '@core/models/fitness.models';
 import {
   FitnessClassService,
@@ -22,7 +24,7 @@ import {
   templateUrl: './class-details.component.html',
   styleUrls: ['./class-details.component.scss'],
 })
-export class ClassDetailsComponent implements OnInit {
+export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   classId!: string;
   classData: FitnessClass | null = null;
   sessions: ClassSession[] = [];
@@ -30,6 +32,22 @@ export class ClassDetailsComponent implements OnInit {
   loading = false;
   loadingSessions = false;
   bookingLoading: Record<string, boolean> = {};
+
+  // ---------------- STRIPE BOOKING STATE ----------------
+  showPaymentModal = false;
+  stripeClientSecret: string | null = null;
+  pendingBooking: BookSessionResponse | null = null;
+
+  stripe: Stripe | null = null;
+  elements: StripeElements | null = null;
+  paymentElement: StripePaymentElement | null = null;
+
+  paymentError: string | null = null;
+  isProcessingPayment = false;
+
+  @ViewChild('paymentElementRef') paymentElementRef!: ElementRef<HTMLDivElement>;
+
+  // ------------------------------------------------------
 
   placeholderImage = 'assets/img/placeholder/fitness-placeholder.jpg';
 
@@ -39,18 +57,12 @@ export class ClassDetailsComponent implements OnInit {
     private fitnessClass: FitnessClassService,
     private toast: ToastService,
     private authService: AuthService,
-    private formattersService: FormattersService
+    public formattersService: FormattersService
   ) {}
 
-  get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
-  }
+  // ---------------- LIFECYCLE ----------------
 
-  get instructorNames(): string {
-    return this.formattersService.formatInstructorNames(this.classData?.instructors);
-  }
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     this.classId = id || '';
 
@@ -61,9 +73,52 @@ export class ClassDetailsComponent implements OnInit {
     }
 
     this.loadClassWithSessions();
+
+    // Preload Stripe.js as early as possible
+    this.stripe = await loadStripe(environment.stripePublishableKey);
   }
 
-  /* ------------------ LOAD CLASS + SESSIONS ------------------ */
+  ngAfterViewInit(): void {
+    // Payment element mounts dynamically when needed
+  }
+
+  ngOnDestroy(): void {
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+    }
+  }
+
+  // ---------------- HELPER GETTERS ----------------
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get instructorNames(): string {
+    return this.formattersService.formatInstructorNames(this.classData?.instructors);
+  }
+
+  getPendingClassName(): string {
+    const booking = this.pendingBooking?.booking;
+    if (!booking || !booking.class_session) {
+      // Fallback to the current class name if we have it, otherwise generic label
+      return this.classData?.name ?? 'Class';
+    }
+
+    const cs: any = booking.class_session;
+    const fc = cs.fitness_class;
+
+    // On /my-bookings/ and some endpoints fitness_class is a full object.
+    // On other endpoints it can be just an ID string.
+    if (fc && typeof fc === 'object' && 'name' in fc) {
+      return (fc as FitnessClass).name;
+    }
+
+    // Fallback: use the page class name if available
+    return this.classData?.name ?? 'Class';
+  }
+
+  // ---------------- LOAD CLASS + SESSIONS ----------------
 
   loadClassWithSessions(days = 30): void {
     this.loading = true;
@@ -82,22 +137,21 @@ export class ClassDetailsComponent implements OnInit {
           this.classData = fitnessClass;
           this.sessions = fitnessClass.upcoming_sessions || [];
         },
-        error: (err) => {
-          console.error('Failed to load class with sessions', err);
-          this.toast.error('Failed to load this class. Please try again.');
+        error: () => {
+          this.toast.error('Failed to load this class.');
           this.router.navigate(['/classes']);
         },
       });
   }
 
-  /* ------------------ MOBILE SCROLL HELPER ------------------ */
+  // ---------------- MOBILE SCROLL HELP ----------------
 
   scrollToSessions(): void {
     const el = document.querySelector('.session-section');
     el?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  /* ------------------ BOOK SESSION ------------------ */
+  // ---------------- BOOK SESSION FLOW ----------------
 
   bookSession(session: ClassSession): void {
     if (!this.isLoggedIn) {
@@ -113,11 +167,6 @@ export class ClassDetailsComponent implements OnInit {
       return;
     }
 
-    // if (session.spaces_left <= 0) {
-    //   this.toast.error('This session is fully booked.');
-    //   return;
-    // }
-
     this.bookingLoading[session.id] = true;
 
     this.fitnessClass
@@ -125,17 +174,109 @@ export class ClassDetailsComponent implements OnInit {
       .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
       .subscribe({
         next: (res: BookSessionResponse) => {
-          this.toast.success(res.message || 'Your class has been booked!');
-          this.loadClassWithSessions(); // refresh spaces_left
+          // Case A: membership credit booking → immediate success
+          if (!res.stripe_client_secret) {
+            this.toast.success(res.message || 'Your class has been booked!');
+            this.loadClassWithSessions();
+            return;
+          }
+
+          // Case B: Stripe payment required → show modal
+          this.pendingBooking = res;
+          this.stripeClientSecret = res.stripe_client_secret;
+          this.showPaymentModal = true;
+
+          // Mount Stripe element after modal renders
+          setTimeout(() => this.initializeStripeElement(), 80);
         },
         error: (err) => {
-          console.error('Booking failed', err);
-
-          const backendMsg =
-            err?.error?.detail || err?.error?.message || err?.error?.non_field_errors?.[0];
-
-          this.toast.error(backendMsg || 'Failed to book this session. Please try again.');
+          const message = err?.error?.detail || err?.error?.message || 'Booking failed.';
+          this.toast.error(message);
         },
       });
+  }
+
+  // ---------------- STRIPE ELEMENT INITIALIZATION ----------------
+
+  async initializeStripeElement(): Promise<void> {
+    if (!this.stripe) {
+      this.paymentError = 'Stripe failed to initialize.';
+      return;
+    }
+    if (!this.stripeClientSecret) {
+      this.paymentError = 'Missing payment information.';
+      return;
+    }
+
+    this.elements = this.stripe.elements({
+      clientSecret: this.stripeClientSecret,
+    });
+
+    this.paymentElement = this.elements.create('payment');
+
+    if (this.paymentElementRef) {
+      this.paymentElement.mount(this.paymentElementRef.nativeElement);
+    }
+  }
+
+  // ---------------- SUBMIT PAYMENT ----------------
+
+  async submitPayment(): Promise<void> {
+    if (!this.stripe || !this.elements) {
+      this.paymentError = 'Payment system unavailable.';
+      return;
+    }
+
+    this.isProcessingPayment = true;
+    this.paymentError = null;
+
+    const result = await this.stripe.confirmPayment({
+      elements: this.elements,
+      redirect: 'if_required',
+      confirmParams: {
+        return_url: window.location.href,
+      },
+    });
+
+    this.isProcessingPayment = false;
+
+    if (result.error) {
+      this.paymentError = result.error.message || 'Payment failed. Please try again.';
+      return;
+    }
+
+    // Payment succeeded (webhook updates backend)
+    this.toast.success('Payment received — booking confirmed!');
+
+    this.closePaymentModal();
+    this.loadClassWithSessions(); // refresh spaces_left
+    this.refreshMyBookings(); // optional prefetch
+  }
+
+  // ---------------- CLOSE PAYMENT MODAL ----------------
+
+  closePaymentModal(): void {
+    if (this.isProcessingPayment) return;
+
+    this.showPaymentModal = false;
+    this.paymentError = null;
+    this.stripeClientSecret = null;
+    this.pendingBooking = null;
+
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+      this.paymentElement = null;
+    }
+  }
+
+  // ---------------- REFRESH MY BOOKINGS ----------------
+
+  private refreshMyBookings(): void {
+    this.fitnessClass.getMyBookings().subscribe({
+      next: () => {},
+      error: () => {
+        console.warn('Failed to refresh bookings (background).');
+      },
+    });
   }
 }

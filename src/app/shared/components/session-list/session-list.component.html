@@ -56,7 +56,7 @@
         type="button"
       >
         <!-- Loading -->
-        <span *ngIf="bookingLoading[session.id]"> Booking… </span>
+        <span *ngIf="bookingLoading[session.id]">Booking…</span>
 
         <!-- Cancelled -->
         <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'">
