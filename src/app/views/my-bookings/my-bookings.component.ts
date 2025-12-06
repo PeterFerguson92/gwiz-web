@@ -126,21 +126,34 @@ export class MyBookingsComponent implements OnInit {
       const as = a.class_session;
       const bs = b.class_session;
 
+      if (!as || !bs) {
+        return 0; // safety guard
+      }
+
       const dateA = new Date(`${as.date}T${as.start_time}`).getTime();
       const dateB = new Date(`${bs.date}T${bs.start_time}`).getTime();
 
       switch (this.sortOption) {
         case 'newest':
-          return dateB - dateA;
-        case 'oldest':
+          // ✅ closest / soonest session first
           return dateA - dateB;
+
+        case 'oldest':
+          // furthest in the future first
+          return dateB - dateA;
+
         case 'class_name_asc':
           return as.fitness_class.name.localeCompare(bs.fitness_class.name);
+
         case 'class_name_desc':
           return bs.fitness_class.name.localeCompare(as.fitness_class.name);
+
         case 'session_date_asc':
+          // same as 'newest' – earliest date first
           return dateA - dateB;
+
         case 'session_date_desc':
+          // latest date first
           return dateB - dateA;
       }
     });
