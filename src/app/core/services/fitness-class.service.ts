@@ -79,7 +79,7 @@ export class FitnessClassService {
   }
 
   cancelBooking(bookingId: string): Observable<BookingWithDetails> {
-    const url = `${environment.apiUrl}/bookings/${bookingId}/cancel/`;
+    const url = `${this.baseUrl}/bookings/${bookingId}/cancel/`;
     return this.http.post<BookingWithDetails>(url, {});
   }
 }
