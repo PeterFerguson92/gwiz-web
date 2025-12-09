@@ -46,3 +46,18 @@ export interface ChangePasswordPayload {
   new_password: string;
   confirm_password: string;
 }
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  uid: string;
+  token: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface SimpleDetailResponse {
+  detail: string;
+}

@@ -7,6 +7,9 @@ import { guestGuard } from '@core/guards/guest.guard';
 import { AuthComponent } from '@views/auth/auth.component';
 import { ProfileComponent } from '@views/profile/profile.component';
 
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
 export const AUTH_ROUTES: Routes = [
   {
     path: 'login',
@@ -19,6 +22,18 @@ export const AUTH_ROUTES: Routes = [
     component: AuthComponent,
     canActivate: [guestGuard],
     data: { title: 'Sign up' },
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    canActivate: [guestGuard],
+    data: { title: 'Forgot password' },
+  },
+  {
+    path: 'reset',
+    component: ResetPasswordComponent,
+    canActivate: [guestGuard],
+    data: { title: 'Reset password' },
   },
   {
     path: 'profile',

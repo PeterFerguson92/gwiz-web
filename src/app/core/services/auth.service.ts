@@ -7,7 +7,9 @@ import { environment } from '../../../environments/environment';
 import {
   AuthResponse,
   ChangePasswordPayload,
+  ForgotPasswordPayload,
   LoginPayload,
+  ResetPasswordPayload,
   SignupPayload,
   UpdateProfilePayload,
   User,
@@ -112,6 +114,18 @@ export class AuthService {
 
   changePassword(payload: ChangePasswordPayload) {
     return this.http.post(`${environment.apiUrl}/auth/password/change/`, payload);
+  }
+
+  /** Start "forgot password" flow – backend always returns generic success */
+  requestPasswordReset(payload: ForgotPasswordPayload) {
+    const url = `${environment.apiUrl}/auth/password/reset/`;
+    return this.http.post<{ detail: string }>(url, payload);
+  }
+
+  /** Complete password reset with uid + token from email link */
+  confirmPasswordReset(payload: ResetPasswordPayload) {
+    const url = `${environment.apiUrl}/auth/password/reset/confirm/`;
+    return this.http.post<{ detail: string }>(url, payload);
   }
 
   // ---------- HELPERS ----------
