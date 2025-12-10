@@ -14,6 +14,11 @@ import { filter } from 'rxjs/operators';
 import { NAME_PATTERN } from '@core/constants/auth.constants';
 import { AuthService } from '@core/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
+import {
+  calculatePasswordStrength,
+  PasswordStrength,
+  strongPasswordValidator,
+} from '@core/utils/password.utils';
 
 @Component({
   selector: 'app-auth',
@@ -63,10 +68,7 @@ export class AuthComponent implements OnInit {
         ],
         email: ['', [Validators.required, Validators.email]],
         phone_number: ['', [Validators.required, this.phoneValidator.bind(this)]],
-        password: [
-          '',
-          [Validators.required, Validators.minLength(8), this.passwordStrengthValidator.bind(this)],
-        ],
+        password: ['', [Validators.required, Validators.minLength(8), strongPasswordValidator]],
         confirmPassword: ['', [Validators.required]],
       },
       { updateOn: 'blur' }
@@ -79,20 +81,9 @@ export class AuthComponent implements OnInit {
     return this.signupForm.get('password');
   }
 
-  get passwordStrengthLevel(): 'weak' | 'medium' | 'strong' | 'empty' {
+  get passwordStrengthLevel(): PasswordStrength {
     const value = this.passwordControl?.value as string;
-    if (!value) return 'empty';
-
-    let score = 0;
-    if (value.length >= 8) score++;
-    if (/[A-Z]/.test(value)) score++;
-    if (/[a-z]/.test(value)) score++;
-    if (/[0-9]/.test(value)) score++;
-    if (/[^A-Za-z0-9]/.test(value)) score++;
-
-    if (score <= 2) return 'weak';
-    if (score === 3 || score === 4) return 'medium';
-    return 'strong';
+    return calculatePasswordStrength(value);
   }
 
   get canLogin(): boolean {
@@ -231,23 +222,6 @@ export class AuthComponent implements OnInit {
   }
 
   // ---------- VALIDATORS & HELPERS ----------
-
-  private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value as string;
-    if (!value) {
-      return null; // handled by 'required'
-    }
-
-    const hasMinLength = value.length >= 8;
-    const hasUpper = /[A-Z]/.test(value);
-    const hasLower = /[a-z]/.test(value);
-    const hasNumber = /[0-9]/.test(value);
-    const hasSymbol = /[^A-Za-z0-9]/.test(value);
-
-    const isStrong = hasMinLength && hasUpper && hasLower && hasNumber && hasSymbol;
-
-    return isStrong ? null : { passwordStrength: true };
-  }
 
   private syncModeWithUrl(url: string): void {
     if (url.includes('/signup')) {

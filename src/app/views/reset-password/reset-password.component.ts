@@ -12,6 +12,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
+import {
+  calculatePasswordStrength,
+  PasswordStrength,
+  strongPasswordValidator,
+} from '@core/utils/password.utils';
 
 @Component({
   selector: 'app-reset-password',
@@ -38,7 +43,7 @@ export class ResetPasswordComponent implements OnInit {
   ) {
     this.form = this.fb.group(
       {
-        new_password: ['', [Validators.required, Validators.minLength(8)]],
+        new_password: ['', [Validators.required, Validators.minLength(8), strongPasswordValidator]],
         confirm_password: ['', [Validators.required]],
       },
       { validators: [this.passwordsMatchValidator] }
@@ -71,6 +76,24 @@ export class ResetPasswordComponent implements OnInit {
 
   getFieldErrors(field: string): string[] {
     return this.fieldErrors[field] || [];
+  }
+
+  get passwordStrengthLevel(): PasswordStrength {
+    const value = (this.newPassword?.value as string) || '';
+    return calculatePasswordStrength(value);
+  }
+
+  get passwordStrengthLabel(): string {
+    switch (this.passwordStrengthLevel) {
+      case 'weak':
+        return 'Needs more gains 💪';
+      case 'medium':
+        return 'Ok we getting there 🔥';
+      case 'strong':
+        return 'Beast mode unlocked 🏋️';
+      default:
+        return '';
+    }
   }
 
   private passwordsMatchValidator(group: FormGroup): ValidationErrors | null {

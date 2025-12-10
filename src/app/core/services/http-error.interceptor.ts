@@ -35,6 +35,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
         // Handle 401: expired / invalid JWT
         if (error.status === 401 && !isAuthEndpoint) {
+          const isLoggedIn = this.authService.isLoggedIn();
+
+          // Guests can hit 401s from public pages (e.g. password reset). Don't force them to /login.
+          if (!isLoggedIn) {
+            return throwError(() => error);
+          }
+
           // Try to detect "token not valid" from Django Simple JWT
           const code = (error.error?.code || '').toString();
           const detail = (error.error?.detail || '').toString();

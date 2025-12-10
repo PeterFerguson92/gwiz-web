@@ -8,10 +8,8 @@ export const guestGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   if (auth.isLoggedIn()) {
-    // Already logged in → send to profile or wherever makes sense
     return router.createUrlTree(['/profile']);
   }
 
-  // Not logged in → allow access to login/signup
-  return true;
+  return true; // allow guest to continue
 };

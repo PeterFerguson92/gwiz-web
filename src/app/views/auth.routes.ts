@@ -30,9 +30,8 @@ export const AUTH_ROUTES: Routes = [
     data: { title: 'Forgot password' },
   },
   {
-    path: 'reset',
+    path: 'auth/password-reset-confirm',
     component: ResetPasswordComponent,
-    canActivate: [guestGuard],
     data: { title: 'Reset password' },
   },
   {
