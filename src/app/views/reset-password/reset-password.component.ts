@@ -28,6 +28,8 @@ import {
 export class ResetPasswordComponent implements OnInit {
   form: FormGroup;
   submitting = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   private uid: string | null = null;
   private token: string | null = null;
