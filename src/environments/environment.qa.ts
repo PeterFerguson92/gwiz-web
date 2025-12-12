@@ -7,6 +7,7 @@ export const environment = {
   apiUrl: 'https://gwiz-admin-qa-a9f0452d617e.herokuapp.com/api',
   stripePublishableKey:
     'pk_test_51Sb9dMLT8MvjHZzurkwyjGMMhGnICvbh4tWhoyOkt7Qu7kBl7EG5MRN0DIqvdzxxpN8KV6qhVA27OicJ4Z9Ue53D00JlBO1wds',
+  googleClientId: '106038761988-ork4pc2hsujsi4on5grtocembf8bvl2t.apps.googleusercontent.comrj',
 };
 /*
  * For easier debugging in development mode, you can import the following file

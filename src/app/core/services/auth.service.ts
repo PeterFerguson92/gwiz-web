@@ -128,6 +128,15 @@ export class AuthService {
     return this.http.post<{ detail: string }>(url, payload);
   }
 
+  googleLogin(idToken: string): Observable<AuthResponse> {
+    const url = `${environment.apiUrl}/auth/google/`;
+    return this.http.post<AuthResponse>(url, { id_token: idToken }).pipe(
+      tap((res) => {
+        this.handleAuth(res);
+      })
+    );
+  }
+
   // ---------- HELPERS ----------
 
   /** Central place to handle tokens + user coming back from backend */

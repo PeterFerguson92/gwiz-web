@@ -91,9 +91,15 @@
             {{ isSubmitting ? 'Signing in…' : 'Sign in' }}
           </button>
 
-          <button type="button" class="btn-outline">
+          <button
+            type="button"
+            class="btn-outline"
+            (click)="onGoogleSignIn('login')"
+            [disabled]="isGoogleLoading"
+            [attr.aria-busy]="isGoogleLoading"
+          >
             <span class="google-icon">G</span>
-            Sign in with Google
+            {{ isGoogleLoading ? 'Connecting…' : 'Sign in with Google' }}
           </button>
 
           <p class="switch-text">
@@ -273,9 +279,15 @@
             {{ isSubmitting ? 'Creating account…' : 'Create account' }}
           </button>
 
-          <button type="button" class="btn-outline">
+          <button
+            type="button"
+            class="btn-outline"
+            (click)="onGoogleSignIn('signup')"
+            [disabled]="isGoogleLoading"
+            [attr.aria-busy]="isGoogleLoading"
+          >
             <span class="google-icon">G</span>
-            Sign up with Google
+            {{ isGoogleLoading ? 'Connecting…' : 'Sign up with Google' }}
           </button>
 
           <p class="switch-text">

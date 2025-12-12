@@ -13,6 +13,7 @@ import { filter } from 'rxjs/operators';
 
 import { NAME_PATTERN } from '@core/constants/auth.constants';
 import { AuthService } from '@core/services/auth.service';
+import { GoogleAuthService } from '@core/services/google-auth.service';
 import { ToastService } from '@core/services/toast.service';
 import {
   calculatePasswordStrength,
@@ -37,13 +38,15 @@ export class AuthComponent implements OnInit {
   showLoginPassword = false;
   showSignupPassword = false;
   showSignupConfirmPassword = false;
+  isGoogleLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private toast: ToastService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private googleAuth: GoogleAuthService
   ) {
     // LOGIN FORM
     this.loginForm = this.fb.group(
@@ -255,5 +258,39 @@ export class AuthComponent implements OnInit {
 
     const control = group.get(controlName);
     return !!control && control.touched && control.hasError(error);
+  }
+
+  onGoogleSignIn(mode: 'login' | 'signup'): void {
+    if (this.isGoogleLoading) {
+      return;
+    }
+
+    this.isGoogleLoading = true;
+
+    this.googleAuth.requestIdToken().subscribe({
+      next: (token) => {
+        this.authService.googleLogin(token).subscribe({
+          next: () => {
+            this.isGoogleLoading = false;
+            const redirect = mode === 'login' ? '/my-bookings' : '/classes';
+            this.router.navigate([redirect]);
+          },
+          error: (err) => {
+            console.error(err);
+            this.isGoogleLoading = false;
+            const message =
+              err?.error?.id_token?.[0] ||
+              err?.error?.detail ||
+              'Google sign-in failed. Please try again.';
+            this.toast.error(message);
+          },
+        });
+      },
+      error: (error) => {
+        console.error(error);
+        this.isGoogleLoading = false;
+        this.toast.error(error?.message || 'Google sign-in cancelled.');
+      },
+    });
   }
 }
