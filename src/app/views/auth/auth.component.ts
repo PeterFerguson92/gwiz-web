@@ -156,7 +156,8 @@ export class AuthComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/my-bookings']);
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+          this.router.navigate([returnUrl || '/profile']);
         },
         error: (err) => {
           console.error(err);
@@ -201,7 +202,8 @@ export class AuthComponent implements OnInit {
             .subscribe({
               next: () => {
                 this.isSubmitting = false;
-                this.router.navigate(['/classes']);
+                const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+                this.router.navigate([returnUrl || '/profile']);
               },
               error: (err) => {
                 console.error(err);

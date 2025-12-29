@@ -47,6 +47,14 @@
 
     <div class="ticket-list" *ngIf="filteredTickets.length">
       <article class="ticket-card" *ngFor="let ticket of filteredTickets; trackBy: trackByTicketId">
+        <div class="card-media">
+          <img
+            [src]="getCoverImage(ticket)"
+            [alt]="ticket.event.name"
+            appFallbackImage="assets/img/placeholder.jpg"
+          />
+        </div>
+
         <div class="ticket-top">
           <div class="chips">
             <span class="chip" [ngClass]="'status-' + ticket.status">{{ getStatusChip(ticket) }}</span>

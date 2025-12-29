@@ -71,6 +71,10 @@ export class MyTicketsComponent implements OnInit {
     return 'Confirmed';
   }
 
+  getCoverImage(ticket: EventTicket): string {
+    return ticket.event.cover_image || 'assets/img/placeholder.jpg';
+  }
+
   getPaymentChip(ticket: EventTicket): string {
     switch (ticket.payment_status) {
       case 'paid':
