@@ -32,6 +32,7 @@ export class MobileMenuComponent {
     { title: 'Home', link: '/', isOpen: false },
     { title: 'About', link: '/about' },
     { title: 'Services', isOpen: false, link: '/services' },
+    { title: 'Events', link: '/events' },
     { title: 'Classes', link: '/classes' },
   ];
 

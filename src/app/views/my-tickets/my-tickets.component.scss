@@ -1,0 +1,226 @@
+.my-tickets {
+  min-height: 360px;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 36px 0;
+}
+
+.empty-state {
+  color: #475569;
+  padding: 24px 0;
+}
+
+.filters {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-label {
+  font-weight: 700;
+  color: #0f172a;
+  margin-right: 4px;
+}
+
+.filter-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.filter-pill.active {
+  background: var(--brand-red);
+  color: #fff;
+  border-color: var(--brand-red);
+  box-shadow: 0 10px 20px rgba(201, 15, 22, 0.3);
+}
+
+.ticket-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.ticket-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.chip.status-cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+.chip.status-reserved {
+  background: rgba(249, 115, 22, 0.14);
+  color: #c2410c;
+}
+
+.chip.payment {
+  background: rgba(16, 185, 129, 0.14);
+  color: #0f766e;
+}
+
+.chip.quantity {
+  background: rgba(148, 163, 184, 0.18);
+  color: #0f172a;
+}
+
+.created {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.event-name {
+  margin: 10px 0 2px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.meta {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.meta .dot {
+  margin: 0 6px;
+  color: #cbd5e1;
+}
+
+.location {
+  margin: 6px 0 0;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ticket-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn-link {
+  color: var(--brand-red);
+  font-weight: 700;
+}
+
+.btn-cancel {
+  border: none;
+  background: var(--brand-red);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-cancel:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cancel-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.cancel-modal {
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.25);
+}
+
+.warning {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-ghost,
+.btn-danger {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-ghost {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn-ghost:disabled,
+.btn-danger:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

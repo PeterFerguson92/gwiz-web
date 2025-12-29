@@ -1,0 +1,47 @@
+<article class="event-card" (click)="onView()">
+  <div class="event-flag" *ngIf="event.is_featured">Featured</div>
+
+  <div class="event-thumb">
+    <img
+      [src]="event.cover_image || placeholderImage"
+      alt="{{ event.name }}"
+      (error)="onImageError($event)"
+    />
+  </div>
+
+  <div class="event-content">
+    <div class="event-meta">
+      <span class="event-date">{{ eventDateLabel }}</span>
+      <span class="dot">•</span>
+      <span class="event-time">{{ eventTimeRange }}</span>
+    </div>
+
+    <h3 class="event-title">{{ event.name }}</h3>
+
+    <p class="event-location">
+      <i class="fa-solid fa-location-dot"></i>
+      {{ event.location }}
+    </p>
+
+    <div class="event-bottom">
+      <div class="price-block">
+        <span class="label">{{ isFree ? 'Free' : 'From' }}</span>
+        <span class="value">{{ priceLabel }}</span>
+      </div>
+
+      <div class="availability" [class.sold-out]="isSoldOut">
+        <span class="dot" aria-hidden="true"></span>
+        <span>{{ availabilityLabel }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="btn-view btn-primary btn-primary-sm"
+        (click)="$event.stopPropagation(); onView()"
+        [disabled]="isSoldOut"
+      >
+        {{ isSoldOut ? 'Sold out' : 'View details' }}
+      </button>
+    </div>
+  </div>
+</article>

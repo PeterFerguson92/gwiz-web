@@ -16,6 +16,10 @@ export const VIEWS_ROUTES: Routes = [
     path: '',
     loadChildren: () => import('./bookings.route').then((mod) => mod.BOOKINGS_ROUTES),
   },
+  {
+    path: '',
+    loadChildren: () => import('./events.route').then((mod) => mod.EVENTS_ROUTES),
+  },
 
   {
     path: '',

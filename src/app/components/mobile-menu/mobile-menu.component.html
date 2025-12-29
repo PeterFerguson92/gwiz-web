@@ -52,6 +52,9 @@
         <a routerLink="/my-bookings" (click)="closeMenu()">My Bookings</a>
       </li>
       <li *ngIf="isLoggedIn">
+        <a routerLink="/my-tickets" (click)="closeMenu()">My Tickets</a>
+      </li>
+      <li *ngIf="isLoggedIn">
         <a routerLink="/profile" (click)="closeMenu()">Profile</a>
       </li>
       <li *ngIf="isLoggedIn">

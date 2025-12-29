@@ -1,0 +1,118 @@
+<app-page-hero title="My tickets" breadcrumbTitle="My tickets"></app-page-hero>
+
+<div class="my-tickets container py-4">
+  <div *ngIf="loading" class="loading-state">
+    <app-loading-api></app-loading-api>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <p *ngIf="!tickets.length" class="empty-state">
+      You do not have any tickets yet.
+      <a routerLink="/events">Browse upcoming events</a>
+    </p>
+
+    <div *ngIf="tickets.length" class="filters">
+      <div class="filter-group">
+        <span class="filter-label">Status:</span>
+        <button
+          class="filter-pill"
+          [class.active]="statusFilter === 'all'"
+          (click)="setStatusFilter('all')"
+        >
+          All
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="statusFilter === 'confirmed'"
+          (click)="setStatusFilter('confirmed')"
+        >
+          Confirmed
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="statusFilter === 'reserved'"
+          (click)="setStatusFilter('reserved')"
+        >
+          Reserved
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="statusFilter === 'cancelled'"
+          (click)="setStatusFilter('cancelled')"
+        >
+          Cancelled
+        </button>
+      </div>
+    </div>
+
+    <div class="ticket-list" *ngIf="filteredTickets.length">
+      <article class="ticket-card" *ngFor="let ticket of filteredTickets; trackBy: trackByTicketId">
+        <div class="ticket-top">
+          <div class="chips">
+            <span class="chip" [ngClass]="'status-' + ticket.status">{{ getStatusChip(ticket) }}</span>
+            <span class="chip payment">{{ getPaymentChip(ticket) }}</span>
+            <span class="chip quantity">x{{ ticket.quantity }}</span>
+          </div>
+          <p class="created" *ngIf="ticket.created_at">
+            Purchased {{ ticket.created_at | date: 'medium' }}
+          </p>
+        </div>
+
+        <h3 class="event-name">{{ ticket.event.name }}</h3>
+        <p class="meta">
+          {{ formatters.formatEventDate(ticket.event.start_datetime) }}
+          <span class="dot">•</span>
+          {{ formatters.formatEventTimeRange(ticket.event.start_datetime, ticket.event.end_datetime) }}
+        </p>
+        <p class="location">
+          <i class="fa-solid fa-location-dot"></i>
+          {{ ticket.event.location }}
+        </p>
+
+        <div class="ticket-actions">
+          <a class="btn-link" [routerLink]="['/events', ticket.event.id]">View event</a>
+          <button
+            type="button"
+            class="btn-cancel"
+            *ngIf="canCancel(ticket)"
+            (click)="openCancelModal(ticket)"
+            [disabled]="cancellingId === ticket.id"
+          >
+            {{ cancellingId === ticket.id ? 'Cancelling…' : 'Cancel ticket' }}
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <p *ngIf="tickets.length && !filteredTickets.length" class="empty-state">
+      No tickets match your filter.
+    </p>
+  </ng-container>
+</div>
+
+<!-- CANCEL MODAL -->
+<div class="cancel-modal-backdrop" *ngIf="ticketPendingCancel as t" (click)="closeCancelModal()">
+  <div class="cancel-modal" (click)="$event.stopPropagation()">
+    <h3>Cancel ticket?</h3>
+    <p>
+      You are about to cancel your tickets for
+      <strong>{{ t.event.name }}</strong>
+      on
+      <strong>{{ formatters.formatEventDate(t.event.start_datetime) }}</strong>
+      at
+      <strong>{{ formatters.formatEventTimeRange(t.event.start_datetime, t.event.end_datetime) }}</strong
+      >.
+    </p>
+    <p class="warning">
+      Cancellations are only available before the event starts. Paid tickets will attempt a refund.
+    </p>
+    <div class="actions">
+      <button type="button" class="btn-ghost" (click)="closeCancelModal()" [disabled]="isCancelling">
+        Keep ticket
+      </button>
+      <button type="button" class="btn-danger" (click)="confirmCancel()" [disabled]="isCancelling">
+        {{ isCancelling ? 'Cancelling…' : 'Yes, cancel ticket' }}
+      </button>
+    </div>
+  </div>
+</div>

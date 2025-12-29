@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { Event as GymEvent } from '@core/models/event.models';
 import { ClassSession, FitnessClass, Instructor } from '@core/models/fitness.models';
 
 @Injectable({ providedIn: 'root' })
@@ -87,5 +88,57 @@ export class FormattersService {
     if (hour < 12) return 'morning';
     if (hour < 17) return 'afternoon';
     return 'evening';
+  }
+
+  // ---------- EVENT HELPERS ----------
+
+  private toDate(isoString: string): Date | null {
+    if (!isoString) return null;
+    const dt = new Date(isoString);
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+
+  formatEventDate(isoString: string): string {
+    const dt = this.toDate(isoString);
+    if (!dt) return '';
+
+    return dt.toLocaleDateString('en-GB', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  formatEventTimeRange(startIso: string, endIso: string): string {
+    const start = this.toDate(startIso);
+    const end = this.toDate(endIso);
+
+    if (!start || !end) {
+      return '';
+    }
+
+    const opts: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+    return `${start.toLocaleTimeString('en-GB', opts)} – ${end.toLocaleTimeString('en-GB', opts)}`;
+  }
+
+  formatCurrency(amount: string | number | null | undefined): string {
+    const num = typeof amount === 'string' ? Number(amount) : amount;
+    if (num === null || num === undefined || isNaN(num)) {
+      return '';
+    }
+
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(num);
+  }
+
+  isEventInFuture(evt: Pick<GymEvent, 'start_datetime'>): boolean {
+    const start = this.toDate(evt.start_datetime);
+    if (!start) return false;
+    return start.getTime() > Date.now();
   }
 }

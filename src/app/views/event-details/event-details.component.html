@@ -1,0 +1,165 @@
+<app-page-hero
+  [title]="eventData?.name || 'Event'"
+  [breadcrumbTitle]="eventData?.name || 'Event'"
+  [backgroundImage]="eventData?.cover_image || placeholderImage"
+></app-page-hero>
+
+<section class="event-details sp8">
+  <div class="container">
+    <div *ngIf="loading" class="loading-wrapper">
+      <app-loading-api></app-loading-api>
+    </div>
+
+    <div class="row" *ngIf="!loading && eventData as evt">
+      <div class="col-lg-8">
+        <div class="event-summary">
+          <div class="chips">
+            <span class="chip-primary">{{ dateLabel }}</span>
+            <span class="chip-outline">{{ timeRangeLabel }}</span>
+            <span class="chip-outline">Capacity: {{ evt.capacity }}</span>
+            <span class="chip-outline">Remaining: {{ evt.remaining_tickets }}</span>
+          </div>
+
+          <h2 class="event-title">{{ evt.name }}</h2>
+          <p class="event-location">
+            <i class="fa-solid fa-location-dot"></i>
+            {{ evt.location }}
+          </p>
+
+          <p class="event-description">
+            {{
+              evt.description ||
+                'Join us for this special event. Expect high energy, great community vibes, and a memorable experience.'
+            }}
+          </p>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <p class="label">When</p>
+              <p class="value">
+                {{ dateLabel }} <br />
+                <span class="muted">{{ timeRangeLabel }}</span>
+              </p>
+            </div>
+
+            <div class="info-card">
+              <p class="label">Where</p>
+              <p class="value">
+                {{ evt.location }}
+                <br />
+                <span class="muted">Arrive 10 minutes early to check in.</span>
+              </p>
+            </div>
+
+            <div class="info-card">
+              <p class="label">Ticket price</p>
+              <p class="value">
+                {{ priceLabel }}
+                <br />
+                <span class="muted">
+                  {{ isFree ? 'Free event' : 'Pay securely online' }}
+                </span>
+              </p>
+            </div>
+
+            <div class="info-card">
+              <p class="label">Availability</p>
+              <p class="value" [ngClass]="{ sold: isSoldOut }">
+                {{ isSoldOut ? 'Sold out' : evt.remaining_tickets + ' tickets left' }}
+                <br />
+                <span class="muted">
+                  {{ isSoldOut ? 'Join the next one soon.' : 'First come, first served.' }}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="ticket-panel">
+          <p class="panel-label">Purchase tickets</p>
+          <h3 class="price">
+            {{ priceLabel }}
+            <span class="per">per ticket</span>
+          </h3>
+
+          <p class="availability" [ngClass]="{ sold: isSoldOut }">
+            <span class="dot"></span>
+            {{ isSoldOut ? 'Sold out' : evt.remaining_tickets + ' available' }}
+          </p>
+
+          <div class="quantity-row">
+            <span>Quantity</span>
+            <div class="stepper">
+              <button type="button" (click)="adjustQuantity(-1)" [disabled]="purchaseQuantity <= 1">
+                −
+              </button>
+              <input
+                type="number"
+                [(ngModel)]="purchaseQuantity"
+                (ngModelChange)="onQuantityChange($event)"
+                [min]="1"
+                [max]="evt.remaining_tickets || 1"
+              />
+              <button
+                type="button"
+                (click)="adjustQuantity(1)"
+                [disabled]="
+                  evt.remaining_tickets !== null &&
+                  evt.remaining_tickets !== undefined &&
+                  purchaseQuantity >= evt.remaining_tickets
+                "
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="btn-primary w-100"
+            (click)="purchaseTickets()"
+            [disabled]="purchaseLoading || isSoldOut"
+          >
+            {{ purchaseLoading ? 'Processing…' : isSoldOut ? 'Sold out' : 'Purchase tickets' }}
+          </button>
+
+          <div class="panel-hint">
+            <p *ngIf="!isLoggedIn">
+              You need an account to purchase. <a routerLink="/login">Login</a> or
+              <a routerLink="/signup">create one</a>.
+            </p>
+            <p *ngIf="isLoggedIn">
+              Tickets are held while payment completes. You can cancel from
+              <a routerLink="/my-tickets">My tickets</a> before the event starts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT MODAL -->
+<div class="payment-modal-overlay" *ngIf="showPaymentModal" (click)="closePaymentModal()">
+  <div class="payment-modal" (click)="$event.stopPropagation()">
+    <h3>Complete payment</h3>
+    <p class="modal-subtitle">
+      Confirm your card payment to reserve your ticket for {{ eventData?.name }}.
+    </p>
+
+    <div class="payment-element" #paymentElementRef></div>
+
+    <p class="payment-error" *ngIf="paymentError">{{ paymentError }}</p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" (click)="closePaymentModal()" [disabled]="isProcessingPayment">
+        Cancel
+      </button>
+      <button type="button" class="btn-primary" (click)="submitPayment()" [disabled]="isProcessingPayment">
+        {{ isProcessingPayment ? 'Confirming…' : 'Confirm payment' }}
+      </button>
+    </div>
+  </div>
+</div>

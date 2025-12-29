@@ -1,0 +1,47 @@
+<app-page-hero title="Events" breadcrumbTitle="Events" backgroundImage="assets/img/bg/dumbell_bg.png" />
+
+<section class="events-page sp8">
+  <div class="container">
+    <div class="events-header">
+      <div>
+        <p class="eyebrow">Happening soon</p>
+        <h2>Upcoming events</h2>
+        <p class="subtitle">
+          Browse everything that is coming up at the gym. Guests can explore all events, and members
+          can purchase tickets instantly.
+        </p>
+      </div>
+
+      <div class="access-note">
+        <span class="pill">No account needed to browse</span>
+        <p class="hint">Sign in to purchase tickets or manage your bookings.</p>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+      <app-loading-api></app-loading-api>
+    </div>
+
+    <div *ngIf="!loading && events.length">
+      <div class="featured-banner" *ngIf="featuredEvents.length">
+        <div class="badge">Featured</div>
+        <div>
+          <p class="label">Highlighted first</p>
+          <p class="copy">These events have limited space and will sell out quickly.</p>
+        </div>
+      </div>
+
+      <div class="events-grid">
+        <app-event-card
+          *ngFor="let event of events; trackBy: trackByEventId"
+          [event]="event"
+          (viewDetails)="openEventDetails($event)"
+        ></app-event-card>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && !events.length" class="empty-state">
+      <p>No events are scheduled yet. Check back soon!</p>
+    </div>
+  </div>
+</section>
