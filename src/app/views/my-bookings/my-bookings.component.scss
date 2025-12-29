@@ -5,6 +5,10 @@
 .my-bookings {
   max-width: 1100px;
   margin: 0 auto;
+
+  &.compact {
+    padding-top: 0;
+  }
 }
 
 /* Loading / Empty */

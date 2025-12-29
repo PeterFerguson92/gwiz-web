@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
@@ -17,6 +17,8 @@ import { ToastService } from '@core/services/toast.service';
   styleUrls: ['./my-tickets.component.scss'],
 })
 export class MyTicketsComponent implements OnInit {
+  @Input() showHero = true;
+
   tickets: EventTicket[] = [];
   loading = false;
 

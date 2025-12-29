@@ -38,6 +38,6 @@ export const AUTH_ROUTES: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [authGuard],
-    data: { title: 'Profile' },
+    data: { title: 'My Chamber' },
   },
 ];

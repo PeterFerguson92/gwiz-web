@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { ToastService } from '@core/services/toast.service';
+import { MyBookingsComponent } from '@views/my-bookings/my-bookings.component';
+import { MyTicketsComponent } from '@views/my-tickets/my-tickets.component';
 
 import { UserProfile } from '../../core/models/auth.models';
 import { AuthService } from '../../core/services/auth.service';
@@ -21,11 +23,19 @@ const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PageHeroComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PageHeroComponent,
+    MyBookingsComponent,
+    MyTicketsComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+  activeTab: 'profile' | 'bookings' | 'tickets' = 'profile';
+
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
 
@@ -47,6 +57,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.initForms();
     this.loadProfile();
+  }
+
+  setTab(tab: 'profile' | 'bookings' | 'tickets'): void {
+    this.activeTab = tab;
   }
 
   private initForms(): void {

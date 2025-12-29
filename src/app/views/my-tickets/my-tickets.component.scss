@@ -1,5 +1,9 @@
 .my-tickets {
   min-height: 360px;
+
+  &.compact {
+    padding-top: 0;
+  }
 }
 
 .loading-state {

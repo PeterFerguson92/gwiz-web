@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -44,6 +44,8 @@ interface GroupedMonth {
   styleUrls: ['./my-bookings.component.scss'],
 })
 export class MyBookingsComponent implements OnInit {
+  @Input() showHero = true;
+
   bookings: BookingWithDetails[] = [];
 
   groupedBookings: GroupedMonth[] = [];

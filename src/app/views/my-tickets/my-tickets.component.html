@@ -1,6 +1,6 @@
-<app-page-hero title="My tickets" breadcrumbTitle="My tickets"></app-page-hero>
+<app-page-hero *ngIf="showHero" title="My tickets" breadcrumbTitle="My tickets"></app-page-hero>
 
-<div class="my-tickets container py-4">
+<div class="my-tickets container py-4" [class.compact]="!showHero">
   <div *ngIf="loading" class="loading-state">
     <app-loading-api></app-loading-api>
   </div>

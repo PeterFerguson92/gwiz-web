@@ -1,11 +1,22 @@
-<app-page-hero title="My Profile" backgroundImage="assets/img/bg/profile-bg.jpg"></app-page-hero>
+<app-page-hero title="My Chamber" breadcrumbTitle="My Chamber" backgroundImage="assets/img/bg/profile-bg.jpg"></app-page-hero>
 
-<div class="service-leftside-area sp8">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 m-auto">
-        <div class="service-rightside-area heading2" style="padding: 0">
-          <!-- Account details -->
+<div class="chamber container py-4">
+  <div class="tab-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">
+      Profile
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'bookings'" (click)="setTab('bookings')">
+      My bookings
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'tickets'" (click)="setTab('tickets')">
+      My tickets
+    </button>
+  </div>
+
+  <div class="tab-panels">
+    <ng-container [ngSwitch]="activeTab">
+      <ng-container *ngSwitchCase="'profile'">
+        <div class="chamber-card heading2">
           <h3>Account Details</h3>
           <p>
             Keep your personal information up to date so we can customise your training, stay in
@@ -90,7 +101,6 @@
 
           <div class="space32"></div>
 
-          <!-- Change password -->
           <h3>Security</h3>
           <p>Update your password to keep your account locked in and secure.</p>
 
@@ -213,8 +223,20 @@
             </button>
           </form>
         </div>
-      </div>
-    </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'bookings'">
+        <div class="chamber-card">
+          <app-my-bookings [showHero]="false"></app-my-bookings>
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'tickets'">
+        <div class="chamber-card">
+          <app-my-tickets [showHero]="false"></app-my-tickets>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </div>
 

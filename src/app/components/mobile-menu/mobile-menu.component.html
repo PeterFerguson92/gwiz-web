@@ -49,13 +49,7 @@
 
       <!-- Auth links -->
       <li *ngIf="isLoggedIn">
-        <a routerLink="/my-bookings" (click)="closeMenu()">My Bookings</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/my-tickets" (click)="closeMenu()">My Tickets</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/profile" (click)="closeMenu()">Profile</a>
+        <a routerLink="/profile" (click)="closeMenu()">My Chamber</a>
       </li>
       <li *ngIf="isLoggedIn">
         <a (click)="logout()" style="cursor: pointer">Logout</a>

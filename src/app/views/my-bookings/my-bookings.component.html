@@ -1,14 +1,14 @@
-<app-page-hero title="My bookings" breadcrumbTitle="My bookings"></app-page-hero>
+<app-page-hero *ngIf="showHero" title="My bookings" breadcrumbTitle="My bookings"></app-page-hero>
 
 <!-- QUICK ACTION BUTTONS (CENTERED) -->
-<div class="quick-actions">
+<div class="quick-actions" *ngIf="showHero">
   <div class="quick-actions-inner">
     <button class="qa-btn" routerLink="/profile">My Profile</button>
     <button class="qa-btn outline" routerLink="/classes">Browse Classes</button>
   </div>
 </div>
 
-<div class="my-bookings container py-4">
+<div class="my-bookings container py-4" [class.compact]="!showHero">
   <!-- LOADING -->
   <ng-container *ngIf="loading; else loaded">
     <div class="loading-state">Loading your bookings…</div>
