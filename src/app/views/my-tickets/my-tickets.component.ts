@@ -6,6 +6,7 @@ import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.c
 import { FormattersService } from '@/app/shared/service/formatters.service';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { EventTicket } from '@core/models/event.models';
+import { AssetService } from '@core/services/asset.service';
 import { EventService } from '@core/services/event.service';
 import { ToastService } from '@core/services/toast.service';
 
@@ -21,6 +22,7 @@ export class MyTicketsComponent implements OnInit {
 
   tickets: EventTicket[] = [];
   loading = false;
+  heroImage = 'assets/img/bg/dumbell_bg.png';
 
   statusFilter: 'all' | 'confirmed' | 'reserved' | 'cancelled' = 'confirmed';
 
@@ -29,12 +31,17 @@ export class MyTicketsComponent implements OnInit {
   isCancelling = false;
 
   constructor(
+    private assetService: AssetService,
     private eventService: EventService,
     private toast: ToastService,
     public formatters: FormattersService
   ) {}
 
   ngOnInit(): void {
+    this.assetService
+      .getCover('personal_tickets_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
+
     this.loadTickets();
   }
 

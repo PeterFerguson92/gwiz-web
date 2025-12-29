@@ -12,6 +12,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import { filter } from 'rxjs/operators';
 
 import { NAME_PATTERN } from '@core/constants/auth.constants';
+import { AssetService } from '@core/services/asset.service';
 import { AuthService } from '@core/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
 import {
@@ -31,6 +32,9 @@ export class AuthComponent implements OnInit {
   isLogin = true;
   isSubmitting = false;
 
+  heroImage =
+    'https://images.pexels.com/photos/8032978/pexels-photo-8032978.jpeg?auto=compress&cs=tinysrgb&w=1200';
+
   loginForm: FormGroup;
   signupForm: FormGroup;
 
@@ -43,7 +47,8 @@ export class AuthComponent implements OnInit {
     private authService: AuthService,
     private toast: ToastService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private assetService: AssetService
   ) {
     // LOGIN FORM
     this.loginForm = this.fb.group(
@@ -116,6 +121,10 @@ export class AuthComponent implements OnInit {
   ngOnInit(): void {
     // Set initial mode based on route URL (/login or /signup)
     this.syncModeWithUrl(this.router.url);
+
+    this.assetService
+      .getCover('login_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
 
     // Listen to route changes to keep UI synced with URL
     this.router.events
@@ -257,5 +266,9 @@ export class AuthComponent implements OnInit {
 
     const control = group.get(controlName);
     return !!control && control.touched && control.hasError(error);
+  }
+
+  get heroBackground(): string {
+    return `linear-gradient(135deg, rgba(248, 113, 113, 0.5), rgba(79, 70, 229, 0.7)), url('${this.heroImage}')`;
   }
 }

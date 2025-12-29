@@ -6,6 +6,7 @@ import { EventCardComponent } from '@/app/shared/components/event-card/event-car
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { Event as GymEvent } from '@core/models/event.models';
+import { AssetService } from '@core/services/asset.service';
 import { EventService } from '@core/services/event.service';
 import { ToastService } from '@core/services/toast.service';
 
@@ -19,14 +20,20 @@ import { ToastService } from '@core/services/toast.service';
 export class EventsComponent implements OnInit {
   events: GymEvent[] = [];
   loading = false;
+  heroImage = 'assets/img/bg/dumbell_bg.png';
 
   constructor(
     private eventService: EventService,
     private toast: ToastService,
-    private router: Router
+    private router: Router,
+    private assetService: AssetService
   ) {}
 
   ngOnInit(): void {
+    this.assetService
+      .getCover('main_events_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
+
     this.loadEvents();
   }
 

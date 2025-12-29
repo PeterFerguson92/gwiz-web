@@ -12,6 +12,7 @@ import {
   FitnessClass,
   FitnessClassWithNextSession,
 } from '@core/models/fitness.models';
+import { AssetService } from '@core/services/asset.service';
 import { AuthService } from '@core/services/auth.service';
 import { FitnessClassService } from '@core/services/fitness-class.service';
 import { ToastService } from '@core/services/toast.service';
@@ -29,8 +30,10 @@ export class ClassesComponent implements OnInit {
   loadingMoreClasses = false;
 
   placeholderImage = 'assets/img/placeholder.jpg';
+  heroImage = 'assets/img/bg/dumbell_bg.png';
 
   constructor(
+    private assetService: AssetService,
     private authService: AuthService,
     private fitnessClassService: FitnessClassService,
     private toast: ToastService,
@@ -38,6 +41,10 @@ export class ClassesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.assetService
+      .getCover('main_classes_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
+
     this.loadClassesWithNextSessions();
   }
 

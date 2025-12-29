@@ -11,6 +11,7 @@ import {
 import { Router } from '@angular/router';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
+import { AssetService } from '@core/services/asset.service';
 import { ToastService } from '@core/services/toast.service';
 import { MyBookingsComponent } from '@views/my-bookings/my-bookings.component';
 import { MyTicketsComponent } from '@views/my-tickets/my-tickets.component';
@@ -36,6 +37,8 @@ const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 export class ProfileComponent implements OnInit {
   activeTab: 'profile' | 'bookings' | 'tickets' = 'profile';
 
+  heroImage = 'assets/img/bg/profile-bg.jpg';
+
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
 
@@ -51,10 +54,15 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private toast: ToastService,
-    private router: Router
+    private router: Router,
+    private assetService: AssetService
   ) {}
 
   ngOnInit(): void {
+    this.assetService
+      .getCover('personal_area_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
+
     this.initForms();
     this.loadProfile();
   }

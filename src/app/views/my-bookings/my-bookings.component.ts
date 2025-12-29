@@ -9,6 +9,7 @@ import { FallbackImageDirective } from '@/app/shared/directives/fallback-image.d
 import { FormattersService } from '@/app/shared/service/formatters.service';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { BookingWithDetails, FitnessClass, Instructor } from '@core/models/fitness.models';
+import { AssetService } from '@core/services/asset.service';
 import { AuthService } from '@core/services/auth.service';
 import { FitnessClassService } from '@core/services/fitness-class.service';
 import { ToastService } from '@core/services/toast.service';
@@ -51,6 +52,7 @@ export class MyBookingsComponent implements OnInit {
   groupedBookings: GroupedMonth[] = [];
 
   loading = false;
+  heroImage = 'assets/img/bg/dumbell_bg.png';
 
   // FILTER STATE
   timeFilter: TimeFilter = 'upcoming';
@@ -63,6 +65,7 @@ export class MyBookingsComponent implements OnInit {
   cancellingBookingId: string | null = null;
 
   constructor(
+    private assetService: AssetService,
     private fitnessClassService: FitnessClassService,
     public formatter: FormattersService,
     private toast: ToastService,
@@ -70,6 +73,10 @@ export class MyBookingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.assetService
+      .getCover('personal_bookings_cover')
+      .subscribe((img) => (this.heroImage = img || this.heroImage));
+
     this.loadBookings();
   }
 
