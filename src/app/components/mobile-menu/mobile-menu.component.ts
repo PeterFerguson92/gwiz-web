@@ -18,7 +18,7 @@ interface MenuItem {
   selector: 'app-mobile-menu',
   imports: [CommonModule, MobileNavItemComponent, RouterLink],
   templateUrl: './mobile-menu.component.html',
-  styles: ``,
+  styleUrls: ['./mobile-menu.component.scss'],
 })
 export class MobileMenuComponent {
   isMenuOpen = false;

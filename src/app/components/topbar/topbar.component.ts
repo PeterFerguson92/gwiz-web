@@ -20,7 +20,7 @@ import { MobileMenuComponent } from '../mobile-menu/mobile-menu.component';
     ...SHARED_IMPORTS,
   ],
   templateUrl: './topbar.component.html',
-  styles: ``,
+  styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit {
   isActive = false;

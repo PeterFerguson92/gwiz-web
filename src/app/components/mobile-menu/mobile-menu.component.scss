@@ -1,0 +1,18 @@
+.mobile-header-elements {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobile-logo img {
+  width: 70%;
+  max-width: 150px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.mobile-nav-icon {
+  margin-left: auto;
+}

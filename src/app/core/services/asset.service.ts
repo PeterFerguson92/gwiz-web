@@ -30,7 +30,7 @@ export class AssetService {
         const first = assets[0];
         if (!first) return null;
         const val = first[key];
-        return (typeof val === 'string' && val.length > 0) ? val : null;
+        return typeof val === 'string' && val.length > 0 ? val : null;
       })
     );
   }
