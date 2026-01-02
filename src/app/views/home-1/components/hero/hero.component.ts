@@ -1,10 +1,11 @@
 import { NgFor } from '@angular/common';
 import { Component, Input, OnChanges } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CarouselModule, type OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-hero',
-  imports: [NgFor, CarouselModule],
+  imports: [NgFor, CarouselModule, RouterLink],
   templateUrl: './hero.component.html',
   styles: ``,
 })
