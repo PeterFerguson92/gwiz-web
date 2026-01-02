@@ -9,9 +9,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { loadStripe, Stripe, StripeElements, StripePaymentElement } from '@stripe/stripe-js';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
+import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
+import { environment } from '@/environments/environment';
+import { Membership } from '@core/models/membership.models';
 import { AssetService } from '@core/services/asset.service';
+import { MembershipService } from '@core/services/membership.service';
 import { ToastService } from '@core/services/toast.service';
 import { MyBookingsComponent } from '@views/my-bookings/my-bookings.component';
 import { MyTicketsComponent } from '@views/my-tickets/my-tickets.component';
@@ -28,6 +33,7 @@ const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
     CommonModule,
     ReactiveFormsModule,
     PageHeroComponent,
+    ...SHARED_IMPORTS,
     MyBookingsComponent,
     MyTicketsComponent,
   ],
@@ -35,9 +41,14 @@ const NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  activeTab: 'profile' | 'bookings' | 'tickets' = 'profile';
+  activeTab: 'profile' | 'bookings' | 'tickets' | 'membership' = 'profile';
 
   heroImage = 'assets/img/bg/profile-bg.jpg';
+
+  plans: Membership[] | any[] = [];
+  plansLoading = false;
+
+  actionMessage: string | null = null;
 
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
@@ -50,24 +61,48 @@ export class ProfileComponent implements OnInit {
   showNewPassword = false;
   showConfirmPassword = false;
 
+  membership: Membership | null = null;
+  membershipLoading = false;
+  membershipError: string | null = null;
+
+  stripeClientSecret: string | null = null;
+  showPaymentModal = false;
+  isProcessingPayment = false;
+  paymentError: string | null = null;
+  pendingPlanId: string | null = null;
+
+  stripe: Stripe | null = null;
+  elements: StripeElements | null = null;
+  paymentElement: StripePaymentElement | null = null;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private toast: ToastService,
     private router: Router,
-    private assetService: AssetService
+    private assetService: AssetService,
+    private membershipService: MembershipService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.assetService
       .getCover('personal_area_cover')
       .subscribe((img) => (this.heroImage = img || this.heroImage));
 
+    this.stripe = await loadStripe(environment.stripePublishableKey);
+
     this.initForms();
     this.loadProfile();
+    this.loadMembership();
+    this.loadPlans();
   }
 
-  setTab(tab: 'profile' | 'bookings' | 'tickets'): void {
+  setTab(tab: 'profile' | 'bookings' | 'tickets' | 'membership'): void {
+    this.activeTab = tab;
+  }
+
+  // Membership tab helper
+  setMembershipTab(tab: 'membership' | 'profile' | 'bookings' | 'tickets'): void {
     this.activeTab = tab;
   }
 
@@ -111,6 +146,28 @@ export class ProfileComponent implements OnInit {
           this.router.navigate(['/login'], {
             queryParams: { returnUrl: '/profile' },
           });
+        }
+      },
+    });
+  }
+
+  private loadMembership(): void {
+    this.membershipLoading = true;
+    this.membershipError = null;
+
+    this.membershipService.getMyMembership().subscribe({
+      next: (data) => {
+        this.membership = data;
+        this.membershipLoading = false;
+      },
+      error: (err) => {
+        this.membershipLoading = false;
+        if (err.status === 404) {
+          this.membership = null;
+          this.membershipError = 'No active membership.';
+        } else {
+          this.membership = null;
+          this.membershipError = 'Could not load membership right now.';
         }
       },
     });
@@ -262,5 +319,208 @@ export class ProfileComponent implements OnInit {
           this.toast.error(msg);
         },
       });
+  }
+
+  private loadPlans(): void {
+    this.plansLoading = true;
+    this.membershipService.getPlans().subscribe({
+      next: (data: any) => {
+        this.plans = data || [];
+        this.plansLoading = false;
+      },
+      error: () => {
+        this.plansLoading = false;
+      },
+    });
+  }
+
+  changePlan(planId: string): void {
+    this.actionMessage = null;
+    this.pendingPlanId = planId;
+    this.membershipService.changePlan(planId).subscribe({
+      next: (res) => {
+        if (res.stripe_client_secret) {
+          this.openPaymentModal(res.stripe_client_secret);
+        } else {
+          this.actionMessage = 'Plan updated.';
+          this.loadMembership();
+        }
+      },
+      error: () => {
+        this.actionMessage = 'Could not change plan right now.';
+      },
+    });
+  }
+
+  cancelMembership(): void {
+    this.actionMessage = null;
+    this.membershipService.cancel().subscribe({
+      next: () => {
+        this.actionMessage = 'Membership cancelled.';
+        this.loadMembership();
+      },
+      error: () => {
+        this.actionMessage = 'Could not cancel membership.';
+      },
+    });
+  }
+
+  purchasePlan(planId: string): void {
+    this.actionMessage = null;
+    this.pendingPlanId = planId;
+    this.membershipService.purchase(planId).subscribe({
+      next: (res) => {
+        if (res.stripe_client_secret) {
+          this.openPaymentModal(res.stripe_client_secret);
+        } else {
+          this.actionMessage = 'Plan activated.';
+          this.loadMembership();
+        }
+      },
+      error: () => {
+        this.actionMessage = 'Could not start this plan right now.';
+      },
+    });
+  }
+
+  // ------- Stripe payment for memberships -------
+
+  private openPaymentModal(clientSecret: string): void {
+    this.stripeClientSecret = clientSecret;
+    this.showPaymentModal = true;
+    this.paymentError = null;
+
+    setTimeout(() => {
+      this.initializeStripeElement();
+    }, 50);
+  }
+
+  private initializeStripeElement(): void {
+    if (!this.stripe || !this.stripeClientSecret) {
+      this.paymentError = 'Payment system unavailable.';
+      return;
+    }
+
+    this.elements = this.stripe.elements({
+      clientSecret: this.stripeClientSecret,
+    });
+
+    this.paymentElement = this.elements.create('payment');
+
+    const mountPoint = document.getElementById('membership-payment-element');
+    if (mountPoint) {
+      this.paymentElement.mount(mountPoint);
+    }
+  }
+
+  async submitMembershipPayment(): Promise<void> {
+    if (!this.stripe || !this.elements) {
+      this.paymentError = 'Payment system unavailable.';
+      return;
+    }
+
+    this.isProcessingPayment = true;
+    this.paymentError = null;
+
+    const result = await this.stripe.confirmPayment({
+      elements: this.elements,
+      redirect: 'if_required',
+      confirmParams: {
+        return_url: window.location.href,
+      },
+    });
+
+    this.isProcessingPayment = false;
+
+    if (result.error) {
+      this.paymentError = result.error.message || 'Payment failed. Please try again.';
+      return;
+    }
+
+    this.toast.success('Payment received — membership activated soon.');
+
+    // Close modal but keep `pendingPlanId` so we can poll for activation.
+    this.closePaymentModal(false);
+
+    // Poll backend until membership shows as active (webhook processed), then refresh UI.
+    this.waitForMembershipActivation();
+  }
+
+  /**
+   * Close the payment modal. By default clears pendingPlanId, but caller can keep
+   * it when expecting a backend webhook to activate membership immediately after payment.
+   */
+  closePaymentModal(clearPending = true): void {
+    if (this.isProcessingPayment) return;
+
+    this.showPaymentModal = false;
+    this.paymentError = null;
+    this.stripeClientSecret = null;
+
+    if (clearPending) {
+      this.pendingPlanId = null;
+    }
+
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+      this.paymentElement = null;
+    }
+  }
+
+  /** Poll membership endpoint until membership becomes active or timeout */
+  private waitForMembershipActivation(attempts = 8, delayMs = 2000): void {
+    if (!this.pendingPlanId) {
+      // nothing to poll for
+      this.loadMembership();
+      return;
+    }
+
+    const tryCheck = (remaining: number) => {
+      this.membershipService.getMyMembership().subscribe({
+        next: (m) => {
+          // If membership exists and matches the pending plan, we're done
+          if (m && m.plan && m.plan.id === this.pendingPlanId) {
+            this.membership = m;
+            this.actionMessage = 'Plan activated.';
+            this.pendingPlanId = null;
+            return;
+          }
+
+          if (remaining <= 0) {
+            // final fallback: refresh membership view
+            this.loadMembership();
+            return;
+          }
+
+          setTimeout(() => tryCheck(remaining - 1), delayMs);
+        },
+        error: () => {
+          if (remaining <= 0) {
+            this.loadMembership();
+            return;
+          }
+          setTimeout(() => tryCheck(remaining - 1), delayMs);
+        },
+      });
+    };
+
+    tryCheck(attempts);
+  }
+
+  private pollMembership(retries: number): void {
+    if (retries <= 0) {
+      this.loadMembership();
+      return;
+    }
+
+    this.membershipService.getMyMembership().subscribe({
+      next: (data) => {
+        this.membership = data;
+        this.membershipError = null;
+      },
+      error: () => {
+        setTimeout(() => this.pollMembership(retries - 1), 1200);
+      },
+    });
   }
 }

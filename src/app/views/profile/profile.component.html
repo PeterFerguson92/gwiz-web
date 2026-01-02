@@ -15,6 +15,13 @@
     <button class="tab-btn" [class.active]="activeTab === 'tickets'" (click)="setTab('tickets')">
       My tickets
     </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'membership'"
+      (click)="setTab('membership')"
+    >
+      Membership
+    </button>
   </div>
 
   <div class="tab-panels">
@@ -240,7 +247,130 @@
           <app-my-tickets [showHero]="false"></app-my-tickets>
         </div>
       </ng-container>
+
+      <ng-container *ngSwitchCase="'membership'">
+        <div class="chamber-card membership-card">
+          <h3>My membership</h3>
+          <p class="text-muted">Track your remaining credits for classes and events.</p>
+
+          <div *ngIf="actionMessage" class="action-message">{{ actionMessage }}</div>
+
+          <div *ngIf="membershipLoading" class="membership-loading">
+            <app-loading-api></app-loading-api>
+          </div>
+
+          <div *ngIf="!membershipLoading && membership">
+            <div class="membership-summary">
+              <div>
+                <p class="label">Plan</p>
+                <h4>{{ membership.plan.name }}</h4>
+                <p class="muted">{{ membership.plan.description }}</p>
+              </div>
+              <div class="status-pill" [ngClass]="'status-' + membership.status">
+                {{ membership.status | titlecase }}
+              </div>
+            </div>
+
+            <div class="credit-grid">
+              <div class="credit-card">
+                <p class="label">Class credits</p>
+                <p class="value">{{ membership.remaining_class_sessions }}</p>
+              </div>
+              <div class="credit-card">
+                <p class="label">Event credits</p>
+                <p class="value">{{ membership.remaining_events }}</p>
+              </div>
+            </div>
+
+            <div class="dates" *ngIf="membership.starts_at || membership.expires_at">
+              <p *ngIf="membership.starts_at">
+                Starts: {{ membership.starts_at | date: 'mediumDate' }}
+              </p>
+              <p *ngIf="membership.expires_at">
+                Expires: {{ membership.expires_at | date: 'mediumDate' }}
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="!membershipLoading && !membership">
+            <p class="empty-state">
+              {{ membershipError || 'No active membership.' }}
+            </p>
+          </div>
+
+          <div class="space32"></div>
+          <h4>Available plans</h4>
+          <div *ngIf="plansLoading" class="membership-loading">
+            <app-loading-api></app-loading-api>
+          </div>
+          <div class="plans-grid" *ngIf="!plansLoading">
+            <div class="plan-card" *ngFor="let plan of plans">
+              <div class="plan-header">
+                <div>
+                  <p class="label">Plan</p>
+                  <h5>{{ plan.name }}</h5>
+                  <p class="muted">{{ plan.description }}</p>
+                </div>
+                <div class="price">
+                  {{ plan.price | currency: 'GBP' }}
+                </div>
+              </div>
+
+              <div class="plan-credits">
+                <span>{{ plan.included_class_sessions }} class credits</span>
+                <span>{{ plan.included_events }} event credits</span>
+              </div>
+
+              <div class="plan-actions">
+                <button
+                  class="btn-primary"
+                  [disabled]="membership?.plan?.id === plan.id"
+                  (click)="membership ? changePlan(plan.id) : purchasePlan(plan.id)"
+                >
+                  {{
+                    membership?.plan?.id === plan.id
+                      ? 'Current plan'
+                      : membership
+                        ? 'Change to this plan'
+                        : 'Join this plan'
+                  }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cancel-row" *ngIf="membership">
+            <button type="button" class="btn-secondary cancel-btn" (click)="cancelMembership()">
+              Cancel membership
+            </button>
+          </div>
+        </div>
+      </ng-container>
     </ng-container>
+  </div>
+</div>
+
+<!-- MEMBERSHIP PAYMENT MODAL -->
+<div class="payment-modal-backdrop" *ngIf="showPaymentModal" (click)="closePaymentModal()">
+  <div class="payment-modal" (click)="$event.stopPropagation()">
+    <h3>Complete membership payment</h3>
+    <p class="payment-note">
+      Enter your card details to activate this plan. Your membership will appear once payment
+      succeeds.
+    </p>
+
+    <div id="membership-payment-element" class="payment-element"></div>
+
+    <p class="payment-error" *ngIf="paymentError">{{ paymentError }}</p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" (click)="closePaymentModal()" [disabled]="isProcessingPayment">
+        Cancel
+      </button>
+      <button type="button" class="btn-primary" (click)="submitMembershipPayment()" [disabled]="isProcessingPayment">
+        {{ isProcessingPayment ? 'Processing…' : 'Pay & Activate' }}
+      </button>
+    </div>
   </div>
 </div>
 

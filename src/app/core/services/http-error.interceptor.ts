@@ -75,7 +75,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }
 
         // Generic error handling (for non-401s or auth endpoints)
-        if (!isAuthEndpoint) {
+        // Skip noisy toast for missing membership (expected 404)
+        const isMembershipMe = url.includes('/memberships/me/');
+        if (!isAuthEndpoint && !isMembershipMe) {
           let message = 'Something went wrong. Please try again.';
 
           if (error.status === 0) {

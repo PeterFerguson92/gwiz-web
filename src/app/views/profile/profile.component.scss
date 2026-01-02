@@ -54,6 +54,205 @@
   border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
+.membership-card .text-muted {
+  color: #64748b;
+}
+
+.action-message {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #0f766e;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.membership-loading {
+  padding: 16px 0;
+}
+
+.membership-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: capitalize;
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.status-pill.status-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #0f766e;
+}
+
+.status-pill.status-cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+.status-pill.status-expired {
+  background: rgba(148, 163, 184, 0.35);
+  color: #374151;
+}
+
+.credit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.credit-card {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.credit-card .label {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.credit-card .value {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dates p {
+  margin: 0;
+  color: #475569;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.plan-card {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.plan-header .label {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.plan-header h5 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.plan-header .muted {
+  margin: 0;
+  color: #475569;
+}
+
+.plan-header .price {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.plan-credits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.plan-actions {
+  margin-top: 8px;
+}
+
+.plan-actions .btn-primary {
+  min-width: 180px;
+  justify-content: center;
+}
+
+.cancel-row {
+  margin-top: 16px;
+}
+
+.cancel-btn {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.payment-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.payment-modal {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+}
+
+.payment-note {
+  margin: 0 0 12px;
+  color: #475569;
+}
+
+.payment-element {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.payment-error {
+  margin: 8px 0 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
 @media (max-width: 767.98px) {
   .chamber {
     padding: 0 8px;
