@@ -17,6 +17,7 @@ export class SessionListComponent {
   @Input() sessions: ClassSession[] = [];
   @Input() loading = false;
   @Input() isLoggedIn = false;
+  @Input() paymentLink: string | null | undefined;
 
   /**
    * Map of session.id -> loading boolean.

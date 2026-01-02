@@ -7,6 +7,7 @@ export interface FitnessClass {
   description: string;
   genre: string;
   base_price: string;
+  payment_link?: string | null;
   default_duration_minutes: number;
   capacity: number;
   instructors: Instructor[];

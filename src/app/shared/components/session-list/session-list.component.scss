@@ -105,6 +105,9 @@
 /* BUTTON – full-width on mobile */
 .session-actions {
   margin-top: 4px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .session-book-btn {
@@ -118,6 +121,21 @@
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+.session-alt-btn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 2px solid var(--brand-red);
+  color: var(--brand-red);
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.12s ease;
+}
+
+.session-alt-btn:hover {
+  transform: translateY(-1px);
 }
 
 /* --------- DESKTOP TWEAKS --------- */

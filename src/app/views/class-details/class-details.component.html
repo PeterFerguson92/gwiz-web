@@ -44,6 +44,7 @@
                 [isLoggedIn]="isLoggedIn"
                 [bookingLoading]="bookingLoading"
                 [fitnessClass]="classData"
+                [paymentLink]="classData?.payment_link"
                 (book)="bookSession($event)"
               ></app-session-list>
             </div>

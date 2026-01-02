@@ -50,7 +50,7 @@
     <!-- BOTTOM: BUTTON -->
     <div class="session-actions">
       <button
-        class="btn-primary session-btn"
+        class="btn-primary session-book-btn"
         [disabled]="isFull(session) || bookingLoading[session.id]"
         (click)="onBook(session)"
         type="button"
@@ -83,6 +83,7 @@
           Book now
         </span>
       </button>
+
     </div>
   </div>
 </div>
