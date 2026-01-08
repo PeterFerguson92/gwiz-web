@@ -39,6 +39,7 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   guestCancelToken: string | null = null;
   guestBookingComplete = false;
   activeGuestSessionId: string | null = null;
+  private guestSuccessTimeoutId: number | null = null;
 
   // ---------------- STRIPE BOOKING STATE ----------------
   showPaymentModal = false;
@@ -92,6 +93,9 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.paymentElement) {
       this.paymentElement.unmount();
+    }
+    if (this.guestSuccessTimeoutId) {
+      window.clearTimeout(this.guestSuccessTimeoutId);
     }
   }
 
@@ -242,7 +246,9 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (isGuest) {
       this.guestBookingId = res.booking?.id ?? null;
       this.guestCancelToken = res.cancel_token ?? res.booking?.cancel_token ?? null;
-      this.guestBookingComplete = !res.stripe_client_secret;
+      if (!res.stripe_client_secret) {
+        this.handleGuestSuccess();
+      }
     }
 
     // Case A: membership credit booking → immediate success
@@ -317,7 +323,7 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadClassWithSessions(); // refresh spaces_left
     this.refreshMyBookings(); // optional prefetch
     if (this.guestCancelToken) {
-      this.guestBookingComplete = true;
+      this.handleGuestSuccess();
     }
   }
 
@@ -363,6 +369,22 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.toast.error(detail || 'Could not cancel this booking.');
       },
     });
+  }
+
+  private handleGuestSuccess(): void {
+    this.guestName = '';
+    this.guestEmail = '';
+    this.guestPhone = '';
+    this.guestBookingComplete = true;
+
+    if (this.guestSuccessTimeoutId) {
+      window.clearTimeout(this.guestSuccessTimeoutId);
+    }
+
+    this.guestSuccessTimeoutId = window.setTimeout(() => {
+      this.guestBookingComplete = false;
+      this.guestSuccessTimeoutId = null;
+    }, 5000);
   }
 
 }
