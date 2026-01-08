@@ -23,6 +23,7 @@ export interface EventTicket {
   payment_status: 'included' | 'pending' | 'paid' | 'void';
   stripe_payment_intent_id?: string;
   stripe_client_secret?: string;
+  cancel_token?: string | null;
   email_sent?: boolean;
   cancellation_email_sent?: boolean;
   created_at?: string;
@@ -30,6 +31,9 @@ export interface EventTicket {
 
 export interface PurchaseTicketPayload {
   quantity: number;
+  guest_name?: string;
+  guest_email?: string;
+  guest_phone?: string;
 }
 
 export type PurchaseTicketResponse = EventTicket;

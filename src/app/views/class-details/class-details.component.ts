@@ -32,6 +32,13 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   loadingSessions = false;
   bookingLoading: Record<string, boolean> = {};
+  guestName = '';
+  guestEmail = '';
+  guestPhone = '';
+  guestBookingId: string | null = null;
+  guestCancelToken: string | null = null;
+  guestBookingComplete = false;
+  activeGuestSessionId: string | null = null;
 
   // ---------------- STRIPE BOOKING STATE ----------------
   showPaymentModal = false;
@@ -92,6 +99,14 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  get isGuestFormValid(): boolean {
+    return (
+      this.guestName.trim().length > 0 &&
+      this.guestEmail.trim().length > 0 &&
+      this.guestPhone.trim().length > 0
+    );
   }
 
   get instructorNames(): string {
@@ -155,10 +170,12 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   bookSession(session: ClassSession): void {
     if (!this.isLoggedIn) {
-      this.toast.info('Please login to book this class.');
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: this.router.url },
-      });
+      if (this.activeGuestSessionId !== session.id) {
+        this.activeGuestSessionId = session.id;
+        this.guestBookingComplete = false;
+        this.guestBookingId = null;
+        this.guestCancelToken = null;
+      }
       return;
     }
 
@@ -174,26 +191,74 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
       .subscribe({
         next: (res: BookSessionResponse) => {
-          // Case A: membership credit booking → immediate success
-          if (!res.stripe_client_secret) {
-            this.toast.success(res.message || 'Your class has been booked!');
-            this.loadClassWithSessions();
-            return;
-          }
-
-          // Case B: Stripe payment required → show modal
-          this.pendingBooking = res;
-          this.stripeClientSecret = res.stripe_client_secret;
-          this.showPaymentModal = true;
-
-          // Mount Stripe element after modal renders
-          setTimeout(() => this.initializeStripeElement(), 80);
+          this.handleBookingResponse(res, false);
         },
         error: (err) => {
           const message = err?.error?.detail || err?.error?.message || 'Booking failed.';
           this.toast.error(message);
         },
       });
+  }
+
+  private bookSessionAsGuest(session: ClassSession): void {
+    if (session.status === 'cancelled') {
+      this.toast.error('This session has been cancelled.');
+      return;
+    }
+
+    this.bookingLoading[session.id] = true;
+
+    this.fitnessClass
+      .bookSessionAsGuest(session.id, {
+        guest_name: this.guestName.trim(),
+        guest_email: this.guestEmail.trim(),
+        guest_phone: this.guestPhone.trim(),
+      })
+      .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
+      .subscribe({
+        next: (res: BookSessionResponse) => {
+          this.handleBookingResponse(res, true);
+        },
+        error: (err) => {
+          const message = err?.error?.detail || err?.error?.message || 'Booking failed.';
+          this.toast.error(message);
+        },
+      });
+  }
+
+  bookGuestSession(session: ClassSession): void {
+    if (!this.isGuestFormValid) {
+      this.toast.error('Please enter your name, email, and phone number.');
+      return;
+    }
+
+    this.guestBookingComplete = false;
+    this.guestBookingId = null;
+    this.guestCancelToken = null;
+    this.bookSessionAsGuest(session);
+  }
+
+  private handleBookingResponse(res: BookSessionResponse, isGuest: boolean): void {
+    if (isGuest) {
+      this.guestBookingId = res.booking?.id ?? null;
+      this.guestCancelToken = res.cancel_token ?? res.booking?.cancel_token ?? null;
+      this.guestBookingComplete = !res.stripe_client_secret;
+    }
+
+    // Case A: membership credit booking → immediate success
+    if (!res.stripe_client_secret) {
+      this.toast.success(res.message || 'Your class has been booked!');
+      this.loadClassWithSessions();
+      return;
+    }
+
+    // Case B: Stripe payment required → show modal
+    this.pendingBooking = res;
+    this.stripeClientSecret = res.stripe_client_secret;
+    this.showPaymentModal = true;
+
+    // Mount Stripe element after modal renders
+    setTimeout(() => this.initializeStripeElement(), 80);
   }
 
   // ---------------- STRIPE ELEMENT INITIALIZATION ----------------
@@ -251,6 +316,9 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.closePaymentModal();
     this.loadClassWithSessions(); // refresh spaces_left
     this.refreshMyBookings(); // optional prefetch
+    if (this.guestCancelToken) {
+      this.guestBookingComplete = true;
+    }
   }
 
   // ---------------- CLOSE PAYMENT MODAL ----------------
@@ -279,4 +347,22 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
+
+  cancelGuestBooking(): void {
+    if (!this.guestBookingId || !this.guestCancelToken) return;
+    this.fitnessClass.cancelBookingAsGuest(this.guestBookingId, this.guestCancelToken).subscribe({
+      next: () => {
+        this.toast.success('Your booking has been cancelled.');
+        this.guestBookingComplete = false;
+        this.guestBookingId = null;
+        this.guestCancelToken = null;
+        this.loadClassWithSessions();
+      },
+      error: (err) => {
+        const detail = err?.error?.detail || err?.error?.message;
+        this.toast.error(detail || 'Could not cancel this booking.');
+      },
+    });
+  }
+
 }

@@ -27,6 +27,12 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   purchaseLoading = false;
   purchaseQuantity = 1;
+  guestName = '';
+  guestEmail = '';
+  guestPhone = '';
+  guestTicketId: string | null = null;
+  guestCancelToken: string | null = null;
+  guestPurchaseComplete = false;
 
   // Stripe + payment modal state
   showPaymentModal = false;
@@ -76,6 +82,14 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  get isGuestFormValid(): boolean {
+    return (
+      this.guestName.trim().length > 0 &&
+      this.guestEmail.trim().length > 0 &&
+      this.guestPhone.trim().length > 0
+    );
   }
 
   get isFree(): boolean {
@@ -143,12 +157,15 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   async purchaseTickets(): Promise<void> {
     if (!this.eventData) return;
 
-    if (!this.isLoggedIn) {
-      this.toast.info('Please login to purchase tickets.');
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: this.router.url },
-      });
+    const isGuest = !this.isLoggedIn;
+    if (isGuest && !this.isGuestFormValid) {
+      this.toast.error('Please enter your name, email, and phone number.');
       return;
+    }
+    if (isGuest) {
+      this.guestPurchaseComplete = false;
+      this.guestTicketId = null;
+      this.guestCancelToken = null;
     }
 
     if (this.isSoldOut) {
@@ -164,9 +181,23 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.purchaseQuantity = safeQuantity;
 
     this.purchaseLoading = true;
-    this.eventService.purchaseTickets(this.eventId, this.purchaseQuantity).subscribe({
+    const payload = {
+      quantity: this.purchaseQuantity,
+      ...(isGuest
+        ? {
+            guest_name: this.guestName.trim(),
+            guest_email: this.guestEmail.trim(),
+            guest_phone: this.guestPhone.trim(),
+          }
+        : {}),
+    };
+
+    this.eventService.purchaseTickets(this.eventId, payload).subscribe({
       next: (ticket) => {
         this.purchaseLoading = false;
+        this.guestTicketId = isGuest ? ticket.id : null;
+        this.guestCancelToken = isGuest ? ticket.cancel_token || null : null;
+        this.guestPurchaseComplete = isGuest && !ticket.stripe_client_secret;
 
         // Free or instantly confirmed ticket
         if (!ticket.stripe_client_secret) {
@@ -238,6 +269,9 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.closePaymentModal();
     this.loadEvent();
     this.refreshMyTickets();
+    if (this.guestCancelToken) {
+      this.guestPurchaseComplete = true;
+    }
   }
 
   closePaymentModal(): void {
@@ -262,4 +296,22 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
+
+  cancelGuestTicket(): void {
+    if (!this.guestTicketId || !this.guestCancelToken) return;
+    this.eventService.cancelTicket(this.guestTicketId, this.guestCancelToken).subscribe({
+      next: () => {
+        this.toast.success('Your ticket has been cancelled.');
+        this.guestPurchaseComplete = false;
+        this.guestTicketId = null;
+        this.guestCancelToken = null;
+        this.loadEvent();
+      },
+      error: (err) => {
+        const detail = err?.error?.detail || err?.error?.message;
+        this.toast.error(detail || 'Could not cancel this ticket.');
+      },
+    });
+  }
+
 }

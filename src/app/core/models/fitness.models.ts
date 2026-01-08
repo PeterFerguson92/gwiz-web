@@ -63,6 +63,7 @@ export interface Booking {
   attendance_status: 'unknown' | 'present' | 'absent' | 'no_show';
 
   created_at: string;
+  cancel_token?: string | null;
 
   /**
    * When returned by /my-bookings/, this will be populated and
@@ -97,4 +98,5 @@ export interface BookSessionResponse {
   booking: Booking;
   message?: string;
   stripe_client_secret?: string | null;
+  cancel_token?: string | null;
 }

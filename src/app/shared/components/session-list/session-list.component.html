@@ -4,86 +4,146 @@
 
 <div *ngIf="!loading && sessions.length; else noSessions">
   <div class="session-card" *ngFor="let session of sessions">
-    <div class="session-header">
-      <div class="session-date">
-        {{ sessionDateLabel(session) }}
+    <div class="session-main">
+      <div class="session-header">
+        <div class="session-date">
+          {{ sessionDateLabel(session) }}
+        </div>
+        <div class="session-time">
+          {{ sessionTimeLabel(session) }}
+        </div>
       </div>
-      <div class="session-time">
-        {{ sessionTimeLabel(session) }}
+
+      <div class="session-body">
+        <div
+          class="session-spaces-pill"
+          [ngClass]="{
+            'session-spaces-full': session.spaces_left <= 0,
+            'session-spaces-cancelled': session.status === 'cancelled',
+          }"
+        >
+          <div class="spaces-count">
+            <!-- Show number only if > 0 -->
+            {{ session.spaces_left > 0 ? session.spaces_left : '' }}
+          </div>
+          <div class="spaces-label">
+            {{ getSpacesLabel(session) }}
+          </div>
+        </div>
+
+        <!-- Capacity + price -->
+        <div class="session-meta">
+          <div class="meta-row" *ngIf="effectiveCapacity(session) !== null">
+            <span class="meta-label">Capacity:</span>
+            <span class="meta-value">
+              {{ effectiveCapacity(session) }}
+            </span>
+          </div>
+          <div class="meta-row" *ngIf="effectivePrice(session) !== null">
+            <span class="meta-label">Price:</span>
+            <span class="meta-value">
+              {{ effectivePrice(session) | currency: 'GBP' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM: BUTTON -->
+      <div class="session-actions">
+        <button
+          class="btn-primary session-book-btn"
+          [disabled]="isFull(session) || bookingLoading[session.id]"
+          (click)="onBook(session)"
+          type="button"
+        >
+          <!-- Loading -->
+          <span *ngIf="bookingLoading[session.id]">Booking…</span>
+
+          <!-- Cancelled -->
+          <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'">
+            Cancelled
+          </span>
+
+          <!-- Full -->
+          <span
+            *ngIf="
+              !bookingLoading[session.id] &&
+              session.status !== 'cancelled' &&
+              session.spaces_left <= 0
+            "
+          >
+            Full
+          </span>
+
+          <!-- Normal -->
+          <span
+            *ngIf="
+              !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left > 0
+            "
+          >
+            Book now
+          </span>
+        </button>
+
       </div>
     </div>
-
-    <div class="session-body">
-      <div
-        class="session-spaces-pill"
-        [ngClass]="{
-          'session-spaces-full': session.spaces_left <= 0,
-          'session-spaces-cancelled': session.status === 'cancelled',
-        }"
-      >
-        <div class="spaces-count">
-          <!-- Show number only if > 0 -->
-          {{ session.spaces_left > 0 ? session.spaces_left : '' }}
-        </div>
-        <div class="spaces-label">
-          {{ getSpacesLabel(session) }}
-        </div>
+    <div
+      class="guest-panel"
+      *ngIf="showGuestBooking && activeGuestSessionId === session.id"
+    >
+      <p class="guest-panel-text">
+        You can book as a guest or
+        <a routerLink="/login">login</a>
+        to manage your bookings.
+      </p>
+      <div class="guest-fields">
+        <label class="guest-input">
+          <span>Name</span>
+          <input
+            type="text"
+            [ngModel]="guestName"
+            (ngModelChange)="updateGuestName($event)"
+            placeholder="Jane Guest"
+          />
+        </label>
+        <label class="guest-input">
+          <span>Email</span>
+          <input
+            type="email"
+            [ngModel]="guestEmail"
+            (ngModelChange)="updateGuestEmail($event)"
+            placeholder="jane@example.com"
+          />
+        </label>
+        <label class="guest-input">
+          <span>Phone</span>
+          <input
+            type="tel"
+            [ngModel]="guestPhone"
+            (ngModelChange)="updateGuestPhone($event)"
+            placeholder="555-123-4567"
+          />
+        </label>
       </div>
-
-      <!-- Capacity + price -->
-      <div class="session-meta">
-        <div class="meta-row" *ngIf="effectiveCapacity(session) !== null">
-          <span class="meta-label">Capacity:</span>
-          <span class="meta-value">
-            {{ effectiveCapacity(session) }}
-          </span>
-        </div>
-        <div class="meta-row" *ngIf="effectivePrice(session) !== null">
-          <span class="meta-label">Price:</span>
-          <span class="meta-value">
-            {{ effectivePrice(session) | currency: 'GBP' }}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOTTOM: BUTTON -->
-    <div class="session-actions">
       <button
-        class="btn-primary session-book-btn"
-        [disabled]="isFull(session) || bookingLoading[session.id]"
-        (click)="onBook(session)"
         type="button"
+        class="btn-primary guest-book-btn"
+        [disabled]="bookingLoading[session.id]"
+        (click)="onGuestBook(session)"
       >
-        <!-- Loading -->
-        <span *ngIf="bookingLoading[session.id]">Booking…</span>
-
-        <!-- Cancelled -->
-        <span *ngIf="!bookingLoading[session.id] && session.status === 'cancelled'">
-          Cancelled
-        </span>
-
-        <!-- Full -->
-        <span
-          *ngIf="
-            !bookingLoading[session.id] &&
-            session.status !== 'cancelled' &&
-            session.spaces_left <= 0
-          "
-        >
-          Full
-        </span>
-
-        <!-- Normal -->
-        <span
-          *ngIf="
-            !bookingLoading[session.id] && session.status !== 'cancelled' && session.spaces_left > 0
-          "
-        >
-          Book now
-        </span>
+        {{ bookingLoading[session.id] ? 'Booking…' : 'Book as guest' }}
       </button>
-
+      <div class="guest-success" *ngIf="guestBookingComplete">
+        <p>Check your email for your booking confirmation.</p>
+        <button
+          type="button"
+          class="btn-link"
+          *ngIf="guestCancelToken && guestBookingId"
+          (click)="onGuestCancel()"
+        >
+          Cancel booking
+        </button>
+      </div>
     </div>
   </div>
 </div>

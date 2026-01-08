@@ -116,19 +116,47 @@
             </div>
           </div>
 
+          <div class="guest-fields" *ngIf="!isLoggedIn">
+            <p class="guest-label">Guest details</p>
+            <label class="guest-input">
+              <span>Name</span>
+              <input type="text" [(ngModel)]="guestName" placeholder="Jane Guest" />
+            </label>
+            <label class="guest-input">
+              <span>Email</span>
+              <input type="email" [(ngModel)]="guestEmail" placeholder="jane@example.com" />
+            </label>
+            <label class="guest-input">
+              <span>Phone</span>
+              <input type="tel" [(ngModel)]="guestPhone" placeholder="555-123-4567" />
+            </label>
+          </div>
+
           <button
             type="button"
             class="btn-primary w-100"
             (click)="purchaseTickets()"
-            [disabled]="purchaseLoading || isSoldOut"
+            [disabled]="purchaseLoading || isSoldOut || (!isLoggedIn && !isGuestFormValid)"
           >
             {{ purchaseLoading ? 'Processing…' : isSoldOut ? 'Sold out' : 'Purchase tickets' }}
           </button>
 
+          <div class="guest-success" *ngIf="guestPurchaseComplete">
+            <p>Check your email for your ticket details.</p>
+            <button
+              type="button"
+              class="btn-link"
+              *ngIf="guestCancelToken && guestTicketId"
+              (click)="cancelGuestTicket()"
+            >
+              Cancel ticket
+            </button>
+          </div>
+
           <div class="panel-hint">
             <p *ngIf="!isLoggedIn">
-              You need an account to purchase. <a routerLink="/login">Login</a> or
-              <a routerLink="/signup">create one</a>.
+              You can purchase as a guest or
+              <a routerLink="/login">login</a> to manage your tickets.
             </p>
             <p *ngIf="isLoggedIn">
               Tickets are held while payment completes. You can cancel from

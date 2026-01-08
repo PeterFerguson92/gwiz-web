@@ -42,10 +42,20 @@
                 [sessions]="sessions"
                 [loading]="loadingSessions"
                 [isLoggedIn]="isLoggedIn"
+                [showGuestBooking]="!isLoggedIn"
+                [activeGuestSessionId]="activeGuestSessionId"
+                [(guestName)]="guestName"
+                [(guestEmail)]="guestEmail"
+                [(guestPhone)]="guestPhone"
+                [guestBookingComplete]="guestBookingComplete"
+                [guestCancelToken]="guestCancelToken"
+                [guestBookingId]="guestBookingId"
                 [bookingLoading]="bookingLoading"
                 [fitnessClass]="classData"
                 [paymentLink]="classData?.payment_link"
                 (book)="bookSession($event)"
+                (guestBook)="bookGuestSession($event)"
+                (guestCancel)="cancelGuestBooking()"
               ></app-session-list>
             </div>
           </div>

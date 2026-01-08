@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '@/environments/environment';
-import { Event, EventTicket, PurchaseTicketResponse } from '@core/models/event.models';
+import { Event, EventTicket, PurchaseTicketPayload, PurchaseTicketResponse } from '@core/models/event.models';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
@@ -21,11 +21,9 @@ export class EventService {
     return this.http.get<Event>(`${this.baseUrl}/${id}/`);
   }
 
-  /** POST /api/events/:id/tickets/ — purchase tickets */
-  purchaseTickets(eventId: string, quantity: number): Observable<PurchaseTicketResponse> {
-    return this.http.post<PurchaseTicketResponse>(`${this.baseUrl}/${eventId}/tickets/`, {
-      quantity,
-    });
+  /** POST /api/events/:id/tickets/ — purchase tickets (guests can include contact info) */
+  purchaseTickets(eventId: string, payload: PurchaseTicketPayload): Observable<PurchaseTicketResponse> {
+    return this.http.post<PurchaseTicketResponse>(`${this.baseUrl}/${eventId}/tickets/`, payload);
   }
 
   /** GET /api/events/tickets/my/ — current user's tickets */
@@ -34,7 +32,8 @@ export class EventService {
   }
 
   /** POST /api/events/tickets/:ticket_id/cancel/ — cancel ticket */
-  cancelTicket(ticketId: string): Observable<EventTicket> {
-    return this.http.post<EventTicket>(`${this.baseUrl}/tickets/${ticketId}/cancel/`, {});
+  cancelTicket(ticketId: string, token?: string): Observable<EventTicket> {
+    const payload = token ? { token } : {};
+    return this.http.post<EventTicket>(`${this.baseUrl}/tickets/${ticketId}/cancel/`, payload);
   }
 }

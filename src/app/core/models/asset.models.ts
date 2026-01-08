@@ -6,6 +6,7 @@ export interface AssetsPayload {
   main_classes_cover: string | null;
   personal_tickets_cover: string | null;
   personal_bookings_cover: string | null;
+  cancel_cover: string | null;
   contact_us_cover: string | null;
   created_at: string;
 }

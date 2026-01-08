@@ -1,0 +1,32 @@
+<app-page-hero
+  [title]="heroTitle"
+  [breadcrumbTitle]="heroTitle"
+  [backgroundImage]="heroImage"
+></app-page-hero>
+
+<section class="cancel-page">
+  <div class="container">
+    <div class="cancel-card">
+      <h2>{{ title }}</h2>
+      <p class="subtext">
+        Please confirm that you want to cancel. This action cannot be undone.
+      </p>
+
+      <div class="status" *ngIf="state === 'success'">
+        {{ message }}
+      </div>
+      <div class="status error" *ngIf="state === 'error'">
+        {{ message }}
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="!canConfirm || state === 'loading' || state === 'success'"
+        (click)="confirmCancel()"
+      >
+        {{ state === 'loading' ? 'Cancelling…' : confirmLabel }}
+      </button>
+    </div>
+  </div>
+</section>

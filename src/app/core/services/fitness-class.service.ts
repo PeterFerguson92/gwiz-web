@@ -74,6 +74,17 @@ export class FitnessClassService {
     return this.http.post<BookSessionResponse>(`${this.baseUrl}/sessions/${sessionId}/book/`, {});
   }
 
+  /** POST /api/booking/:id/book/ — guest booking */
+  bookSessionAsGuest(
+    sessionId: string,
+    guest: { guest_name: string; guest_email: string; guest_phone: string }
+  ): Observable<BookSessionResponse> {
+    return this.http.post<BookSessionResponse>(
+      `${this.baseUrl}/sessions/${sessionId}/book/`,
+      guest
+    );
+  }
+
   getMyBookings(): Observable<BookingWithDetails[]> {
     return this.http.get<BookingWithDetails[]>(`${this.baseUrl}/my-bookings/`);
   }
@@ -81,5 +92,10 @@ export class FitnessClassService {
   cancelBooking(bookingId: string): Observable<BookingWithDetails> {
     const url = `${this.baseUrl}/bookings/${bookingId}/cancel/`;
     return this.http.post<BookingWithDetails>(url, {});
+  }
+
+  cancelBookingAsGuest(bookingId: string, token: string): Observable<BookingWithDetails> {
+    const url = `${this.baseUrl}/bookings/${bookingId}/cancel/`;
+    return this.http.post<BookingWithDetails>(url, { token });
   }
 }

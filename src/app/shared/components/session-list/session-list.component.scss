@@ -9,6 +9,12 @@
   gap: 12px;
 }
 
+.session-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 /* TOP: date + time */
 .session-header {
   display: flex;
@@ -110,6 +116,73 @@
   flex-wrap: wrap;
 }
 
+.guest-panel {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #f8fafc;
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.guest-panel-text {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.guest-panel-text a {
+  color: var(--brand-red);
+  text-decoration: underline;
+}
+
+.guest-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.guest-input {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.guest-input input {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.guest-book-btn {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.guest-success {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  color: #065f46;
+  font-weight: 600;
+  display: grid;
+  gap: 6px;
+}
+
+.guest-success .btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #b91c1c;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
 .session-book-btn {
   width: 100%;
   justify-content: center;
@@ -142,9 +215,14 @@
 @media (min-width: 768px) {
   .session-card {
     padding: 18px 20px;
+    gap: 16px;
+  }
+
+  .session-main {
     flex-direction: row;
     align-items: center;
     gap: 20px;
+    width: 100%;
   }
 
   .session-header {
@@ -158,6 +236,11 @@
 
   .session-actions {
     flex: 0 0 auto;
+    margin-top: 0;
+  }
+
+  .guest-panel {
+    flex-basis: 100%;
     margin-top: 0;
   }
 
