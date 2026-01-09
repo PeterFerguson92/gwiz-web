@@ -437,7 +437,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.toast.success('Payment received — membership activated soon.');
+    this.toast.success('Payment received, membership activated soon.');
 
     // Close modal but keep `pendingPlanId` so we can poll for activation.
     this.closePaymentModal(false);
