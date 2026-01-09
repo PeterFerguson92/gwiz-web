@@ -20,6 +20,12 @@ export class SidebarComponent {
 
   constructor(private router: Router) {}
 
+  get priceLabel(): string {
+    const price = Number(this.classData?.base_price);
+    if (!this.classData || Number.isNaN(price) || price <= 0) return 'Free';
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(price);
+  }
+
   navigateTo(route: string) {
     // Small safety: strip double slashes
     const clean = route.startsWith('/') ? route : `/${route}`;

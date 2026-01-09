@@ -39,12 +39,12 @@
               {{ effectiveCapacity(session) }}
             </span>
           </div>
-          <div class="meta-row" *ngIf="effectivePrice(session) !== null">
-            <span class="meta-label">Price:</span>
-            <span class="meta-value">
-              {{ effectivePrice(session) | currency: 'GBP' }}
-            </span>
-          </div>
+        <div class="meta-row" *ngIf="priceLabel(session)">
+          <span class="meta-label">Price:</span>
+          <span class="meta-value">
+            {{ priceLabel(session) }}
+          </span>
+        </div>
         </div>
       </div>
 

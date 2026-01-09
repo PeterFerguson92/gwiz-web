@@ -63,6 +63,12 @@ export class SessionListComponent {
     return this.formattersService.getSessionPrice(session, this.fitnessClass);
   }
 
+  priceLabel(session: ClassSession): string | null {
+    const price = this.effectivePrice(session);
+    if (price == null || price <= 0) return 'Free';
+    return this.formattersService.formatCurrency(price);
+  }
+
   isFull(session: ClassSession): boolean {
     return session.spaces_left <= 0 || session.status === 'cancelled';
   }
