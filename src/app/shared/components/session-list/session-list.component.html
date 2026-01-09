@@ -3,7 +3,7 @@
 </div>
 
 <div *ngIf="!loading && sessions.length; else noSessions">
-  <div class="session-card" *ngFor="let session of sessions">
+  <div class="session-card" *ngFor="let session of sessions" [attr.data-session-id]="session.id">
     <div class="session-main">
       <div class="session-header">
         <div class="session-date">

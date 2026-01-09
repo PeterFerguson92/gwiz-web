@@ -170,6 +170,12 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     el?.scrollIntoView({ behavior: 'smooth' });
   }
 
+  private scrollGuestPanelIntoView(sessionId: string): void {
+    const card = document.querySelector(`[data-session-id="${sessionId}"]`);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   // ---------------- BOOK SESSION FLOW ----------------
 
   bookSession(session: ClassSession): void {
@@ -179,6 +185,7 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.guestBookingComplete = false;
         this.guestBookingId = null;
         this.guestCancelToken = null;
+        setTimeout(() => this.scrollGuestPanelIntoView(session.id), 80);
       }
       return;
     }
