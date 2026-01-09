@@ -253,7 +253,7 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Case A: membership credit booking → immediate success
     if (!res.stripe_client_secret) {
-      this.toast.success(res.message || 'Your class has been booked!');
+      this.toast.success(res.message || 'Your class has been booked, check your email.');
       this.loadClassWithSessions();
       return;
     }
@@ -317,7 +317,7 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Payment succeeded (webhook updates backend)
-    this.toast.success('Payment received — booking confirmed!');
+    this.toast.success('Payment received, check your email for booking details.');
 
     this.closePaymentModal();
     this.loadClassWithSessions(); // refresh spaces_left

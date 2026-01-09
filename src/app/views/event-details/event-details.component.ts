@@ -207,7 +207,7 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Free or instantly confirmed ticket
         if (!ticket.stripe_client_secret) {
-          this.toast.success('Your ticket is confirmed!');
+          this.toast.success('Your ticket is confirmed, check your email for details.');
           this.loadEvent();
           return;
         }
@@ -271,7 +271,7 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.toast.success('Payment received — your ticket is confirmed.');
+    this.toast.success('Payment received, check your email for ticket details.');
     this.closePaymentModal();
     this.loadEvent();
     this.refreshMyTickets();
