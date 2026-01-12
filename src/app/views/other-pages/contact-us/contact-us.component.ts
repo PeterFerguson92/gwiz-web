@@ -23,6 +23,19 @@ export class ContactUsComponent {
     private service: ApiService,
     private assetService: AssetService
   ) {}
+
+  get phoneNumbers(): string[] {
+    const raw = this.contact?.phone;
+    if (!raw) return [];
+    return raw
+      .split('/')
+      .map((phone: string) => phone.trim())
+      .filter(Boolean);
+  }
+
+  formatPhoneHref(phone: string): string {
+    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+  }
   ngOnInit(): void {
     this.assetService
       .getCover('contact_us_cover')

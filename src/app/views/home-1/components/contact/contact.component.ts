@@ -10,6 +10,19 @@ import { Component, Input } from '@angular/core';
 export class ContactComponent {
   @Input() contact: any;
 
+  get phoneNumbers(): string[] {
+    const raw = this.contact?.phone;
+    if (!raw) return [];
+    return raw
+      .split('/')
+      .map((phone: string) => phone.trim())
+      .filter(Boolean);
+  }
+
+  formatPhoneHref(phone: string): string {
+    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+  }
+
   getBackgroundImage(img: string) {
     return img ? img : 'assets/img/all-images/default-contact.png';
   }

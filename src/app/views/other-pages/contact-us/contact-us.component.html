@@ -30,7 +30,15 @@
                   </div>
                   <div class="text">
                     <p>Phone</p>
-                    <a [href]="contact.phone">{{ contact.phone }}</a>
+                    <a *ngIf="phoneNumbers.length === 1" [href]="formatPhoneHref(phoneNumbers[0])">
+                      {{ phoneNumbers[0] }}
+                    </a>
+                    <ng-container *ngIf="phoneNumbers.length > 1">
+                      <ng-container *ngFor="let phone of phoneNumbers; let last = last">
+                        <a [href]="formatPhoneHref(phone)">{{ phone }}</a
+                        ><span *ngIf="!last"> / </span>
+                      </ng-container>
+                    </ng-container>
                   </div>
                 </div>
                 <div class="space48"></div>
@@ -70,7 +78,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Instagram
+                      &#64;flightschoolxchambergang
                     </a>
                   </div>
                 </div>
