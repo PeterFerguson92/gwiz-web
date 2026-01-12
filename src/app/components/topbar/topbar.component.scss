@@ -6,9 +6,12 @@
 }
 
 .site-logo img {
+  height: 56px;
   max-height: 72px;
   width: auto;
   display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
 }
 
 .main-menu ul {
