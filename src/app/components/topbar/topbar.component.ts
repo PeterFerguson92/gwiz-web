@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
+import { environment } from '@/environments/environment';
 import { StickyScrollDirective } from '@core/directives/sticky-scroll.directive';
 import { ApiService } from '@core/services/api.service';
 import { AuthService } from '@core/services/auth.service';
@@ -48,11 +49,12 @@ export class TopbarComponent implements OnInit {
       (data) => {
         if (data && data.status === 'success') {
           const result = data.result[0];
-          this.logoImg = result.logo;
-          this.mobileLogoImg = result.logo;
+          this.logoImg = this.appendCacheBuster(result.logo);
+          this.mobileLogoImg = this.appendCacheBuster(result.logo);
         } else {
-          this.logoImg = 'assets/img/logo/nobglogo/small_image_transparent.png';
-          this.mobileLogoImg = 'assets/img/logo/nobglogo/small_image_transparent.png';
+          const fallback = 'assets/img/logo/nobglogo/small_image_transparent.png';
+          this.logoImg = this.appendCacheBuster(fallback);
+          this.mobileLogoImg = this.appendCacheBuster(fallback);
         }
       },
       (error) => {
@@ -60,6 +62,12 @@ export class TopbarComponent implements OnInit {
         // this.displayError(error);
       }
     );
+  }
+
+  private appendCacheBuster(url: string): string {
+    if (!url) return url;
+    const joiner = url.includes('?') ? '&' : '?';
+    return `${url}${joiner}v=${environment.buildId}`;
   }
 
   get isLoggedIn(): boolean {
