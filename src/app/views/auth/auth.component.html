@@ -91,10 +91,18 @@
             {{ isSubmitting ? 'Signing in…' : 'Sign in' }}
           </button>
 
-          <!-- <button type="button" class="btn-outline">
+          <!-- Google Sign In - Coming Soon
+          <button
+            type="button"
+            class="btn-outline"
+            (click)="onGoogleSignIn()"
+            [disabled]="isSubmitting"
+            data-google-signin-btn
+          >
             <span class="google-icon">G</span>
             Sign in with Google
-          </button> -->
+          </button>
+          -->
 
           <p class="switch-text">
             Don’t have an account?
@@ -273,10 +281,18 @@
             {{ isSubmitting ? 'Creating account…' : 'Create account' }}
           </button>
 
-          <!-- <button type="button" class="btn-outline">
+          <!-- Google Sign Up - Coming Soon
+          <button
+            type="button"
+            class="btn-outline"
+            (click)="onGoogleSignUp()"
+            [disabled]="isSubmitting"
+            data-google-signup-btn
+          >
             <span class="google-icon">G</span>
             Sign up with Google
-          </button> -->
+          </button>
+          -->
 
           <p class="switch-text">
             Already training with us?

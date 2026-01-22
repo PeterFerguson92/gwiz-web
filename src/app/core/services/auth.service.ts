@@ -116,6 +116,15 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/auth/password/change/`, payload);
   }
 
+  /** Google Sign-In/Sign-Up - unified endpoint handles both */
+  loginWithGoogle(idToken: string, rememberMe = true): Observable<AuthResponse> {
+    const url = `${environment.apiUrl}/auth/google/`;
+    this.rememberMe = rememberMe;
+    return this.http.post<AuthResponse>(url, { id_token: idToken }).pipe(
+      tap((res) => this.handleAuth(res))
+    );
+  }
+
   /** Start "forgot password" flow – backend always returns generic success */
   requestPasswordReset(payload: ForgotPasswordPayload) {
     const url = `${environment.apiUrl}/auth/password/reset/`;

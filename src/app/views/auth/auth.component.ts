@@ -268,6 +268,71 @@ export class AuthComponent implements OnInit {
     return !!control && control.touched && control.hasError(error);
   }
 
+  onGoogleSignIn(): void {
+    this.triggerGoogleSignIn('login');
+  }
+
+  onGoogleSignUp(): void {
+    this.triggerGoogleSignIn('signup');
+  }
+
+  private triggerGoogleSignIn(mode: 'login' | 'signup'): void {
+    this.isSubmitting = true;
+    const google = (window as any).google;
+
+    if (!google || !google.accounts) {
+      this.isSubmitting = false;
+      this.toast.error('Google SDK not loaded. Please refresh and try again.');
+      return;
+    }
+
+    // Initialize Google Sign-In with callback
+    google.accounts.id.initialize({
+      client_id: 't.apps.googleusercontent.com',
+      callback: (response: any) => {
+        if (response.credential) {
+          this.handleGoogleAuth(response.credential, mode);
+        } else {
+          this.isSubmitting = false;
+          this.toast.error('Google authentication failed');
+        }
+      },
+      error_callback: () => {
+        this.isSubmitting = false;
+        this.toast.error('Google authentication failed');
+      },
+    });
+
+    // Show the One Tap UI
+    google.accounts.id.renderButton(document.body, {
+      type: 'standard',
+      theme: 'outline',
+      size: 'large',
+      locale: 'en',
+    });
+
+    // Trigger the prompt
+    google.accounts.id.prompt();
+  }
+
+  private handleGoogleAuth(idToken: string, mode: 'login' | 'signup'): void {
+    this.authService.loginWithGoogle(idToken, true).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.toast.success(
+          mode === 'login' ? 'Logged in with Google!' : 'Account created with Google!'
+        );
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        this.router.navigate([returnUrl || '/profile']);
+      },
+      error: (err) => {
+        console.error('Google auth error:', err);
+        this.isSubmitting = false;
+        this.toast.error('Google authentication failed. Please try again.');
+      },
+    });
+  }
+
   get heroBackground(): string {
     return `linear-gradient(135deg, rgba(248, 113, 113, 0.5), rgba(79, 70, 229, 0.7)), url('${this.heroImage}')`;
   }
