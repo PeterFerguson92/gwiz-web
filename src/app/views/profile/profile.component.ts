@@ -50,8 +50,8 @@ export class ProfileComponent implements OnInit {
 
   actionMessage: string | null = null;
 
-  profileForm!: FormGroup;
-  passwordForm!: FormGroup;
+  profileForm: FormGroup;
+  passwordForm: FormGroup;
 
   loadingProfile = true;
   savingProfile = false;
@@ -82,7 +82,27 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private assetService: AssetService,
     private membershipService: MembershipService
-  ) {}
+  ) {
+    // Initialize forms in constructor to ensure they're always available
+    this.profileForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
+      surname: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      phone_number: ['', [Validators.required, this.phoneValidator.bind(this)]],
+    });
+
+    this.passwordForm = this.fb.group({
+      old_password: ['', [Validators.required]],
+      new_password: [
+        '',
+        [Validators.required, Validators.minLength(8), this.passwordStrengthValidator.bind(this)],
+      ],
+      confirm_password: ['', [Validators.required]],
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     this.assetService
@@ -91,7 +111,6 @@ export class ProfileComponent implements OnInit {
 
     this.stripe = await loadStripe(environment.stripePublishableKey);
 
-    this.initForms();
     this.loadProfile();
     this.loadMembership();
     this.loadPlans();
@@ -106,43 +125,34 @@ export class ProfileComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  private initForms(): void {
-    this.profileForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)]],
-      surname: [
-        '',
-        [Validators.required, Validators.minLength(2), Validators.pattern(NAME_PATTERN)],
-      ],
-      email: ['', [Validators.required, Validators.email]],
-      phone_number: ['', [Validators.required, this.phoneValidator]],
-    });
-
-    this.passwordForm = this.fb.group({
-      old_password: ['', [Validators.required]],
-      new_password: [
-        '',
-        [Validators.required, Validators.minLength(8), this.passwordStrengthValidator],
-      ],
-      confirm_password: ['', [Validators.required]],
-    });
-  }
-
   private loadProfile(): void {
     this.loadingProfile = true;
 
+    // First, check if we have cached user data
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.name) {
+      console.log('Using cached user data:', currentUser);
+      this.loadingProfile = false;
+      this.profileForm.patchValue(currentUser);
+      this.profileForm.markAsPristine();
+      Object.values(this.profileForm.controls).forEach((c) => c.markAsPristine());
+      return;
+    }
+
+    // If no cached data, fetch from API
+    console.log('Fetching profile from API...');
     this.authService.getProfile().subscribe({
       next: (profile: UserProfile) => {
+        console.log('Profile loaded from API:', profile);
         this.loadingProfile = false;
         this.profileForm.patchValue(profile);
         this.profileForm.markAsPristine();
         Object.values(this.profileForm.controls).forEach((c) => c.markAsPristine());
       },
       error: (err) => {
+        console.error('Error loading profile:', err);
         this.loadingProfile = false;
-
-        // If unauthorized → redirect (OPTIONAL)
         if (err.status === 401) {
-          // global interceptor already shows toast
           this.router.navigate(['/login'], {
             queryParams: { returnUrl: '/profile' },
           });

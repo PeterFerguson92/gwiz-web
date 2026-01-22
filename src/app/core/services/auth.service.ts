@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, mergeMap, Observable, of, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import {
@@ -201,14 +201,34 @@ export class AuthService {
     const refresh = this.getRefreshToken();
     if (!refresh) {
       // nothing to do, user is logged out
+      console.log('[Auth] No refresh token found, user is logged out');
       return of(void 0);
     }
 
+    console.log('[Auth] Refresh token found, attempting to restore session...');
     // Try to get a new access token silently
     return this.refreshToken().pipe(
+      // After getting a new access token, fetch the user profile
+      mergeMap(() => {
+        console.log('[Auth] Access token refreshed, fetching profile...');
+        return this.getProfile();
+      }),
+      tap((profile: UserProfile) => {
+        // Update the current user subject with the fetched profile
+        // Convert UserProfile to User for storage (add a dummy id if needed)
+        if (profile) {
+          console.log('[Auth] Profile fetched, updating currentUserSubject:', profile);
+          const user: User = {
+            id: 0, // Profile endpoint doesn't return ID, but we need it for the User type
+            ...profile,
+          };
+          this.currentUserSubject.next(user);
+        }
+      }),
       map(() => void 0),
-      catchError(() => {
+      catchError((err) => {
         // if refresh fails, clear everything but don't blow up the app
+        console.error('[Auth] Session restore failed:', err);
         this.clearTokens();
         this.currentUserSubject.next(null);
         return of(void 0);
