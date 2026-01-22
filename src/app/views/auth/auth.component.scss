@@ -9,6 +9,7 @@
     BlinkMacSystemFont,
     'Segoe UI',
     sans-serif;
+  padding-top: 110px;
 }
 
 /* Outer wrapper */
@@ -17,7 +18,7 @@
   display: flex;
   align-items: flex-start; /* no more vertical centering */
   justify-content: center;
-  padding: 7rem 1.5rem 3rem; /* big top padding to clear the toolbar */
+  padding: 12rem 1.5rem 3rem; /* increased top padding to clear the navbar */
 }
 
 /* Card */
@@ -30,6 +31,7 @@
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   box-shadow: 0 24px 60px rgba(6, 6, 6, 0.9);
+  margin-top: 2rem;
 }
 
 /* LEFT SIDE – hero */
@@ -553,4 +555,3 @@ input:focus {
     margin-bottom: 1.5rem;
   }
 }
-
