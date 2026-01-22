@@ -22,7 +22,7 @@
                     <ng-container *ngIf="phoneNumbers.length > 1">
                       <ng-container *ngFor="let phone of phoneNumbers; let last = last">
                         <a [href]="formatPhoneHref(phone)">{{ phone }}</a
-                        ><span *ngIf="!last"> / </span>
+                        ><span *ngIf="!last"><br /></span>
                       </ng-container>
                     </ng-container>
                   </div>
@@ -58,6 +58,7 @@
                     <i class="fa-brands fa-instagram"></i>
                   </div>
                   <div class="text">
+                    <p>Instagram</p>
                     <a
                       *ngIf="contact?.social"
                       [href]="contact.social"
@@ -66,7 +67,6 @@
                     >
                       &#64;flightschoolxchambergang
                     </a>
-                    <!-- <a href="javascript:void(0)">{{contact.social}}</a> -->
                   </div>
                 </div>
               </div>

@@ -60,10 +60,11 @@
     .contact-auhtor-side {
       .icons-text {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         .icons {
           height: 48px;
           width: 48px;
+          min-width: 48px;
           text-align: center;
           line-height: 48px;
           border-radius: 4px;
@@ -74,19 +75,21 @@
         }
         .text {
           padding-left: 16px;
+          flex: 1;
           p {
             font-family: var(--ztc-family-font1);
             font-size: var(--ztc-font-size-font-s20);
             font-weight: var(--ztc-weight-bold);
             line-height: 20px;
             color: var(--ztc-text-text-1);
+            margin-bottom: 8px;
           }
           a {
             font-family: var(--ztc-family-font1);
             font-size: var(--ztc-font-size-font-s18);
             line-height: var(--ztc-font-size-font-s24);
             color: var(--ztc-text-text-1);
-            display: inline-block;
+            display: block;
             transition: all 0.4s;
             &:hover {
               color: var(--ztc-text-text-2);
