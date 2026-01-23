@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -31,6 +31,9 @@ import {
 export class AuthComponent implements OnInit {
   isLogin = true;
   isSubmitting = false;
+  googleKey: string | null = null;
+  private googleInitialized = false;
+  private pendingGoogleMode: 'login' | 'signup' = 'login';
 
   heroImage =
     'https://images.pexels.com/photos/8032978/pexels-photo-8032978.jpeg?auto=compress&cs=tinysrgb&w=1200';
@@ -48,7 +51,8 @@ export class AuthComponent implements OnInit {
     private toast: ToastService,
     private router: Router,
     private route: ActivatedRoute,
-    private assetService: AssetService
+    private assetService: AssetService,
+    private ngZone: NgZone
   ) {
     // LOGIN FORM
     this.loginForm = this.fb.group(
@@ -125,6 +129,11 @@ export class AuthComponent implements OnInit {
     this.assetService
       .getCover('login_cover')
       .subscribe((img) => (this.heroImage = img || this.heroImage));
+
+    // Fetch Google key for authentication
+    this.assetService.getGoogleKey().subscribe((key) => {
+      this.googleKey = key;
+    });
 
     // Listen to route changes to keep UI synced with URL
     this.router.events
@@ -278,59 +287,83 @@ export class AuthComponent implements OnInit {
 
   private triggerGoogleSignIn(mode: 'login' | 'signup'): void {
     this.isSubmitting = true;
+    this.pendingGoogleMode = mode;
     const google = (window as any).google;
 
-    if (!google || !google.accounts) {
+    if (!google || !google.accounts || !google.accounts.id) {
       this.isSubmitting = false;
       this.toast.error('Google SDK not loaded. Please refresh and try again.');
       return;
     }
 
-    // Initialize Google Sign-In with callback
+    if (!this.googleKey) {
+      this.isSubmitting = false;
+      this.toast.error('Google configuration not available. Please refresh and try again.');
+      return;
+    }
+
+    this.ensureGoogleInitialized();
+
+    // Trigger One Tap prompt for custom button usage
+    google.accounts.id.prompt((notification: any) => {
+      if (
+        notification.isNotDisplayed?.() ||
+        notification.isSkippedMoment?.() ||
+        notification.isDismissedMoment?.()
+      ) {
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  private handleGoogleAuth(idToken: string, mode: 'login' | 'signup'): void {
+    this.ngZone.run(() => {
+      this.authService.loginWithGoogle(idToken, true).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.toast.success(
+            mode === 'login' ? 'Logged in with Google!' : 'Account created with Google!'
+          );
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+          this.router.navigate([returnUrl || '/profile']);
+        },
+        error: (err) => {
+          console.error('Google auth error:', err);
+          this.isSubmitting = false;
+          this.toast.error('Google authentication failed. Please try again.');
+        },
+      });
+    });
+  }
+
+  private ensureGoogleInitialized(): void {
+    if (this.googleInitialized) {
+      return;
+    }
+
+    const google = (window as any).google;
+    if (!google || !google.accounts || !google.accounts.id || !this.googleKey) {
+      return;
+    }
+
     google.accounts.id.initialize({
-      client_id: 't.apps.googleusercontent.com',
+      client_id: this.googleKey,
       callback: (response: any) => {
-        if (response.credential) {
-          this.handleGoogleAuth(response.credential, mode);
+        if (response?.credential) {
+          this.handleGoogleAuth(response.credential, this.pendingGoogleMode);
         } else {
           this.isSubmitting = false;
           this.toast.error('Google authentication failed');
         }
       },
-      error_callback: () => {
-        this.isSubmitting = false;
-        this.toast.error('Google authentication failed');
-      },
     });
 
-    // Show the One Tap UI
-    google.accounts.id.renderButton(document.body, {
-      type: 'standard',
-      theme: 'outline',
-      size: 'large',
-      locale: 'en',
-    });
+    const buttonTarget = document.getElementById('google-signin-button');
+    if (buttonTarget) {
+      google.accounts.id.renderButton(buttonTarget, { theme: 'outline', size: 'large' });
+    }
 
-    // Trigger the prompt
-    google.accounts.id.prompt();
-  }
-
-  private handleGoogleAuth(idToken: string, mode: 'login' | 'signup'): void {
-    this.authService.loginWithGoogle(idToken, true).subscribe({
-      next: () => {
-        this.isSubmitting = false;
-        this.toast.success(
-          mode === 'login' ? 'Logged in with Google!' : 'Account created with Google!'
-        );
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-        this.router.navigate([returnUrl || '/profile']);
-      },
-      error: (err) => {
-        console.error('Google auth error:', err);
-        this.isSubmitting = false;
-        this.toast.error('Google authentication failed. Please try again.');
-      },
-    });
+    this.googleInitialized = true;
   }
 
   get heroBackground(): string {

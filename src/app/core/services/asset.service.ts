@@ -9,7 +9,9 @@ import { AssetsPayload } from '@core/models/asset.models';
 @Injectable({ providedIn: 'root' })
 export class AssetService {
   private readonly baseUrl = `${environment.apiUrl}/homepage/assets/`;
+  private readonly contactUrl = `${environment.apiUrl}/homepage/contact`;
   private cached$?: Observable<AssetsPayload[]>;
+  private contactCached$?: Observable<any>;
 
   constructor(private http: HttpClient) {}
 
@@ -33,5 +35,20 @@ export class AssetService {
         return typeof val === 'string' && val.length > 0 ? val : null;
       })
     );
+  }
+
+  getContactData(): Observable<any> {
+    if (!this.contactCached$) {
+      this.contactCached$ = this.http.get<{ status: string; result: any[] }>(this.contactUrl).pipe(
+        map((res) => res.result?.[0] || null),
+        catchError(() => of(null)),
+        shareReplay(1)
+      );
+    }
+    return this.contactCached$;
+  }
+
+  getGoogleKey(): Observable<string | null> {
+    return this.getContactData().pipe(map((contact) => contact?.google_key || null));
   }
 }
