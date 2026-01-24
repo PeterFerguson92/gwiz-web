@@ -84,6 +84,13 @@ export class MobileMenuComponent {
     return img ? img : 'assets/img/all-images/default-footer-logo.png';
   }
 
+  getGoogleMapsLink(address: string): string {
+    if (!address) {
+      return 'https://www.google.com/maps';
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  }
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }

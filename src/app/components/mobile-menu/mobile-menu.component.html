@@ -73,13 +73,19 @@
           </div>
           <div class="contact-info-single">
             <i class="fa-solid fa-envelope"></i>
-            <a href="mailto:info@example.com">
+            <a [href]="'mailto:' + footer.contact.email">
               {{ footer.contact.email }}
             </a>
           </div>
           <div class="contact-info-single">
             <i class="fa-solid fa-location-dot"></i>
-            <span>{{ footer.contact.address }}</span>
+            <a
+              [href]="getGoogleMapsLink(footer.contact.address)"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ footer.contact.address }}
+            </a>
           </div>
         </div>
       </div>
