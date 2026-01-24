@@ -6,7 +6,7 @@ export const environment = {
   production: true,
   apiUrl: 'https://gwiz-admin-ff2827c872e3.herokuapp.com/api',
   stripePublishableKey:
-    'pk_test_51Sb9dMLT8MvjHZzurkwyjGMMhGnICvbh4tWhoyOkt7Qu7kBl7EG5MRN0DIqvdzxxpN8KV6qhVA27OicJ4Z9Ue53D00JlBO1wds',
+    'pk_live_51Sb9d7Q1tLsYGMLeVLonQ2A3Jr5nD81qZd7vzp3bxx8TgcUhZHZwSJdSNkG1lbPqvD8lRyvgNJGrwLT1brMXrrLe00o8A5MdTv',
   buildId: '2026-01-09-1',
 };
 /*
