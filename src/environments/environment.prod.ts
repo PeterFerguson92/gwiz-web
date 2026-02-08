@@ -7,6 +7,7 @@ export const environment = {
   apiUrl: 'https://gwiz-admin-ff2827c872e3.herokuapp.com/api',
   stripePublishableKey:
     'pk_live_51Sb9d7Q1tLsYGMLeVLonQ2A3Jr5nD81qZd7vzp3bxx8TgcUhZHZwSJdSNkG1lbPqvD8lRyvgNJGrwLT1brMXrrLe00o8A5MdTv',
+  paymentProvider: 'stripe',
   buildId: '2026-01-09-1',
 };
 /*

@@ -88,6 +88,14 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.authService.isLoggedIn();
   }
 
+  private get paymentProvider(): 'stripe' | 'truelayer' {
+    return (environment.paymentProvider || 'stripe') as 'stripe' | 'truelayer';
+  }
+
+  private get returnUrl(): string {
+    return `${window.location.origin}/payment/return`;
+  }
+
   get isGuestFormValid(): boolean {
     return (
       this.guestName.trim().length > 0 &&
@@ -187,6 +195,8 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.purchaseLoading = true;
     const payload = {
       quantity: this.purchaseQuantity,
+      payment_provider: this.paymentProvider,
+      return_url: this.returnUrl,
       ...(isGuest
         ? {
             guest_name: this.guestName.trim(),
@@ -201,8 +211,13 @@ export class EventDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.purchaseLoading = false;
         this.guestTicketId = isGuest ? ticket.id : null;
         this.guestCancelToken = isGuest ? ticket.cancel_token || null : null;
-        if (isGuest && !ticket.stripe_client_secret) {
+        if (isGuest && !ticket.stripe_client_secret && !ticket.truelayer_authorization_url) {
           this.handleGuestSuccess();
+        }
+
+        if (ticket.truelayer_authorization_url) {
+          window.location.href = ticket.truelayer_authorization_url;
+          return;
         }
 
         // Free or instantly confirmed ticket

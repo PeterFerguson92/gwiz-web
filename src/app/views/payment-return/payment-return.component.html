@@ -1,0 +1,21 @@
+<section class="payment-return">
+  <div class="container">
+    <div class="payment-return-card">
+      <h2>Payment processing</h2>
+      <p class="status" [ngClass]="status">{{ message }}</p>
+
+      <p class="hint" *ngIf="status === 'pending' || status === 'checking'">
+        This can take a minute. We will update automatically.
+      </p>
+
+      <p class="hint" *ngIf="status === 'timeout'">
+        If your payment was successful, it will appear shortly in your account.
+      </p>
+
+      <div class="actions" *ngIf="status === 'paid' || status === 'timeout' || status === 'none'">
+        <a class="btn-primary" routerLink="/my-bookings">My bookings</a>
+        <a class="btn-primary outline" routerLink="/my-tickets">My tickets</a>
+      </div>
+    </div>
+  </div>
+</section>

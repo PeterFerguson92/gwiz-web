@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { CancelComponent } from './cancel/cancel.component';
 import { Home1Component } from './home-1/home-1.component';
+import { PaymentReturnComponent } from './payment-return/payment-return.component';
 
 export const VIEWS_ROUTES: Routes = [
   {
@@ -13,6 +14,11 @@ export const VIEWS_ROUTES: Routes = [
     path: 'cancel',
     component: CancelComponent,
     data: { title: 'Cancel' },
+  },
+  {
+    path: 'payment/return',
+    component: PaymentReturnComponent,
+    data: { title: 'Payment Return' },
   },
   {
     path: '',

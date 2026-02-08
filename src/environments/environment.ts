@@ -8,6 +8,7 @@ export const environment = {
   apiUrl: 'http://localhost:8000/api',
   stripePublishableKey:
     'pk_test_51Sb9dMLT8MvjHZzurkwyjGMMhGnICvbh4tWhoyOkt7Qu7kBl7EG5MRN0DIqvdzxxpN8KV6qhVA27OicJ4Z9Ue53D00JlBO1wds',
+  paymentProvider: 'stripe',
   buildId: '2026-01-09-1',
 };
 /*

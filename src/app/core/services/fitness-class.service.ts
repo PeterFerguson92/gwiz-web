@@ -16,6 +16,19 @@ export interface FitnessClassWithSessions extends FitnessClass {
   upcoming_sessions: ClassSession[];
 }
 
+type PaymentProvider = 'stripe' | 'truelayer';
+
+interface BookSessionPayload {
+  payment_provider?: PaymentProvider;
+  return_url?: string;
+}
+
+interface GuestBookSessionPayload extends BookSessionPayload {
+  guest_name: string;
+  guest_email: string;
+  guest_phone: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FitnessClassService {
   private readonly baseUrl = `${environment.apiUrl}/booking`;
@@ -70,14 +83,17 @@ export class FitnessClassService {
   }
 
   /** POST /api/booking/sessions/:id/book/ */
-  bookSession(sessionId: string): Observable<BookSessionResponse> {
-    return this.http.post<BookSessionResponse>(`${this.baseUrl}/sessions/${sessionId}/book/`, {});
+  bookSession(sessionId: string, payload: BookSessionPayload = {}): Observable<BookSessionResponse> {
+    return this.http.post<BookSessionResponse>(
+      `${this.baseUrl}/sessions/${sessionId}/book/`,
+      payload
+    );
   }
 
   /** POST /api/booking/:id/book/ — guest booking */
   bookSessionAsGuest(
     sessionId: string,
-    guest: { guest_name: string; guest_email: string; guest_phone: string }
+    guest: GuestBookSessionPayload
   ): Observable<BookSessionResponse> {
     return this.http.post<BookSessionResponse>(
       `${this.baseUrl}/sessions/${sessionId}/book/`,

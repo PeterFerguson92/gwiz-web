@@ -98,5 +98,6 @@ export interface BookSessionResponse {
   booking: Booking;
   message?: string;
   stripe_client_secret?: string | null;
+  truelayer_authorization_url?: string | null;
   cancel_token?: string | null;
 }

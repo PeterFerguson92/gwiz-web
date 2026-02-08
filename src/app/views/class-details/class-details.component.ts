@@ -105,6 +105,14 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.authService.isLoggedIn();
   }
 
+  private get paymentProvider(): 'stripe' | 'truelayer' {
+    return (environment.paymentProvider || 'stripe') as 'stripe' | 'truelayer';
+  }
+
+  private get returnUrl(): string {
+    return `${window.location.origin}/payment/return`;
+  }
+
   get isGuestFormValid(): boolean {
     return (
       this.guestName.trim().length > 0 &&
@@ -198,7 +206,10 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.bookingLoading[session.id] = true;
 
     this.fitnessClass
-      .bookSession(session.id)
+      .bookSession(session.id, {
+        payment_provider: this.paymentProvider,
+        return_url: this.returnUrl,
+      })
       .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
       .subscribe({
         next: (res: BookSessionResponse) => {
@@ -224,6 +235,8 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         guest_name: this.guestName.trim(),
         guest_email: this.guestEmail.trim(),
         guest_phone: this.guestPhone.trim(),
+        payment_provider: this.paymentProvider,
+        return_url: this.returnUrl,
       })
       .pipe(finalize(() => (this.bookingLoading[session.id] = false)))
       .subscribe({
@@ -253,9 +266,14 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (isGuest) {
       this.guestBookingId = res.booking?.id ?? null;
       this.guestCancelToken = res.cancel_token ?? res.booking?.cancel_token ?? null;
-      if (!res.stripe_client_secret) {
+      if (!res.stripe_client_secret && !res.truelayer_authorization_url) {
         this.handleGuestSuccess();
       }
+    }
+
+    if (res.truelayer_authorization_url) {
+      window.location.href = res.truelayer_authorization_url;
+      return;
     }
 
     // Case A: membership credit booking → immediate success
