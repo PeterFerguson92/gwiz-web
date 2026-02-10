@@ -1,0 +1,17 @@
+<section class="payment-complete">
+  <div class="container">
+    <div class="payment-complete-card">
+      <h2>Payment update</h2>
+      <p class="status" [ngClass]="status">{{ message }}</p>
+
+      <p class="hint" *ngIf="status === 'processing'">
+        If this does not resolve soon, check My Bookings or My Tickets.
+      </p>
+
+      <div class="actions">
+        <a class="btn-primary" routerLink="/my-bookings">My bookings</a>
+        <a class="btn-primary outline" routerLink="/my-tickets">My tickets</a>
+      </div>
+    </div>
+  </div>
+</section>

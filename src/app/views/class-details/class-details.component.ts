@@ -310,10 +310,10 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const result = await this.stripe.confirmPayment({
       elements: this.elements,
-      redirect: 'if_required',
       confirmParams: {
-        return_url: window.location.href,
+        return_url: `${window.location.origin}/payments/complete`,
       },
+      redirect: 'if_required',
     });
 
     this.isProcessingPayment = false;
