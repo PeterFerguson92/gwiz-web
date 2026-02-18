@@ -40,4 +40,10 @@ export const AUTH_ROUTES: Routes = [
     canActivate: [authGuard],
     data: { title: 'My Chamber' },
   },
+  {
+    path: 'membership',
+    component: ProfileComponent,
+    canActivate: [authGuard],
+    data: { title: 'Membership', defaultTab: 'membership' },
+  },
 ];

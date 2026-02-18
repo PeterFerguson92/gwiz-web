@@ -70,6 +70,26 @@
   color: #374151;
 }
 
+.membership-alert {
+  margin-bottom: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: rgba(255, 251, 235, 0.8);
+}
+
+.membership-alert p {
+  margin: 0;
+  color: #92400e;
+}
+
+.membership-alert-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 /* -------------------------------------------
    SESSIONS
 -------------------------------------------- */

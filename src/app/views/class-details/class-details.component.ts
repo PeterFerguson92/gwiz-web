@@ -52,6 +52,8 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   paymentError: string | null = null;
   isProcessingPayment = false;
+  membershipBookingMessage: string | null = null;
+  payPerClassFallbackLink: string | null = null;
 
   @ViewChild('paymentElementRef') paymentElementRef!: ElementRef<HTMLDivElement>;
 
@@ -179,6 +181,8 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   // ---------------- BOOK SESSION FLOW ----------------
 
   bookSession(session: ClassSession): void {
+    this.clearMembershipBookingMessage();
+
     if (!this.isLoggedIn) {
       if (this.activeGuestSessionId !== session.id) {
         this.activeGuestSessionId = session.id;
@@ -206,6 +210,11 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         error: (err) => {
           const message = err?.error?.detail || err?.error?.message || 'Booking failed.';
+          if (this.isNoActiveMembershipError(err)) {
+            this.membershipBookingMessage =
+              'No active membership found. Activate membership to continue booking.';
+            this.payPerClassFallbackLink = this.getPayPerClassFallbackLink(err);
+          }
           this.toast.error(message);
         },
       });
@@ -250,6 +259,8 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleBookingResponse(res: BookSessionResponse, isGuest: boolean): void {
+    this.clearMembershipBookingMessage();
+
     if (isGuest) {
       this.guestBookingId = res.booking?.id ?? null;
       this.guestCancelToken = res.cancel_token ?? res.booking?.cancel_token ?? null;
@@ -392,6 +403,28 @@ export class ClassDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.guestBookingComplete = false;
       this.guestSuccessTimeoutId = null;
     }, 5000);
+  }
+
+  private isNoActiveMembershipError(err: any): boolean {
+    const detail = (err?.error?.detail || err?.error?.message || '').toString().toLowerCase();
+    return detail.includes('no active membership');
+  }
+
+  private getPayPerClassFallbackLink(err: any): string | null {
+    if (err?.error?.pay_per_class_url) {
+      return err.error.pay_per_class_url;
+    }
+
+    if (err?.error?.allow_pay_per_class && this.classData?.payment_link) {
+      return this.classData.payment_link;
+    }
+
+    return this.classData?.payment_link || null;
+  }
+
+  clearMembershipBookingMessage(): void {
+    this.membershipBookingMessage = null;
+    this.payPerClassFallbackLink = null;
   }
 
 }

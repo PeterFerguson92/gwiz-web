@@ -251,9 +251,19 @@
       <ng-container *ngSwitchCase="'membership'">
         <div class="chamber-card membership-card">
           <h3>My membership</h3>
-          <p class="text-muted">Track your remaining credits for classes and events.</p>
+          <p class="text-muted">Track your status, credits, expiry date and membership details.</p>
 
           <div *ngIf="actionMessage" class="action-message">{{ actionMessage }}</div>
+
+          <div class="expiry-banner" *ngIf="showExpiringBanner">
+            <p>
+              Your membership expires in
+              <strong>{{ daysLeft }} {{ daysLeft === 1 ? 'day' : 'days' }}</strong
+              >.
+              Activate now to avoid interruptions.
+            </p>
+            <button type="button" class="banner-close" (click)="dismissExpiryBanner()">Dismiss</button>
+          </div>
 
           <div *ngIf="membershipLoading" class="membership-loading">
             <app-loading-api></app-loading-api>
@@ -271,6 +281,13 @@
               </div>
             </div>
 
+            <p class="expiry-copy" *ngIf="membership.expires_at">
+              {{ expiryMessage }} {{ membership.expires_at | date: 'mediumDate' }}
+            </p>
+            <p class="countdown-copy" *ngIf="isMembershipActive && daysLeft !== null">
+              {{ daysLeft }} {{ daysLeft === 1 ? 'day' : 'days' }} left in current cycle.
+            </p>
+
             <div class="credit-grid">
               <div class="credit-card">
                 <p class="label">Class credits</p>
@@ -282,13 +299,22 @@
               </div>
             </div>
 
-            <div class="dates" *ngIf="membership.starts_at || membership.expires_at">
+            <div class="dates" *ngIf="membership.starts_at || membership.expires_at || membership.next_reset_at">
               <p *ngIf="membership.starts_at">
                 Starts: {{ membership.starts_at | date: 'mediumDate' }}
               </p>
               <p *ngIf="membership.expires_at">
                 Expires: {{ membership.expires_at | date: 'mediumDate' }}
               </p>
+              <p *ngIf="membership.next_reset_at">
+                Next reset: {{ membership.next_reset_at | date: 'mediumDate' }}
+              </p>
+            </div>
+
+            <div class="renew-row" *ngIf="membership.status !== 'active'">
+              <button type="button" class="btn-primary" (click)="renewMembership()">
+                Activate membership
+              </button>
             </div>
           </div>
 
@@ -296,6 +322,9 @@
             <p class="empty-state">
               {{ membershipError || 'No active membership.' }}
             </p>
+            <button type="button" class="btn-primary" *ngIf="!plansLoading" (click)="renewMembership()">
+              Activate membership
+            </button>
           </div>
 
           <div class="space32"></div>
@@ -304,7 +333,12 @@
             <app-loading-api></app-loading-api>
           </div>
           <div class="plans-grid" *ngIf="!plansLoading">
-            <div class="plan-card" *ngFor="let plan of plans">
+            <div
+              class="plan-card"
+              *ngFor="let plan of plans"
+              [class.selected]="selectedPlanId === plan.id"
+              (click)="selectPlan(plan.id)"
+            >
               <div class="plan-header">
                 <div>
                   <p class="label">Plan</p>
@@ -324,15 +358,19 @@
               <div class="plan-actions">
                 <button
                   class="btn-primary"
-                  [disabled]="membership?.plan?.id === plan.id"
-                  (click)="membership ? changePlan(plan.id) : purchasePlan(plan.id)"
+                  [disabled]="pendingPlanId === plan.id || (isMembershipActive && membership?.plan?.id === plan.id)"
+                  (click)="$event.stopPropagation(); isMembershipActive ? changePlan(plan.id) : renewMembership(plan.id)"
                 >
                   {{
-                    membership?.plan?.id === plan.id
-                      ? 'Current plan'
-                      : membership
-                        ? 'Change to this plan'
-                        : 'Join this plan'
+                    pendingPlanId === plan.id
+                      ? 'Processing…'
+                      : isMembershipActive && membership?.plan?.id === plan.id
+                        ? 'Current plan'
+                        : isMembershipActive
+                          ? 'Change plan'
+                          : selectedPlanId === plan.id
+                            ? 'Activate selected plan'
+                            : 'Activate membership'
                   }}
                 </button>
               </div>

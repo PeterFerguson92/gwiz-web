@@ -37,6 +37,21 @@
           <!-- UPCOMING SESSIONS -->
           <div class="section-block session-section">
             <h2 class="block-title">Upcoming sessions</h2>
+            <div class="membership-alert" *ngIf="membershipBookingMessage">
+              <p>{{ membershipBookingMessage }}</p>
+              <div class="membership-alert-actions">
+                <a class="btn-primary" routerLink="/membership">Activate membership</a>
+                <a
+                  *ngIf="payPerClassFallbackLink"
+                  class="btn-secondary"
+                  [href]="payPerClassFallbackLink"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Pay per class
+                </a>
+              </div>
+            </div>
             <div class="session-scroll-wrapper">
               <app-session-list
                 [sessions]="sessions"

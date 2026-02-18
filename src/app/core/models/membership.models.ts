@@ -17,6 +17,7 @@ export interface Membership {
   status: 'active' | 'cancelled' | 'expired';
   starts_at: string | null;
   expires_at: string | null;
+  next_reset_at?: string | null;
 }
 
 export interface MembershipResponse {

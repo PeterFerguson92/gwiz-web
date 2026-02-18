@@ -174,8 +174,7 @@ export class AuthComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isSubmitting = false;
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-          this.router.navigate([returnUrl || '/profile']);
+          this.redirectAfterAuth();
         },
         error: (err) => {
           console.error(err);
@@ -220,8 +219,7 @@ export class AuthComponent implements OnInit {
             .subscribe({
               next: () => {
                 this.isSubmitting = false;
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-                this.router.navigate([returnUrl || '/profile']);
+                this.redirectAfterAuth();
               },
               error: (err) => {
                 console.error(err);
@@ -324,8 +322,7 @@ export class AuthComponent implements OnInit {
           this.toast.success(
             mode === 'login' ? 'Logged in with Google!' : 'Account created with Google!'
           );
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-          this.router.navigate([returnUrl || '/profile']);
+          this.redirectAfterAuth();
         },
         error: (err) => {
           console.error('Google auth error:', err);
@@ -368,5 +365,28 @@ export class AuthComponent implements OnInit {
 
   get heroBackground(): string {
     return `linear-gradient(135deg, rgba(248, 113, 113, 0.5), rgba(79, 70, 229, 0.7)), url('${this.heroImage}')`;
+  }
+
+  private redirectAfterAuth(): void {
+    const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'];
+    const safeReturnUrl = this.getSafeReturnUrl(rawReturnUrl);
+    this.router.navigateByUrl(safeReturnUrl);
+  }
+
+  private getSafeReturnUrl(rawReturnUrl: unknown): string {
+    if (typeof rawReturnUrl !== 'string' || !rawReturnUrl.trim()) {
+      return '/profile';
+    }
+
+    // Only allow internal app routes to prevent open redirects.
+    if (!rawReturnUrl.startsWith('/')) {
+      return '/profile';
+    }
+
+    if (rawReturnUrl.startsWith('//')) {
+      return '/profile';
+    }
+
+    return rawReturnUrl;
   }
 }

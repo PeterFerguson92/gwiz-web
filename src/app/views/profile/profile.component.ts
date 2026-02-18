@@ -8,13 +8,13 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { loadStripe, Stripe, StripeElements, StripePaymentElement } from '@stripe/stripe-js';
 
 import { PageHeroComponent } from '@/app/shared/components/page-hero/page-hero.component';
 import { SHARED_IMPORTS } from '@/app/shared/shared-imports';
 import { environment } from '@/environments/environment';
-import { Membership } from '@core/models/membership.models';
+import { Membership, MembershipPlan } from '@core/models/membership.models';
 import { AssetService } from '@core/services/asset.service';
 import { MembershipService } from '@core/services/membership.service';
 import { ToastService } from '@core/services/toast.service';
@@ -45,8 +45,9 @@ export class ProfileComponent implements OnInit {
 
   heroImage = 'assets/img/bg/profile-bg.jpg';
 
-  plans: Membership[] | any[] = [];
+  plans: MembershipPlan[] = [];
   plansLoading = false;
+  selectedPlanId: string | null = null;
 
   actionMessage: string | null = null;
 
@@ -64,6 +65,7 @@ export class ProfileComponent implements OnInit {
   membership: Membership | null = null;
   membershipLoading = false;
   membershipError: string | null = null;
+  dismissExpiringBanner = false;
 
   stripeClientSecret: string | null = null;
   showPaymentModal = false;
@@ -79,6 +81,7 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private toast: ToastService,
+    private route: ActivatedRoute,
     private router: Router,
     private assetService: AssetService,
     private membershipService: MembershipService
@@ -110,6 +113,8 @@ export class ProfileComponent implements OnInit {
       .subscribe((img) => (this.heroImage = img || this.heroImage));
 
     this.stripe = await loadStripe(environment.stripePublishableKey);
+    this.applyDefaultTabFromRoute();
+    this.applyPlanSelectionFromQuery();
 
     this.loadProfile();
     this.loadMembership();
@@ -123,6 +128,18 @@ export class ProfileComponent implements OnInit {
   // Membership tab helper
   setMembershipTab(tab: 'membership' | 'profile' | 'bookings' | 'tickets'): void {
     this.activeTab = tab;
+  }
+
+  private applyDefaultTabFromRoute(): void {
+    const defaultTab = this.route.snapshot.data['defaultTab'];
+    if (defaultTab === 'membership') {
+      this.activeTab = 'membership';
+    }
+  }
+
+  private applyPlanSelectionFromQuery(): void {
+    const planId = this.route.snapshot.queryParamMap.get('plan_id');
+    this.selectedPlanId = planId && planId.trim() ? planId.trim() : null;
   }
 
   private loadProfile(): void {
@@ -168,13 +185,14 @@ export class ProfileComponent implements OnInit {
     this.membershipService.getMyMembership().subscribe({
       next: (data) => {
         this.membership = data;
+        this.dismissExpiringBanner = false;
         this.membershipLoading = false;
       },
       error: (err) => {
         this.membershipLoading = false;
         if (err.status === 404) {
           this.membership = null;
-          this.membershipError = 'No active membership.';
+          this.membershipError = 'No active membership. Activate membership to restore credits.';
         } else {
           this.membership = null;
           this.membershipError = 'Could not load membership right now.';
@@ -334,8 +352,11 @@ export class ProfileComponent implements OnInit {
   private loadPlans(): void {
     this.plansLoading = true;
     this.membershipService.getPlans().subscribe({
-      next: (data: any) => {
+      next: (data) => {
         this.plans = data || [];
+        if (this.selectedPlanId && !this.plans.some((plan) => plan.id === this.selectedPlanId)) {
+          this.selectedPlanId = null;
+        }
         this.plansLoading = false;
       },
       error: () => {
@@ -383,14 +404,70 @@ export class ProfileComponent implements OnInit {
         if (res.stripe_client_secret) {
           this.openPaymentModal(res.stripe_client_secret);
         } else {
-          this.actionMessage = 'Plan activated.';
+          this.actionMessage = 'Membership activated.';
+          this.pendingPlanId = null;
           this.loadMembership();
         }
       },
-      error: () => {
-        this.actionMessage = 'Could not start this plan right now.';
+      error: (err) => {
+        this.pendingPlanId = null;
+        this.actionMessage =
+          err?.error?.detail || err?.error?.message || 'Could not start this plan right now.';
       },
     });
+  }
+
+  renewMembership(planId?: string): void {
+    const targetPlanId =
+      planId || this.selectedPlanId || this.membership?.plan?.id || this.plans[0]?.id;
+    if (!targetPlanId) {
+      this.actionMessage = 'No membership plan is available right now.';
+      return;
+    }
+    this.purchasePlan(targetPlanId);
+  }
+
+  selectPlan(planId: string): void {
+    this.selectedPlanId = planId;
+  }
+
+  get membershipStatus(): 'active' | 'expired' | 'cancelled' | 'none' {
+    return this.membership?.status || 'none';
+  }
+
+  get isMembershipActive(): boolean {
+    return this.membershipStatus === 'active';
+  }
+
+  get daysLeft(): number | null {
+    const expiresAt = this.membership?.expires_at;
+    if (!expiresAt) return null;
+
+    const nowMs = Date.now();
+    const expiresMs = new Date(expiresAt).getTime();
+    if (Number.isNaN(expiresMs)) return null;
+
+    const dayMs = 24 * 60 * 60 * 1000;
+    const rawDays = Math.ceil((expiresMs - nowMs) / dayMs);
+    return Math.max(rawDays, 0);
+  }
+
+  get showExpiringBanner(): boolean {
+    return this.isMembershipActive && this.daysLeft !== null && this.daysLeft <= 7 && !this.dismissExpiringBanner;
+  }
+
+  dismissExpiryBanner(): void {
+    this.dismissExpiringBanner = true;
+  }
+
+  get expiryMessage(): string {
+    if (!this.membership?.expires_at) return '';
+
+    if (this.membershipStatus === 'expired') {
+      return 'Your membership expired. Activate membership to restore credits.';
+    }
+
+    return 'Membership expires on';
   }
 
   // ------- Stripe payment for memberships -------
@@ -447,7 +524,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.toast.success('Payment received, membership activated soon.');
+    this.toast.success('Payment submitted. We are confirming membership activation.');
 
     // Close modal but keep `pendingPlanId` so we can poll for activation.
     this.closePaymentModal(false);
@@ -498,6 +575,9 @@ export class ProfileComponent implements OnInit {
 
           if (remaining <= 0) {
             // final fallback: refresh membership view
+            this.pendingPlanId = null;
+            this.actionMessage =
+              'Payment submitted. Membership activation is still pending. Please refresh in a moment.';
             this.loadMembership();
             return;
           }
@@ -506,6 +586,9 @@ export class ProfileComponent implements OnInit {
         },
         error: () => {
           if (remaining <= 0) {
+            this.pendingPlanId = null;
+            this.actionMessage =
+              'Payment submitted. Membership activation is still pending. Please refresh in a moment.';
             this.loadMembership();
             return;
           }
