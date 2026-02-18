@@ -81,6 +81,17 @@
   cursor: pointer;
 }
 
+.expiry-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.banner-activate-btn {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
 .action-message {
   padding: 10px 12px;
   border-radius: 10px;

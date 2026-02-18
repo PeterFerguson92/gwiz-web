@@ -262,7 +262,12 @@
               >.
               Activate now to avoid interruptions.
             </p>
-            <button type="button" class="banner-close" (click)="dismissExpiryBanner()">Dismiss</button>
+            <div class="expiry-banner-actions">
+              <button type="button" class="btn-primary banner-activate-btn" (click)="renewMembership()">
+                Activate now
+              </button>
+              <button type="button" class="banner-close" (click)="dismissExpiryBanner()">Dismiss</button>
+            </div>
           </div>
 
           <div *ngIf="membershipLoading" class="membership-loading">
@@ -358,14 +363,14 @@
               <div class="plan-actions">
                 <button
                   class="btn-primary"
-                  [disabled]="pendingPlanId === plan.id || (isMembershipActive && membership?.plan?.id === plan.id)"
-                  (click)="$event.stopPropagation(); isMembershipActive ? changePlan(plan.id) : renewMembership(plan.id)"
+                  [disabled]="pendingPlanId === plan.id"
+                  (click)="$event.stopPropagation(); isMembershipActive && membership?.plan?.id !== plan.id ? changePlan(plan.id) : renewMembership(plan.id)"
                 >
                   {{
                     pendingPlanId === plan.id
                       ? 'Processing…'
                       : isMembershipActive && membership?.plan?.id === plan.id
-                        ? 'Current plan'
+                        ? 'Activate current plan'
                         : isMembershipActive
                           ? 'Change plan'
                           : selectedPlanId === plan.id
