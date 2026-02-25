@@ -11,26 +11,26 @@ import { TermsComponent } from './terms/terms.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 export const OTHER_PAGES_ROUTES: Routes = [
-  {
-    path: 'our-team',
-    component: OurTeamComponent,
-    data: { title: 'Our Team' },
-  },
-  {
-    path: 'pricing-plan',
-    component: PricingPlansComponent,
-    data: { title: 'Pricing Plan' },
-  },
-  {
-    path: 'testimonials',
-    component: TestimonialsComponent,
-    data: { title: 'Testimonials' },
-  },
-  {
-    path: 'faq',
-    component: FaqComponent,
-    data: { title: 'Faq' },
-  },
+  // {
+  //   path: 'our-team',
+  //   component: OurTeamComponent,
+  //   data: { title: 'Our Team' },
+  // },
+  // {
+  //   path: 'pricing-plan',
+  //   component: PricingPlansComponent,
+  //   data: { title: 'Pricing Plan' },
+  // },
+  // {
+  //   path: 'testimonials',
+  //   component: TestimonialsComponent,
+  //   data: { title: 'Testimonials' },
+  // },
+  // {
+  //   path: 'faq',
+  //   component: FaqComponent,
+  //   data: { title: 'Faq' },
+  // },
   {
     path: 'contact-us',
     component: ContactUsComponent,
@@ -41,10 +41,10 @@ export const OTHER_PAGES_ROUTES: Routes = [
     component: AboutComponent,
     data: { title: 'About' },
   },
-  {
-    path: '404',
-    component: Error404Component,
-  },
+  // {
+  //   path: '404',
+  //   component: Error404Component,
+  // },
   {
     path: 'privacy',
     component: PrivacyPolicyComponent,

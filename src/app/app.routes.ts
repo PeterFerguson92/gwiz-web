@@ -19,10 +19,10 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('./views/views.route').then((m) => m.VIEWS_ROUTES),
       },
-      {
-        path: '',
-        loadChildren: () => import('./views/demo/demo-page.route').then((m) => m.DEMO_PAGE_ROUTES),
-      },
+      // {
+      //   path: '',
+      //   loadChildren: () => import('./views/demo/demo-page.route').then((m) => m.DEMO_PAGE_ROUTES),
+      // },
     ],
   },
 
