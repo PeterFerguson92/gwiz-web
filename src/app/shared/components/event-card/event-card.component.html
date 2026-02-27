@@ -29,7 +29,7 @@
         <span class="value">{{ priceLabel }}</span>
       </div>
 
-      <div class="availability" [class.sold-out]="isSoldOut">
+      <div class="availability sold-out" *ngIf="isSoldOut">
         <span class="dot" aria-hidden="true"></span>
         <span>{{ availabilityLabel }}</span>
       </div>
@@ -40,7 +40,7 @@
         (click)="$event.stopPropagation(); onView()"
         [disabled]="isSoldOut"
       >
-        {{ isSoldOut ? 'Sold out' : 'View details' }}
+        {{ isSoldOut ? 'sold out' : 'View details' }}
       </button>
     </div>
   </div>

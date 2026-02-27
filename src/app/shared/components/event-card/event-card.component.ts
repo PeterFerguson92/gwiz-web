@@ -46,9 +46,7 @@ export class EventCardComponent {
   }
 
   get availabilityLabel(): string {
-    if (this.isSoldOut) return 'Sold out';
-    if (this.event?.remaining_tickets === 1) return '1 ticket left';
-    return `${this.event?.remaining_tickets ?? 0} tickets left`;
+    return 'sold out';
   }
 
   onView(): void {

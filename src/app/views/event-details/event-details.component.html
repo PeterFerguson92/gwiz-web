@@ -17,7 +17,6 @@
             <span class="chip-primary">{{ dateLabel }}</span>
             <span class="chip-outline">{{ timeRangeLabel }}</span>
             <span class="chip-outline">Capacity: {{ evt.capacity }}</span>
-            <span class="chip-outline">Remaining: {{ evt.remaining_tickets }}</span>
           </div>
 
           <h2 class="event-title">{{ evt.name }}</h2>
@@ -62,14 +61,12 @@
               </p>
             </div>
 
-            <div class="info-card">
+            <div class="info-card" *ngIf="isSoldOut">
               <p class="label">Availability</p>
-              <p class="value" [ngClass]="{ sold: isSoldOut }">
-                {{ isSoldOut ? 'Sold out' : evt.remaining_tickets + ' tickets left' }}
+              <p class="value sold">
+                sold out
                 <br />
-                <span class="muted">
-                  {{ isSoldOut ? 'Join the next one soon.' : 'First come, first served.' }}
-                </span>
+                <span class="muted">Join the next one soon.</span>
               </p>
             </div>
           </div>
@@ -84,9 +81,9 @@
             <span class="per">per ticket</span>
           </h3>
 
-          <p class="availability" [ngClass]="{ sold: isSoldOut }">
+          <p class="availability sold" *ngIf="isSoldOut">
             <span class="dot"></span>
-            {{ isSoldOut ? 'Sold out' : evt.remaining_tickets + ' available' }}
+            sold out
           </p>
 
           <div class="quantity-row">
@@ -138,7 +135,7 @@
             (click)="purchaseTickets()"
             [disabled]="purchaseLoading || isSoldOut || (!isLoggedIn && !isGuestFormValid)"
           >
-            {{ purchaseLoading ? 'Processing…' : isSoldOut ? 'Sold out' : 'Purchase tickets' }}
+            {{ purchaseLoading ? 'Processing…' : isSoldOut ? 'sold out' : 'Purchase tickets' }}
           </button>
 
           <div class="guest-success" *ngIf="guestPurchaseComplete">
