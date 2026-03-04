@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.component';
 
@@ -10,7 +10,7 @@ import { BreadcrumbComponent } from '@app/components/breadcrumb/breadcrumb.compo
   templateUrl: './page-hero.component.html',
   styleUrls: ['./page-hero.component.scss'],
 })
-export class PageHeroComponent implements OnInit {
+export class PageHeroComponent implements OnInit, OnChanges {
   @Input() title = '';
   @Input() breadcrumbTitle?: string;
 
@@ -22,13 +22,20 @@ export class PageHeroComponent implements OnInit {
 
   /** Whether page has been scrolled a bit (for subtle animation) */
   scrolled = false;
+  private cacheNonce = '';
+  private resolvedHeroImage = this.fallbackImage;
 
   get heroImage(): string {
-    return this.backgroundImage || this.fallbackImage;
+    return this.resolvedHeroImage;
   }
 
   ngOnInit(): void {
+    this.refreshHeroImage();
     this.updateScrollState();
+  }
+
+  ngOnChanges(_changes: SimpleChanges): void {
+    this.refreshHeroImage();
   }
 
   @HostListener('window:scroll')
@@ -38,5 +45,24 @@ export class PageHeroComponent implements OnInit {
 
   private updateScrollState(): void {
     this.scrolled = window.scrollY > 10;
+  }
+
+  private refreshHeroImage(): void {
+    const image = this.backgroundImage || this.fallbackImage;
+    this.cacheNonce = `${Date.now()}`;
+    this.resolvedHeroImage = this.shouldBypassCache(image)
+      ? this.appendCacheNonce(image, this.cacheNonce)
+      : image;
+  }
+
+  private shouldBypassCache(imageUrl: string): boolean {
+    if (!imageUrl) return false;
+    if (imageUrl.startsWith('assets/') || imageUrl.startsWith('/assets/')) return false;
+    return imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('/');
+  }
+
+  private appendCacheNonce(imageUrl: string, nonce: string): string {
+    const separator = imageUrl.includes('?') ? '&' : '?';
+    return `${imageUrl}${separator}v=${nonce}`;
   }
 }
