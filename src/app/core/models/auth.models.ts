@@ -19,6 +19,7 @@ export interface User {
   surname: string;
   email: string;
   phone_number: string;
+  is_staff: boolean;
 }
 
 export interface AuthResponse {
@@ -32,6 +33,7 @@ export interface UserProfile {
   surname: string;
   email: string;
   phone_number: string;
+  is_staff: boolean;
 }
 
 export interface UpdateProfilePayload extends UserProfile {
@@ -39,6 +41,7 @@ export interface UpdateProfilePayload extends UserProfile {
   surname: string;
   email: string;
   phone_number: string;
+  is_staff: boolean;
 }
 
 export interface ChangePasswordPayload {

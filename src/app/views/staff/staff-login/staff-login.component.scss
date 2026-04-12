@@ -1,0 +1,40 @@
+@use '../../auth/auth.component.scss' as *;
+
+.staff-auth-wrapper {
+  .auth-card {
+    max-width: 980px;
+  }
+}
+
+.staff-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(201, 15, 22, 0.12);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.alert {
+  margin-bottom: 1rem;
+  border-radius: 0.85rem;
+  padding: 0.8rem 0.95rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.alert.error {
+  background: rgba(127, 29, 29, 0.34);
+  border: 1px solid rgba(248, 113, 113, 0.28);
+  color: #fecaca;
+}
+
+.alert.warning {
+  background: rgba(120, 53, 15, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  color: #fde68a;
+}

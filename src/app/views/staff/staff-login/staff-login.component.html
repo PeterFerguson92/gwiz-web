@@ -1,0 +1,88 @@
+<div class="auth-wrapper staff-auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-hero" [style.--auth-hero-bg]="heroBackground">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div>
+          <h2>Staff Attendance</h2>
+          <p>Secure door access for coaches and front desk staff.</p>
+        </div>
+
+        <ul>
+          <li>✔ Staff-only sign in</li>
+          <li>✔ Uses the existing FSxCG account backend</li>
+          <li>✔ Attendance tools live behind staff access</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-form-container">
+        <span class="staff-kicker">Staff portal</span>
+        <h1>Sign in to continue</h1>
+        <p class="subtitle">Use your existing account. Staff access is required after login.</p>
+
+        <div class="alert error" *ngIf="errorState === 'invalid_credentials'">
+          Invalid email or password.
+        </div>
+
+        <div class="alert warning" *ngIf="errorState === 'no_staff'">
+          Your account does not have staff access.
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="staff-email">Email</label>
+            <input
+              id="staff-email"
+              type="email"
+              formControlName="email"
+              placeholder="staff@fsxcg.com"
+            />
+            <div class="error" *ngIf="hasError('email', 'required')">Email is required.</div>
+            <div class="error" *ngIf="hasError('email', 'email')">Enter a valid email.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="staff-password">Password</label>
+            <div class="password-field">
+              <input
+                id="staff-password"
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Your password"
+              />
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="showPassword = !showPassword"
+                [attr.aria-pressed]="showPassword"
+              >
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
+            <div class="error" *ngIf="hasError('password', 'required')">Password is required.</div>
+          </div>
+
+          <div class="form-meta">
+            <label class="checkbox">
+              <input type="checkbox" formControlName="rememberMe" />
+              <span>Remember this device</span>
+            </label>
+
+            <a class="link-small" [routerLink]="['/forgot-password']">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-primary" [disabled]="!canSubmit">
+            {{ isSubmitting ? 'Signing in…' : 'Sign in as staff' }}
+          </button>
+
+          <p class="switch-text">
+            Need the member area instead?
+            <a [routerLink]="['/login']">Go to standard login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
