@@ -102,7 +102,7 @@ export class AttendanceService {
     );
   }
 
-  private buildParams(query: Record<string, string | number | undefined>): HttpParams {
+  private buildParams(query: AttendanceListQuery | AttendanceSearchQuery): HttpParams {
     let params = new HttpParams();
 
     Object.entries(query).forEach(([key, value]) => {

@@ -1,14 +1,73 @@
 <section class="staff-page">
   <div class="page-header">
-    <span class="page-label">Event check-in</span>
-    <h2>Event attendance placeholder</h2>
-    <p>This page is routed and protected, but it does not call attendance APIs yet.</p>
+    <div>
+      <span class="page-label">Event check-in</span>
+      <h2>Event attendees</h2>
+      <p>Read-only attendee list for this event.</p>
+    </div>
+
+    <div class="page-meta">
+      <span class="meta-label">eventId</span>
+      <code>{{ eventId }}</code>
+    </div>
   </div>
 
-  <div class="placeholder-card">
-    <span class="meta-label">Route param</span>
-    <strong>eventId</strong>
-    <code>{{ eventId$ | async }}</code>
+  <div class="state-card" *ngIf="isLoading">Loading attendees…</div>
+
+  <div class="state-card error" *ngIf="!isLoading && errorMessage">
+    <strong>Could not load attendees.</strong>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="state-card" *ngIf="!isLoading && !errorMessage && !hasRows">
+    No attendees found for this event.
+  </div>
+
+  <div class="attendee-panel" *ngIf="!isLoading && !errorMessage && hasRows">
+    <div class="panel-header">
+      <div>
+        <span class="meta-label">Total attendees</span>
+        <strong>{{ totalCount }}</strong>
+      </div>
+      <div>
+        <span class="meta-label">Page</span>
+        <strong>{{ currentPage }} / {{ totalPages }}</strong>
+      </div>
+    </div>
+
+    <div class="attendee-table-wrap">
+      <table class="attendee-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Check-in</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attendee of attendees; trackBy: trackById">
+            <td>{{ attendee.user_email || 'Unknown' }}</td>
+            <td>{{ attendee.status }}</td>
+            <td>{{ attendee.payment_status }}</td>
+            <td>
+              <span class="state-pill" [class.checked-in]="isCheckedIn(attendee)">
+                {{ isCheckedIn(attendee) ? 'Checked in' : 'Not checked in' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-row">
+      <button type="button" class="pager-btn" (click)="loadPage(currentPage - 1)" [disabled]="!hasPreviousPage">
+        Previous
+      </button>
+      <button type="button" class="pager-btn" (click)="loadPage(currentPage + 1)" [disabled]="!hasNextPage">
+        Next
+      </button>
+    </div>
   </div>
 
   <a class="back-link" routerLink="/staff">Back to staff overview</a>
