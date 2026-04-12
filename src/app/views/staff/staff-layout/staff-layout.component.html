@@ -1,0 +1,33 @@
+<div class="staff-shell">
+  <header class="staff-header">
+    <div class="header-copy">
+      <span class="staff-kicker">Staff portal</span>
+      <h1>Attendance</h1>
+      <p>Protected staff area for event and class check-in workflows.</p>
+    </div>
+
+    <div class="header-actions" *ngIf="currentUser as user">
+      <div class="staff-user">
+        <span class="meta-label">Signed in as</span>
+        <strong>{{ user.name }} {{ user.surname }}</strong>
+        <span class="user-email">{{ user.email }}</span>
+      </div>
+
+      <button type="button" class="signout-btn" (click)="signOut()">Sign out</button>
+    </div>
+  </header>
+
+  <nav class="staff-nav">
+    <a routerLink="/staff" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Overview
+    </a>
+    <a routerLink="/staff/events/demo-event/check-in" routerLinkActive="active">Event check-in</a>
+    <a routerLink="/staff/classes/demo-session/attendance" routerLinkActive="active">
+      Session attendance
+    </a>
+  </nav>
+
+  <main class="staff-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

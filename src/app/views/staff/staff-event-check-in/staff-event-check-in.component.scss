@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.staff-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.page-label,
+.meta-label {
+  display: inline-block;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.page-header h2 {
+  margin: 0.45rem 0 0.35rem;
+  color: #f8fafc;
+}
+
+.page-header p,
+.back-link {
+  color: #cbd5e1;
+}
+
+.placeholder-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.68);
+  padding: 1rem;
+}
+
+code {
+  display: block;
+  margin-top: 0.5rem;
+  color: #fca5a5;
+}
+
+.back-link {
+  text-decoration: none;
+}

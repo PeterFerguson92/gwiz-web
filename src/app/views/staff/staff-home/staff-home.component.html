@@ -1,33 +1,23 @@
-<div class="staff-shell">
-  <div class="staff-card">
-    <div class="staff-header">
-      <div>
-        <span class="staff-kicker">Staff portal</span>
-        <h1>Attendance dashboard</h1>
-        <p>Staff authentication is live. Attendee tools will be added next.</p>
-      </div>
-
-      <button type="button" class="signout-btn" (click)="signOut()">Sign out</button>
-    </div>
-
-    <div class="staff-meta" *ngIf="currentUser as user">
-      <div>
-        <span class="meta-label">Signed in as</span>
-        <strong>{{ user.name }} {{ user.surname }}</strong>
-      </div>
-      <div>
-        <span class="meta-label">Email</span>
-        <strong>{{ user.email }}</strong>
-      </div>
-      <div>
-        <span class="meta-label">Access</span>
-        <strong>Staff</strong>
-      </div>
-    </div>
-
-    <div class="staff-placeholder">
-      <h2>Next step</h2>
-      <p>Event and session attendee screens have not been built yet.</p>
+<section class="staff-page">
+  <div class="page-header">
+    <div>
+      <span class="staff-kicker">Staff portal</span>
+      <h1>Attendance dashboard</h1>
+      <p>Choose a staff flow to continue. API wiring for attendee screens comes next.</p>
     </div>
   </div>
-</div>
+
+  <div class="staff-grid">
+    <a class="staff-card" [routerLink]="['/staff/events', 'demo-event', 'check-in']">
+      <span class="card-label">Events</span>
+      <h2>Event check-in</h2>
+      <p>Open the event attendance flow for a specific event.</p>
+    </a>
+
+    <a class="staff-card" [routerLink]="['/staff/classes', 'demo-session', 'attendance']">
+      <span class="card-label">Classes</span>
+      <h2>Session attendance</h2>
+      <p>Open the class session attendance flow for a specific session.</p>
+    </a>
+  </div>
+</section>
