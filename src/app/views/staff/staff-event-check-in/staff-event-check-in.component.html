@@ -12,21 +12,34 @@
     </div>
   </div>
 
-  <div class="state-card" *ngIf="isLoading">Loading attendees…</div>
+  <div class="search-bar">
+    <label class="search-label" for="event-attendee-search">Search attendees</label>
+    <input
+      id="event-attendee-search"
+      type="search"
+      class="search-input"
+      [formControl]="searchControl"
+      placeholder="Search by email or ticket ID"
+    />
+  </div>
+
+  <div class="state-card" *ngIf="isLoading">
+    {{ isSearchMode ? 'Searching attendees…' : 'Loading attendees…' }}
+  </div>
 
   <div class="state-card error" *ngIf="!isLoading && errorMessage">
-    <strong>Could not load attendees.</strong>
+    <strong>{{ isSearchMode ? 'Could not search attendees.' : 'Could not load attendees.' }}</strong>
     <p>{{ errorMessage }}</p>
   </div>
 
   <div class="state-card" *ngIf="!isLoading && !errorMessage && !hasRows">
-    No attendees found for this event.
+    {{ isSearchMode ? 'No search results found.' : 'No attendees found for this event.' }}
   </div>
 
   <div class="attendee-panel" *ngIf="!isLoading && !errorMessage && hasRows">
     <div class="panel-header">
       <div>
-        <span class="meta-label">Total attendees</span>
+        <span class="meta-label">{{ isSearchMode ? 'Search results' : 'Total attendees' }}</span>
         <strong>{{ totalCount }}</strong>
       </div>
       <div>
@@ -61,10 +74,20 @@
     </div>
 
     <div class="pagination-row">
-      <button type="button" class="pager-btn" (click)="loadPage(currentPage - 1)" [disabled]="!hasPreviousPage">
+      <button
+        type="button"
+        class="pager-btn"
+        (click)="loadPage(currentPage - 1)"
+        [disabled]="!hasPreviousPage"
+      >
         Previous
       </button>
-      <button type="button" class="pager-btn" (click)="loadPage(currentPage + 1)" [disabled]="!hasNextPage">
+      <button
+        type="button"
+        class="pager-btn"
+        (click)="loadPage(currentPage + 1)"
+        [disabled]="!hasNextPage"
+      >
         Next
       </button>
     </div>
