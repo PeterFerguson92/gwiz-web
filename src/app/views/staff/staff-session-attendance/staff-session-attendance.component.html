@@ -31,6 +31,34 @@
         </button>
       </div>
     </div>
+
+    <div class="filter-bar">
+      <span class="filter-label">Show</span>
+      <button
+        type="button"
+        class="filter-chip"
+        [class.active]="activeFilter === 'eligible'"
+        (click)="setFilter('eligible')"
+      >
+        Eligible
+      </button>
+      <button
+        type="button"
+        class="filter-chip"
+        [class.active]="activeFilter === 'all'"
+        (click)="setFilter('all')"
+      >
+        All
+      </button>
+      <button
+        type="button"
+        class="filter-chip"
+        [class.active]="activeFilter === 'checked_in'"
+        (click)="setFilter('checked_in')"
+      >
+        Checked in
+      </button>
+    </div>
   </div>
 
   <div class="state-card" *ngIf="isLoading">{{ loadingCopy }}</div>
@@ -45,8 +73,8 @@
   <div class="attendee-panel" *ngIf="!isLoading && !errorMessage && hasRows">
     <div class="panel-header">
       <div>
-        <span class="meta-label">{{ isSearchMode ? 'Search results' : 'Total attendees' }}</span>
-        <strong>{{ totalCount }}</strong>
+        <span class="meta-label">{{ filterSummary }}</span>
+        <strong>{{ resultCount }}</strong>
       </div>
       <div>
         <span class="meta-label">Page</span>
@@ -66,7 +94,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let attendee of attendees; trackBy: trackById">
+          <tr *ngFor="let attendee of filteredAttendees; trackBy: trackById">
             <td data-label="Email">{{ attendee.user_email || 'Unknown' }}</td>
             <td data-label="Status">{{ attendee.status }}</td>
             <td data-label="Payment">{{ attendee.payment_status }}</td>

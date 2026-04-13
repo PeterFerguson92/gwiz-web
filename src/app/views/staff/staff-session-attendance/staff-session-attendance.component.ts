@@ -37,6 +37,8 @@ export class StaffSessionAttendanceComponent {
   totalCount = 0;
   totalPages = 1;
   activeQuery = '';
+  readonly filters = ['eligible', 'all', 'checked_in'] as const;
+  activeFilter: (typeof this.filters)[number] = 'eligible';
 
   constructor() {
     this.route.paramMap.subscribe((params) => {
@@ -67,7 +69,7 @@ export class StaffSessionAttendanceComponent {
   }
 
   get hasRows(): boolean {
-    return this.attendees.length > 0;
+    return this.filteredAttendees.length > 0;
   }
 
   get isSearchMode(): boolean {
@@ -83,9 +85,39 @@ export class StaffSessionAttendanceComponent {
   }
 
   get emptyCopy(): string {
-    return this.isSearchMode
-      ? 'No attendee matched that email or booking ID.'
-      : 'No attendees are available for this session yet.';
+    if (this.isSearchMode) {
+      return 'No attendee matched that email or booking ID.';
+    }
+
+    if (this.activeFilter === 'checked_in') {
+      return 'No one is checked in yet for this session.';
+    }
+
+    if (this.activeFilter === 'eligible') {
+      return 'No check-in-ready attendees are available for this session.';
+    }
+
+    return 'No attendees are available for this session yet.';
+  }
+
+  get filteredAttendees(): AttendanceAttendeeItem[] {
+    return this.attendees.filter((attendee) => this.matchesFilter(attendee));
+  }
+
+  get resultCount(): number {
+    return this.filteredAttendees.length;
+  }
+
+  get filterSummary(): string {
+    if (this.activeFilter === 'checked_in') {
+      return 'Checked in';
+    }
+
+    if (this.activeFilter === 'eligible') {
+      return 'Eligible';
+    }
+
+    return this.isSearchMode ? 'Search results' : 'All attendees';
   }
 
   isCheckedIn(attendee: AttendanceAttendeeItem): boolean {
@@ -114,6 +146,10 @@ export class StaffSessionAttendanceComponent {
       (attendee.payment_status === 'paid' || attendee.payment_status === 'included') &&
       !this.isCheckedIn(attendee)
     );
+  }
+
+  setFilter(filter: (typeof this.filters)[number]): void {
+    this.activeFilter = filter;
   }
 
   isRowLoading(attendeeId: string): boolean {
@@ -206,6 +242,18 @@ export class StaffSessionAttendanceComponent {
 
   trackById(_: number, attendee: AttendanceAttendeeItem): string {
     return attendee.id;
+  }
+
+  private matchesFilter(attendee: AttendanceAttendeeItem): boolean {
+    if (this.activeFilter === 'all') {
+      return true;
+    }
+
+    if (this.activeFilter === 'checked_in') {
+      return this.isCheckedIn(attendee);
+    }
+
+    return this.canCheckIn(attendee) || this.isCheckedIn(attendee);
   }
 
   private applyResponse(
