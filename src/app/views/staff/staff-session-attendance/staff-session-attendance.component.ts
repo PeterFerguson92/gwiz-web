@@ -74,12 +74,38 @@ export class StaffSessionAttendanceComponent {
     return this.activeQuery.length > 0;
   }
 
+  get loadingCopy(): string {
+    return this.isSearchMode ? 'Searching attendees for the door list…' : 'Loading live attendee list…';
+  }
+
+  get errorTitle(): string {
+    return this.isSearchMode ? 'Search unavailable' : 'Live attendee list unavailable';
+  }
+
+  get emptyCopy(): string {
+    return this.isSearchMode
+      ? 'No attendee matched that email or booking ID.'
+      : 'No attendees are available for this session yet.';
+  }
+
   isCheckedIn(attendee: AttendanceAttendeeItem): boolean {
     return !!attendee.checked_in_at;
   }
 
-  isRowLoading(attendeeId: string): boolean {
-    return !!this.rowLoading[attendeeId];
+  checkInStateLabel(attendee: AttendanceAttendeeItem): string {
+    if (this.isCheckedIn(attendee)) {
+      return 'Checked in';
+    }
+
+    return this.canCheckIn(attendee) ? 'Ready to check in' : 'Unavailable';
+  }
+
+  checkInStateClass(attendee: AttendanceAttendeeItem): string {
+    if (this.isCheckedIn(attendee)) {
+      return 'checked-in';
+    }
+
+    return this.canCheckIn(attendee) ? 'ready' : 'unavailable';
   }
 
   canCheckIn(attendee: AttendanceAttendeeItem): boolean {
@@ -88,6 +114,10 @@ export class StaffSessionAttendanceComponent {
       (attendee.payment_status === 'paid' || attendee.payment_status === 'included') &&
       !this.isCheckedIn(attendee)
     );
+  }
+
+  isRowLoading(attendeeId: string): boolean {
+    return !!this.rowLoading[attendeeId];
   }
 
   isActionDisabled(attendee: AttendanceAttendeeItem): boolean {
@@ -141,8 +171,8 @@ export class StaffSessionAttendanceComponent {
         this.totalPages = 1;
         this.isLoading = false;
         this.errorMessage = this.isSearchMode
-          ? 'Could not run attendee search. Please try again.'
-          : 'Please try again in a moment.';
+          ? 'Search failed. Clear the query or try again.'
+          : 'Could not refresh the live attendee list. Try again.';
       },
     });
   }
@@ -170,12 +200,12 @@ export class StaffSessionAttendanceComponent {
     });
   }
 
-  trackById(_: number, attendee: AttendanceAttendeeItem): string {
-    return attendee.id;
+  refreshCurrentView(): void {
+    this.loadPage(this.currentPage);
   }
 
-  private refreshCurrentView(): void {
-    this.loadPage(this.currentPage);
+  trackById(_: number, attendee: AttendanceAttendeeItem): string {
+    return attendee.id;
   }
 
   private applyResponse(
