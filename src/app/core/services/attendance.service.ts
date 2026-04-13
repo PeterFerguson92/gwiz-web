@@ -81,10 +81,11 @@ export class AttendanceService {
   }
 
   searchTickets(
+    eventId: string,
     query: AttendanceSearchQuery
   ): Observable<AttendancePaginatedResponse<AttendanceAttendeeItem>> {
     return this.http.get<AttendancePaginatedResponse<AttendanceAttendeeItem>>(
-      `${this.eventsBaseUrl}/tickets/search/`,
+      `${this.eventsBaseUrl}/${eventId}/tickets/search/`,
       {
         params: this.buildParams(query),
       }
@@ -92,10 +93,11 @@ export class AttendanceService {
   }
 
   searchBookings(
+    sessionId: string,
     query: AttendanceSearchQuery
   ): Observable<AttendancePaginatedResponse<AttendanceAttendeeItem>> {
     return this.http.get<AttendancePaginatedResponse<AttendanceAttendeeItem>>(
-      `${this.bookingBaseUrl}/bookings/search/`,
+      `${this.bookingBaseUrl}/sessions/${sessionId}/bookings/search/`,
       {
         params: this.buildParams(query),
       }

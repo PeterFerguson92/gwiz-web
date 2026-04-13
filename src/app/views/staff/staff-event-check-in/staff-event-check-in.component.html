@@ -59,6 +59,21 @@
         Checked in
       </button>
     </div>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span class="meta-label">Visible total</span>
+        <strong>{{ visibleTotalCount }}</strong>
+      </div>
+      <div class="summary-card">
+        <span class="meta-label">Checked in</span>
+        <strong>{{ checkedInCount }}</strong>
+      </div>
+      <div class="summary-card">
+        <span class="meta-label">Remaining</span>
+        <strong>{{ remainingCount }}</strong>
+      </div>
+    </div>
   </div>
 
   <div class="state-card" *ngIf="isLoading">{{ loadingCopy }}</div>

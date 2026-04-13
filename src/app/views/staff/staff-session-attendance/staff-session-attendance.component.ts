@@ -108,6 +108,18 @@ export class StaffSessionAttendanceComponent {
     return this.filteredAttendees.length;
   }
 
+  get visibleTotalCount(): number {
+    return this.resultCount;
+  }
+
+  get checkedInCount(): number {
+    return this.filteredAttendees.filter((attendee) => this.isCheckedIn(attendee)).length;
+  }
+
+  get remainingCount(): number {
+    return Math.max(0, this.visibleTotalCount - this.checkedInCount);
+  }
+
   get filterSummary(): string {
     if (this.activeFilter === 'checked_in') {
       return 'Checked in';
@@ -189,7 +201,7 @@ export class StaffSessionAttendanceComponent {
     this.errorMessage = '';
 
     const request$ = this.isSearchMode
-      ? this.attendanceService.searchBookings({
+      ? this.attendanceService.searchBookings(this.sessionId, {
           q: this.activeQuery,
           page,
           page_size: this.pageSize,
