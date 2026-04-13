@@ -22,14 +22,10 @@ export class FitnessClassService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * LIST all fitness classes
-   * GET /api/booking/fitness-classes/?active=true|false
-   */
   getAllFitnessClasses(active?: boolean): Observable<FitnessClass[]> {
     let params = new HttpParams();
     if (active !== undefined) {
-      params = params.set('active', String(active)); // "true" / "false"
+      params = params.set('active', String(active));
     }
 
     return this.http.get<FitnessClass[]>(`${this.baseUrl}/fitness-classes/`, {
@@ -37,12 +33,10 @@ export class FitnessClassService {
     });
   }
 
-  /** GET /api/booking/fitness-classes/:id/ */
   getFitnessClass(id: string): Observable<FitnessClass> {
     return this.http.get<FitnessClass>(`${this.baseUrl}/fitness-classes/${id}/`);
   }
 
-  /** GET /api/booking/fitness-classes/:id/with-sessions/?days=30 */
   getFitnessClassWithSessions(id: string, days?: number): Observable<FitnessClassWithSessions> {
     let params = new HttpParams();
     if (days != null) {
@@ -55,10 +49,6 @@ export class FitnessClassService {
     );
   }
 
-  /**
-   * GET upcoming sessions for a class using the with-sessions endpoint
-   * GET /api/booking/fitness-classes/:id/with-sessions/?days=30
-   */
   getClassSessions(id: string, days: number = 30) {
     const params = new HttpParams().set('days', days.toString());
 
@@ -69,12 +59,14 @@ export class FitnessClassService {
       .pipe(map((fitnessClass: FitnessClass) => fitnessClass.upcoming_sessions ?? []));
   }
 
-  /** POST /api/booking/sessions/:id/book/ */
+  getAllUpcomingSessions(): Observable<ClassSession[]> {
+    return this.http.get<ClassSession[]>(`${this.baseUrl}/sessions/all-upcoming`);
+  }
+
   bookSession(sessionId: string): Observable<BookSessionResponse> {
     return this.http.post<BookSessionResponse>(`${this.baseUrl}/sessions/${sessionId}/book/`, {});
   }
 
-  /** POST /api/booking/:id/book/ — guest booking */
   bookSessionAsGuest(
     sessionId: string,
     guest: { guest_name: string; guest_email: string; guest_phone: string }

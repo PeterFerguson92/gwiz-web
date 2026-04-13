@@ -3,21 +3,57 @@
     <div>
       <span class="staff-kicker">Staff portal</span>
       <h1>Attendance dashboard</h1>
-      <p>Choose a staff flow to continue. API wiring for attendee screens comes next.</p>
+      <p>Choose a real event or upcoming class session to open attendance tools.</p>
     </div>
   </div>
 
-  <div class="staff-grid">
-    <a class="staff-card" [routerLink]="['/staff/events', 'demo-event', 'check-in']">
-      <span class="card-label">Events</span>
-      <h2>Event check-in</h2>
-      <p>Open the event attendance flow for a specific event.</p>
-    </a>
+  <div class="state-card" *ngIf="isLoading">Loading events and sessions…</div>
 
-    <a class="staff-card" [routerLink]="['/staff/classes', 'demo-session', 'attendance']">
-      <span class="card-label">Classes</span>
-      <h2>Session attendance</h2>
-      <p>Open the class session attendance flow for a specific session.</p>
-    </a>
+  <div class="state-card error" *ngIf="!isLoading && errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="staff-grid" *ngIf="!isLoading && !errorMessage">
+    <section class="staff-section">
+      <div class="section-header">
+        <span class="card-label">Events</span>
+        <h2>Event check-in</h2>
+      </div>
+
+      <div class="state-card" *ngIf="!hasEvents">No active events available.</div>
+
+      <div class="list-grid" *ngIf="hasEvents">
+        <a
+          class="staff-card"
+          *ngFor="let event of events; trackBy: trackById"
+          [routerLink]="['/staff/events', event.id, 'check-in']"
+        >
+          <strong>{{ event.name }}</strong>
+          <span>{{ event.location || 'Location TBD' }}</span>
+          <span>{{ event.start_datetime | date: 'medium' }}</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="staff-section">
+      <div class="section-header">
+        <span class="card-label">Classes</span>
+        <h2>Session attendance</h2>
+      </div>
+
+      <div class="state-card" *ngIf="!hasSessions">No upcoming sessions available.</div>
+
+      <div class="list-grid" *ngIf="hasSessions">
+        <a
+          class="staff-card"
+          *ngFor="let session of sessions; trackBy: trackById"
+          [routerLink]="['/staff/classes', session.id, 'attendance']"
+        >
+          <strong>{{ sessionTitle(session) }}</strong>
+          <span>{{ session.date | date: 'mediumDate' }}</span>
+          <span>{{ session.start_time }} - {{ session.end_time }}</span>
+        </a>
+      </div>
+    </section>
   </div>
 </section>
