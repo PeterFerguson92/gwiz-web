@@ -170,3 +170,32 @@
     text-align: left;
   }
 }
+
+
+.action-btn {
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.12);
+  color: #fee2e2;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.action-btn.undo {
+  border-color: rgba(251, 191, 36, 0.24);
+  background: rgba(245, 158, 11, 0.14);
+  color: #fde68a;
+}
+
+.action-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+
+.action-btn.unavailable {
+  border-color: rgba(148, 163, 184, 0.18);
+  background: rgba(51, 65, 85, 0.25);
+  color: #94a3b8;
+}

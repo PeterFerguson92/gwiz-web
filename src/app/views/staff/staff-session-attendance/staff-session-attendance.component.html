@@ -56,6 +56,7 @@
             <th>Status</th>
             <th>Payment</th>
             <th>Check-in</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +68,18 @@
               <span class="state-pill" [class.checked-in]="isCheckedIn(attendee)">
                 {{ isCheckedIn(attendee) ? 'Checked in' : 'Not checked in' }}
               </span>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="action-btn"
+                [class.undo]="isCheckedIn(attendee)"
+                [class.unavailable]="!isCheckedIn(attendee) && !canCheckIn(attendee)"
+                [disabled]="isActionDisabled(attendee)"
+                (click)="toggleCheckIn(attendee)"
+              >
+                {{ rowActionLabel(attendee) }}
+              </button>
             </td>
           </tr>
         </tbody>

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +11,7 @@ import {
   AttendancePaginatedResponse,
 } from '@core/models/attendance.models';
 import { AttendanceService } from '@core/services/attendance.service';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-staff-event-check-in',
@@ -21,11 +23,13 @@ import { AttendanceService } from '@core/services/attendance.service';
 export class StaffEventCheckInComponent {
   private route = inject(ActivatedRoute);
   private attendanceService = inject(AttendanceService);
+  private toast = inject(ToastService);
   private destroyRef = inject(DestroyRef);
 
   eventId = '';
   searchControl = new FormControl('', { nonNullable: true });
   attendees: AttendanceAttendeeItem[] = [];
+  rowLoading: Record<string, boolean> = {};
   isLoading = true;
   errorMessage = '';
   currentPage = 1;
@@ -74,6 +78,42 @@ export class StaffEventCheckInComponent {
     return !!attendee.checked_in_at;
   }
 
+  isRowLoading(attendeeId: string): boolean {
+    return !!this.rowLoading[attendeeId];
+  }
+
+  canCheckIn(attendee: AttendanceAttendeeItem): boolean {
+    return (
+      attendee.status === 'confirmed' &&
+      (attendee.payment_status === 'paid' || attendee.payment_status === 'included') &&
+      !this.isCheckedIn(attendee)
+    );
+  }
+
+  isActionDisabled(attendee: AttendanceAttendeeItem): boolean {
+    if (this.isRowLoading(attendee.id)) {
+      return true;
+    }
+
+    if (this.isCheckedIn(attendee)) {
+      return false;
+    }
+
+    return !this.canCheckIn(attendee);
+  }
+
+  rowActionLabel(attendee: AttendanceAttendeeItem): string {
+    if (this.isRowLoading(attendee.id)) {
+      return this.isCheckedIn(attendee) ? 'Undoing…' : 'Checking in…';
+    }
+
+    if (this.isCheckedIn(attendee)) {
+      return 'Undo';
+    }
+
+    return this.canCheckIn(attendee) ? 'Check in' : 'Unavailable';
+  }
+
   loadPage(page: number): void {
     if (page < 1) {
       return;
@@ -107,15 +147,50 @@ export class StaffEventCheckInComponent {
     });
   }
 
+  toggleCheckIn(attendee: AttendanceAttendeeItem): void {
+    if (this.isActionDisabled(attendee)) {
+      return;
+    }
+
+    this.rowLoading[attendee.id] = true;
+
+    const request$ = this.isCheckedIn(attendee)
+      ? this.attendanceService.revertTicketCheckIn(attendee.id)
+      : this.attendanceService.checkInTicket(attendee.id);
+
+    request$.subscribe({
+      next: () => {
+        this.toast.success(this.isCheckedIn(attendee) ? 'Ticket check-in reverted.' : 'Ticket checked in.');
+        this.refreshCurrentView();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.rowLoading[attendee.id] = false;
+        this.toast.error(this.getErrorMessage(error, 'Unable to update ticket attendance.'));
+      },
+    });
+  }
+
   trackById(_: number, attendee: AttendanceAttendeeItem): string {
     return attendee.id;
   }
 
-  private applyResponse(response: AttendancePaginatedResponse<AttendanceAttendeeItem>, page: number): void {
+  private refreshCurrentView(): void {
+    this.loadPage(this.currentPage);
+  }
+
+  private applyResponse(
+    response: AttendancePaginatedResponse<AttendanceAttendeeItem>,
+    page: number
+  ): void {
     this.attendees = response.results;
     this.totalCount = response.count;
     this.currentPage = page;
     this.totalPages = Math.max(1, Math.ceil(response.count / this.pageSize));
+    this.rowLoading = {};
     this.isLoading = false;
+  }
+
+  private getErrorMessage(error: HttpErrorResponse, fallback: string): string {
+    return error.error?.detail || fallback;
   }
 }
