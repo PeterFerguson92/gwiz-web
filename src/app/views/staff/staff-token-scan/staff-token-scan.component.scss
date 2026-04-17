@@ -21,12 +21,12 @@
 }
 
 .page-header p,
-.state-card p {
+.result-detail {
   color: #cbd5e1;
 }
 
 .scanner-card,
-.state-card {
+.result-card {
   border-radius: 1rem;
   border: 1px solid rgba(148, 163, 184, 0.14);
   background: rgba(15, 23, 42, 0.68);
@@ -92,24 +92,88 @@
   opacity: 0.55;
 }
 
-.state-card.error {
-  border-color: rgba(248, 113, 113, 0.25);
+.result-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
 }
 
-.state-card.warning {
-  border-color: rgba(251, 191, 36, 0.25);
+.result-card.success {
+  border-color: rgba(34, 197, 94, 0.35);
+  background:
+    linear-gradient(180deg, rgba(20, 83, 45, 0.28) 0%, rgba(15, 23, 42, 0.94) 100%);
 }
 
-.state-card.success {
-  border-color: rgba(34, 197, 94, 0.25);
+.result-card.already {
+  border-color: rgba(251, 191, 36, 0.35);
+  background:
+    linear-gradient(180deg, rgba(120, 53, 15, 0.26) 0%, rgba(15, 23, 42, 0.94) 100%);
 }
 
-.state-card p {
-  margin: 0.35rem 0 0;
+.result-card.warning {
+  border-color: rgba(251, 191, 36, 0.35);
+  background:
+    linear-gradient(180deg, rgba(120, 53, 15, 0.26) 0%, rgba(15, 23, 42, 0.94) 100%);
+}
+
+.result-card.error {
+  border-color: rgba(248, 113, 113, 0.35);
+  background:
+    linear-gradient(180deg, rgba(127, 29, 29, 0.28) 0%, rgba(15, 23, 42, 0.94) 100%);
+}
+
+.result-header {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.result-kicker,
+.meta-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.result-header h3 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.result-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.meta-block {
+  display: grid;
+  gap: 0.3rem;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(2, 6, 23, 0.28);
+  padding: 0.85rem 1rem;
+}
+
+.meta-block strong {
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.result-detail {
+  margin: 0;
+  font-size: 1rem;
 }
 
 @media (max-width: 640px) {
   .scanner-region {
     min-height: 260px;
+  }
+
+  .result-meta {
+    grid-template-columns: 1fr;
   }
 }

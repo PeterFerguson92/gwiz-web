@@ -8,6 +8,8 @@ import { AttendanceCheckInByTokenResponse } from '@core/models/attendance.models
 import { AttendanceService } from '@core/services/attendance.service';
 import { ToastService } from '@core/services/toast.service';
 
+type ScanResultState = 'success' | 'already_checked_in' | 'invalid_code' | 'failed';
+
 @Component({
   selector: 'app-staff-token-scan',
   standalone: true,
@@ -35,6 +37,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   errorMessage = '';
   warningMessage = '';
   lastResult: AttendanceCheckInByTokenResponse | null = null;
+  resultState: ScanResultState | null = null;
 
   get isSubmitting(): boolean {
     return this.inFlightCount > 0;
@@ -114,6 +117,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
       next: (result) => {
         this.ngZone.run(() => {
           this.lastResult = result;
+          this.resultState = 'success';
           this.handleFeedback('success');
           this.toast.success(`${this.labelForKind(result.kind)} checked in.`);
           this.scheduleStateClear();
@@ -125,6 +129,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
           this.errorMessage = error.error?.detail || 'Unable to check in by token.';
           this.lastResult = null;
           this.warningMessage = '';
+          this.resultState = error.status === 409 ? 'already_checked_in' : 'failed';
           this.handleFeedback('error');
           this.toast.error(this.errorMessage);
           this.scheduleStateClear();
@@ -176,6 +181,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.lastInvalidScanAt = now;
     this.clearTransientState();
     this.warningMessage = message;
+    this.resultState = 'invalid_code';
     this.handleFeedback('warning');
     this.scheduleStateClear();
   }
@@ -189,6 +195,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.errorMessage = '';
     this.warningMessage = '';
     this.lastResult = null;
+    this.resultState = null;
   }
 
   private scheduleStateClear(): void {
@@ -280,5 +287,35 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
 
   private labelForKind(kind: AttendanceCheckInByTokenResponse['kind']): string {
     return kind === 'booking' ? 'Booking' : 'Ticket';
+  }
+
+  get resultTitle(): string {
+    switch (this.resultState) {
+      case 'success':
+        return 'CHECKED IN';
+      case 'already_checked_in':
+        return 'ALREADY CHECKED IN';
+      case 'invalid_code':
+        return 'INVALID CODE';
+      case 'failed':
+        return 'CHECK-IN FAILED';
+      default:
+        return '';
+    }
+  }
+
+  get resultCardClass(): string {
+    switch (this.resultState) {
+      case 'success':
+        return 'success';
+      case 'already_checked_in':
+        return 'already';
+      case 'invalid_code':
+        return 'warning';
+      case 'failed':
+        return 'error';
+      default:
+        return '';
+    }
   }
 }

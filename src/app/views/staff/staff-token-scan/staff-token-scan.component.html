@@ -23,20 +23,24 @@
     </div>
   </div>
 
-  <div class="state-card error" *ngIf="errorMessage">
-    <strong>Check-in failed</strong>
-    <p>{{ errorMessage }}</p>
-  </div>
+  <div class="result-card" [ngClass]="resultCardClass" *ngIf="resultState">
+    <div class="result-header">
+      <span class="result-kicker">Scanner result</span>
+      <h3>{{ resultTitle }}</h3>
+    </div>
 
-  <div class="state-card warning" *ngIf="warningMessage">
-    <strong>Scan ignored</strong>
-    <p>{{ warningMessage }}</p>
-  </div>
+    <div class="result-meta" *ngIf="lastResult as result">
+      <div class="meta-block">
+        <span class="meta-label">Kind</span>
+        <strong>{{ result.kind }}</strong>
+      </div>
+      <div class="meta-block">
+        <span class="meta-label">Checked in</span>
+        <strong>{{ result.checked_in_at | date: 'mediumTime' }}</strong>
+      </div>
+    </div>
 
-  <div class="state-card success" *ngIf="lastResult as result">
-    <strong>Check-in complete</strong>
-    <p><strong>Kind:</strong> {{ result.kind }}</p>
-    <p><strong>ID:</strong> {{ result.id }}</p>
-    <p><strong>Checked in at:</strong> {{ result.checked_in_at | date: 'medium' }}</p>
+    <p class="result-detail" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="result-detail" *ngIf="warningMessage">{{ warningMessage }}</p>
   </div>
 </section>
