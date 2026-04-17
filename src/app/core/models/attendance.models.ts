@@ -3,9 +3,17 @@ export interface AttendanceActionPayload {
   notes?: string;
 }
 
+export interface AttendanceCheckInByTokenPayload extends AttendanceActionPayload {
+  token: string;
+}
+
 export interface AttendanceActionResponse {
   id: string;
   checked_in_at: string | null;
+}
+
+export interface AttendanceCheckInByTokenResponse extends AttendanceActionResponse {
+  kind: 'ticket' | 'booking';
 }
 
 export interface AttendanceAttendeeItem {

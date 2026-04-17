@@ -1,0 +1,37 @@
+<section class="staff-page">
+  <div class="page-header">
+    <div>
+      <span class="page-label">Manual token check-in</span>
+      <h2>Paste token</h2>
+      <p>Use this to validate the end-to-end QR check-in flow before enabling camera scanning.</p>
+    </div>
+  </div>
+
+  <div class="token-card">
+    <label class="token-label" for="check-in-token">Check-in token</label>
+    <input
+      id="check-in-token"
+      type="text"
+      class="token-input"
+      [formControl]="tokenControl"
+      placeholder="Paste UUID token"
+      [disabled]="isSubmitting"
+    />
+
+    <button type="button" class="submit-btn" (click)="submit()" [disabled]="isSubmitting || !tokenControl.value.trim()">
+      {{ isSubmitting ? 'Checking in…' : 'Check in by token' }}
+    </button>
+  </div>
+
+  <div class="state-card error" *ngIf="errorMessage">
+    <strong>Check-in failed</strong>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="state-card success" *ngIf="lastResult as result">
+    <strong>Check-in complete</strong>
+    <p><strong>Kind:</strong> {{ result.kind }}</p>
+    <p><strong>ID:</strong> {{ result.id }}</p>
+    <p><strong>Checked in at:</strong> {{ result.checked_in_at | date: 'medium' }}</p>
+  </div>
+</section>

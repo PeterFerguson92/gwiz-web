@@ -7,6 +7,8 @@ import {
   AttendanceActionPayload,
   AttendanceActionResponse,
   AttendanceAttendeeItem,
+  AttendanceCheckInByTokenPayload,
+  AttendanceCheckInByTokenResponse,
   AttendanceListQuery,
   AttendancePaginatedResponse,
   AttendanceSearchQuery,
@@ -16,6 +18,7 @@ import {
 export class AttendanceService {
   private readonly eventsBaseUrl = `${environment.apiUrl}/events`;
   private readonly bookingBaseUrl = `${environment.apiUrl}/booking`;
+  private readonly staffBaseUrl = `${environment.apiUrl}/staff`;
 
   constructor(private http: HttpClient) {}
 
@@ -52,6 +55,15 @@ export class AttendanceService {
   ): Observable<AttendanceActionResponse> {
     return this.http.post<AttendanceActionResponse>(
       `${this.bookingBaseUrl}/bookings/${bookingId}/revert-check-in/`,
+      payload
+    );
+  }
+
+  checkInByToken(
+    payload: AttendanceCheckInByTokenPayload
+  ): Observable<AttendanceCheckInByTokenResponse> {
+    return this.http.post<AttendanceCheckInByTokenResponse>(
+      `${this.staffBaseUrl}/check-in/by-token/`,
       payload
     );
   }
