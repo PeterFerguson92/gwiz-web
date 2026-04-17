@@ -9,6 +9,7 @@ import { AttendanceService } from '@core/services/attendance.service';
 import { ToastService } from '@core/services/toast.service';
 
 type ScanResultState = 'success' | 'already_checked_in' | 'invalid_code' | 'failed';
+type ScanFlashState = 'success' | 'already_checked_in' | 'error';
 
 @Component({
   selector: 'app-staff-token-scan',
@@ -29,6 +30,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private inFlightTokens = new Set<string>();
   private tokenCooldowns = new Map<string, number>();
   private clearStateTimeoutId: number | null = null;
+  private clearFlashTimeoutId: number | null = null;
   private audioContext: AudioContext | null = null;
   private lastInvalidScanAt = 0;
 
@@ -38,6 +40,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   warningMessage = '';
   lastResult: AttendanceCheckInByTokenResponse | null = null;
   resultState: ScanResultState | null = null;
+  flashState: ScanFlashState | null = null;
 
   get isSubmitting(): boolean {
     return this.inFlightCount > 0;
@@ -50,6 +53,9 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   async ngOnDestroy(): Promise<void> {
     if (this.clearStateTimeoutId !== null) {
       window.clearTimeout(this.clearStateTimeoutId);
+    }
+    if (this.clearFlashTimeoutId !== null) {
+      window.clearTimeout(this.clearFlashTimeoutId);
     }
 
     if (this.qrScanner?.isScanning) {
@@ -118,6 +124,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
         this.ngZone.run(() => {
           this.lastResult = result;
           this.resultState = 'success';
+          this.triggerFlash('success');
           this.handleFeedback('success');
           this.toast.success(`${this.labelForKind(result.kind)} checked in.`);
           this.scheduleStateClear();
@@ -130,6 +137,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
           this.lastResult = null;
           this.warningMessage = '';
           this.resultState = error.status === 409 ? 'already_checked_in' : 'failed';
+          this.triggerFlash(error.status === 409 ? 'already_checked_in' : 'error');
           this.handleFeedback('error');
           this.toast.error(this.errorMessage);
           this.scheduleStateClear();
@@ -182,6 +190,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.clearTransientState();
     this.warningMessage = message;
     this.resultState = 'invalid_code';
+    this.triggerFlash('error');
     this.handleFeedback('warning');
     this.scheduleStateClear();
   }
@@ -196,6 +205,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.warningMessage = '';
     this.lastResult = null;
     this.resultState = null;
+    this.clearFlash();
   }
 
   private scheduleStateClear(): void {
@@ -206,6 +216,27 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.clearStateTimeoutId = window.setTimeout(() => {
       this.clearTransientState();
     }, this.transientStateMs);
+  }
+
+  private triggerFlash(state: ScanFlashState): void {
+    this.flashState = state;
+
+    if (this.clearFlashTimeoutId !== null) {
+      window.clearTimeout(this.clearFlashTimeoutId);
+    }
+
+    this.clearFlashTimeoutId = window.setTimeout(() => {
+      this.clearFlash();
+    }, 900);
+  }
+
+  private clearFlash(): void {
+    if (this.clearFlashTimeoutId !== null) {
+      window.clearTimeout(this.clearFlashTimeoutId);
+      this.clearFlashTimeoutId = null;
+    }
+
+    this.flashState = null;
   }
 
   private handleFeedback(type: 'success' | 'warning' | 'error'): void {

@@ -23,21 +23,34 @@
     </div>
   </div>
 
-  <div class="result-card" [ngClass]="resultCardClass" *ngIf="resultState">
+  <div
+    class="result-card"
+    [ngClass]="[
+      resultCardClass,
+      flashState === 'success'
+        ? 'flash-success'
+        : flashState === 'already_checked_in'
+          ? 'flash-already'
+          : flashState === 'error'
+            ? 'flash-error'
+            : ''
+    ]"
+    *ngIf="resultState"
+  >
     <div class="result-header">
       <span class="result-kicker">Scanner result</span>
       <h3>{{ resultTitle }}</h3>
     </div>
 
-    <div class="result-meta" *ngIf="lastResult as result">
-      <div class="meta-block">
+    <div class="result-inline-meta" *ngIf="lastResult as result">
+      <span class="result-inline-chip">
         <span class="meta-label">Kind</span>
         <strong>{{ result.kind }}</strong>
-      </div>
-      <div class="meta-block">
+      </span>
+      <span class="result-inline-chip">
         <span class="meta-label">Checked in</span>
         <strong>{{ result.checked_in_at | date: 'mediumTime' }}</strong>
-      </div>
+      </span>
     </div>
 
     <p class="result-detail" *ngIf="errorMessage">{{ errorMessage }}</p>
