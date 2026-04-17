@@ -28,6 +28,11 @@
     <p>{{ errorMessage }}</p>
   </div>
 
+  <div class="state-card warning" *ngIf="warningMessage">
+    <strong>Scan ignored</strong>
+    <p>{{ warningMessage }}</p>
+  </div>
+
   <div class="state-card success" *ngIf="lastResult as result">
     <strong>Check-in complete</strong>
     <p><strong>Kind:</strong> {{ result.kind }}</p>

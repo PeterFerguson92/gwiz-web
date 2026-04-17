@@ -18,6 +18,7 @@ import { ToastService } from '@core/services/toast.service';
 export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   readonly scannerRegionId = 'staff-token-scanner';
   private readonly duplicateGuardMs = 3000;
+  private readonly transientStateMs = 2500;
   private attendanceService = inject(AttendanceService);
   private toast = inject(ToastService);
   private ngZone = inject(NgZone);
@@ -25,10 +26,14 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private qrScanner: Html5Qrcode | null = null;
   private inFlightTokens = new Set<string>();
   private tokenCooldowns = new Map<string, number>();
+  private clearStateTimeoutId: number | null = null;
+  private audioContext: AudioContext | null = null;
+  private lastInvalidScanAt = 0;
 
   isScannerReady = false;
   inFlightCount = 0;
   errorMessage = '';
+  warningMessage = '';
   lastResult: AttendanceCheckInByTokenResponse | null = null;
 
   get isSubmitting(): boolean {
@@ -40,15 +45,20 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
+    if (this.clearStateTimeoutId !== null) {
+      window.clearTimeout(this.clearStateTimeoutId);
+    }
+
     if (this.qrScanner?.isScanning) {
       await this.qrScanner.stop();
     }
     await this.qrScanner?.clear();
+
+    this.audioContext?.close().catch(() => {});
   }
 
   async restartScanner(): Promise<void> {
-    this.errorMessage = '';
-    this.lastResult = null;
+    this.clearTransientState();
 
     if (this.qrScanner?.isScanning) {
       await this.qrScanner.stop();
@@ -61,6 +71,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private async startScanner(): Promise<void> {
     this.isScannerReady = false;
     this.errorMessage = '';
+    this.warningMessage = '';
 
     try {
       this.qrScanner = new Html5Qrcode(this.scannerRegionId, {
@@ -87,6 +98,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private async handleScan(decodedText: string): Promise<void> {
     const token = this.extractToken(decodedText);
     if (!token) {
+      this.handleWarningState('QR code did not contain a valid check-in token.');
       return;
     }
 
@@ -94,8 +106,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.errorMessage = '';
-    this.lastResult = null;
+    this.clearTransientState();
     this.inFlightTokens.add(token);
     this.inFlightCount += 1;
 
@@ -103,7 +114,9 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
       next: (result) => {
         this.ngZone.run(() => {
           this.lastResult = result;
+          this.handleFeedback('success');
           this.toast.success(`${this.labelForKind(result.kind)} checked in.`);
+          this.scheduleStateClear();
           this.finishTokenRequest(token);
         });
       },
@@ -111,7 +124,10 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
         this.ngZone.run(() => {
           this.errorMessage = error.error?.detail || 'Unable to check in by token.';
           this.lastResult = null;
+          this.warningMessage = '';
+          this.handleFeedback('error');
           this.toast.error(this.errorMessage);
+          this.scheduleStateClear();
           this.finishTokenRequest(token);
         });
       },
@@ -149,6 +165,95 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
         this.tokenCooldowns.delete(token);
       }
     }, this.duplicateGuardMs);
+  }
+
+  private handleWarningState(message: string): void {
+    const now = Date.now();
+    if (now - this.lastInvalidScanAt < 1500) {
+      return;
+    }
+
+    this.lastInvalidScanAt = now;
+    this.clearTransientState();
+    this.warningMessage = message;
+    this.handleFeedback('warning');
+    this.scheduleStateClear();
+  }
+
+  private clearTransientState(): void {
+    if (this.clearStateTimeoutId !== null) {
+      window.clearTimeout(this.clearStateTimeoutId);
+      this.clearStateTimeoutId = null;
+    }
+
+    this.errorMessage = '';
+    this.warningMessage = '';
+    this.lastResult = null;
+  }
+
+  private scheduleStateClear(): void {
+    if (this.clearStateTimeoutId !== null) {
+      window.clearTimeout(this.clearStateTimeoutId);
+    }
+
+    this.clearStateTimeoutId = window.setTimeout(() => {
+      this.clearTransientState();
+    }, this.transientStateMs);
+  }
+
+  private handleFeedback(type: 'success' | 'warning' | 'error'): void {
+    this.vibrate(type);
+    this.beep(type);
+  }
+
+  private vibrate(type: 'success' | 'warning' | 'error'): void {
+    if (!('vibrate' in navigator)) {
+      return;
+    }
+
+    if (type === 'success') {
+      navigator.vibrate?.([90]);
+      return;
+    }
+
+    if (type === 'warning') {
+      navigator.vibrate?.([40, 40, 40]);
+      return;
+    }
+
+    navigator.vibrate?.([120, 60, 120]);
+  }
+
+  private beep(type: 'success' | 'warning' | 'error'): void {
+    const AudioContextCtor =
+      window.AudioContext ||
+      // @ts-expect-error WebKit fallback for older mobile browsers.
+      window.webkitAudioContext;
+
+    if (!AudioContextCtor) {
+      return;
+    }
+
+    try {
+      this.audioContext ??= new AudioContextCtor();
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.value =
+        type === 'success' ? 880 : type === 'warning' ? 640 : 320;
+
+      gainNode.gain.setValueAtTime(0.0001, this.audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.03, this.audioContext.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, this.audioContext.currentTime + 0.12);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      oscillator.start();
+      oscillator.stop(this.audioContext.currentTime + 0.12);
+    } catch {
+      // Audio feedback is optional; ignore browser support or autoplay failures.
+    }
   }
 
   private extractToken(rawValue: string): string | null {
