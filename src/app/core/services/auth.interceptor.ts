@@ -6,7 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, defer, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+  private refreshTokenSubject = new BehaviorSubject<string | null | false>(null);
 
   constructor(private auth: AuthService) {}
 
@@ -62,7 +62,7 @@ export class AuthInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null); // reset
 
       // 🔁 call refresh endpoint using refresh token in localStorage
-      return this.auth.refreshToken().pipe(
+      return defer(() => this.auth.refreshToken()).pipe(
         switchMap((_res) => {
           this.isRefreshing = false;
 
@@ -76,6 +76,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         catchError((err) => {
           this.isRefreshing = false;
+          this.refreshTokenSubject.next(false);
 
           // Refresh failed → user fully logged out
           this.auth.logout();
@@ -88,7 +89,13 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.refreshTokenSubject.pipe(
         filter((token) => token !== null),
         take(1),
-        switchMap((token) => next.handle(this.addAuthHeader(req, token!)))
+        switchMap((token) => {
+          if (token === false) {
+            return throwError(() => new Error('Token refresh failed'));
+          }
+
+          return next.handle(this.addAuthHeader(req, token));
+        })
       );
     }
   }

@@ -16,6 +16,12 @@ export interface FitnessClassWithSessions extends FitnessClass {
   upcoming_sessions: ClassSession[];
 }
 
+export interface UpcomingSessionsQuery {
+  from_date?: string;
+  to_date?: string;
+  genre?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FitnessClassService {
   private readonly baseUrl = `${environment.apiUrl}/booking`;
@@ -59,8 +65,18 @@ export class FitnessClassService {
       .pipe(map((fitnessClass: FitnessClass) => fitnessClass.upcoming_sessions ?? []));
   }
 
-  getAllUpcomingSessions(): Observable<ClassSession[]> {
-    return this.http.get<ClassSession[]>(`${this.baseUrl}/sessions/all-upcoming`);
+  getAllUpcomingSessions(query: UpcomingSessionsQuery = {}): Observable<ClassSession[]> {
+    let params = new HttpParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params = params.set(key, String(value));
+      }
+    });
+
+    return this.http.get<ClassSession[]>(`${this.baseUrl}/sessions/all-upcoming`, {
+      params,
+    });
   }
 
   bookSession(sessionId: string): Observable<BookSessionResponse> {

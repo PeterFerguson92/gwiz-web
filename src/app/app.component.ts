@@ -18,17 +18,19 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private auth = inject(AuthService); // 👈 inject auth
+  private aosInitialized = false;
 
   ngOnInit(): void {
     // 🔐 Try to restore session (in-memory access token) on app startup
     this.auth.initAuthOnStartup().subscribe();
 
-    aos.init();
-
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         map(() => {
+          const isStaffRoute = this.router.url.startsWith('/staff');
+          this.syncAosState(isStaffRoute);
+
           let route = this.activatedRoute;
           while (route.firstChild) {
             route = route.firstChild;
@@ -42,5 +44,24 @@ export class AppComponent implements OnInit {
           this.titleService.setTitle('Flight School X Chamber Gang');
         }
       });
+  }
+
+  private syncAosState(isStaffRoute: boolean): void {
+    if (isStaffRoute) {
+      document.body.removeAttribute('data-aos-easing');
+      document.body.removeAttribute('data-aos-duration');
+      document.body.removeAttribute('data-aos-delay');
+      return;
+    }
+
+    if (!this.aosInitialized) {
+      aos.init({
+        disable: () => this.router.url.startsWith('/staff'),
+      });
+      this.aosInitialized = true;
+      return;
+    }
+
+    aos.refreshHard();
   }
 }

@@ -7,22 +7,24 @@
     </div>
   </div>
 
-  <div class="state-card" *ngIf="isLoading">Loading events and sessions…</div>
-
-  <div class="state-card error" *ngIf="!isLoading && errorMessage">
-    {{ errorMessage }}
-  </div>
-
-  <div class="staff-grid" *ngIf="!isLoading && !errorMessage">
+  <div class="staff-grid">
     <section class="staff-section">
       <div class="section-header">
         <span class="card-label">Events</span>
         <h2>Event check-in</h2>
       </div>
 
-      <div class="state-card" *ngIf="!hasEvents">No active events available.</div>
+      <div class="state-card" *ngIf="eventsLoading">Loading events…</div>
 
-      <div class="list-grid" *ngIf="hasEvents">
+      <div class="state-card error" *ngIf="!eventsLoading && eventsErrorMessage">
+        {{ eventsErrorMessage }}
+      </div>
+
+      <div class="state-card" *ngIf="!eventsLoading && !eventsErrorMessage && !hasEvents">
+        No active events available.
+      </div>
+
+      <div class="list-grid" *ngIf="!eventsLoading && !eventsErrorMessage && hasEvents">
         <a
           class="staff-card"
           *ngFor="let event of events; trackBy: trackById"
@@ -37,22 +39,77 @@
 
     <section class="staff-section">
       <div class="section-header">
-        <span class="card-label">Classes</span>
-        <h2>Session attendance</h2>
+        <div>
+          <span class="card-label">Classes</span>
+          <h2>Session attendance</h2>
+        </div>
+        <span class="section-meta">{{ sessionWindowLabel }}</span>
       </div>
 
-      <div class="state-card" *ngIf="!hasSessions">No upcoming sessions available.</div>
-
-      <div class="list-grid" *ngIf="hasSessions">
-        <a
-          class="staff-card"
-          *ngFor="let session of sessions; trackBy: trackById"
-          [routerLink]="['/staff/classes', session.id, 'attendance']"
+      <div class="filter-bar">
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedSessionWindow === 7"
+          (click)="setSessionWindow(7)"
         >
-          <strong>{{ sessionTitle(session) }}</strong>
-          <span>{{ session.date | date: 'mediumDate' }}</span>
-          <span>{{ session.start_time }} - {{ session.end_time }}</span>
-        </a>
+          7 days
+        </button>
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedSessionWindow === 14"
+          (click)="setSessionWindow(14)"
+        >
+          14 days
+        </button>
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedSessionWindow === 30"
+          (click)="setSessionWindow(30)"
+        >
+          30 days
+        </button>
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedSessionWindow === 0"
+          (click)="setSessionWindow(0)"
+        >
+          All upcoming
+        </button>
+      </div>
+
+      <div class="state-card" *ngIf="sessionsLoading">Loading class sessions…</div>
+
+      <div class="state-card error" *ngIf="!sessionsLoading && sessionsErrorMessage">
+        {{ sessionsErrorMessage }}
+      </div>
+
+      <div class="state-card" *ngIf="!sessionsLoading && !sessionsErrorMessage && !hasSessions">
+        No upcoming sessions available for this date range.
+      </div>
+
+      <div class="session-groups" *ngIf="!sessionsLoading && !sessionsErrorMessage && hasSessions">
+        <div class="session-group" *ngFor="let group of groupedSessions">
+          <div class="group-header">
+            <span class="group-label">{{ group.label }}</span>
+            <span class="group-count">{{ group.sessions.length }}</span>
+          </div>
+
+          <div class="list-grid">
+            <a
+              class="staff-card"
+              *ngFor="let session of group.sessions; trackBy: trackById"
+              [routerLink]="['/staff/classes', session.id, 'attendance']"
+            >
+              <strong>{{ sessionTitle(session) }}</strong>
+              <span>{{ session.date | date: 'mediumDate' }}</span>
+              <span>{{ session.start_time }} - {{ session.end_time }}</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </div>
