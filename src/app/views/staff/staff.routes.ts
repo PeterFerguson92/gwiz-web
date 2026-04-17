@@ -8,6 +8,7 @@ import { StaffHomeComponent } from './staff-home/staff-home.component';
 import { StaffLayoutComponent } from './staff-layout/staff-layout.component';
 import { StaffLoginComponent } from './staff-login/staff-login.component';
 import { StaffSessionAttendanceComponent } from './staff-session-attendance/staff-session-attendance.component';
+import { StaffTokenScanComponent } from './staff-token-scan/staff-token-scan.component';
 import { StaffTokenCheckInComponent } from './staff-token-check-in/staff-token-check-in.component';
 
 export const STAFF_ROUTES: Routes = [
@@ -41,6 +42,11 @@ export const STAFF_ROUTES: Routes = [
         path: 'check-in/token',
         component: StaffTokenCheckInComponent,
         data: { title: 'Token check-in' },
+      },
+      {
+        path: 'check-in/scan',
+        component: StaffTokenScanComponent,
+        data: { title: 'QR check-in' },
       },
     ],
   },

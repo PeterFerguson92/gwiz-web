@@ -4246,6 +4246,11 @@
   "resolved" "https://registry.npmjs.org/html-escaper/-/html-escaper-2.0.2.tgz"
   "version" "2.0.2"
 
+"html5-qrcode@^2.3.8":
+  "integrity" "sha512-jsr4vafJhwoLVEDW3n1KvPnCCXWaQfRng0/EEYk1vNcQGcG/htAdhJX0be8YyqMoSz7+hZvOZSTAepsabiuhiQ=="
+  "resolved" "https://registry.npmjs.org/html5-qrcode/-/html5-qrcode-2.3.8.tgz"
+  "version" "2.3.8"
+
 "htmlparser2@^10.0.0":
   "integrity" "sha512-TwAZM+zE5Tq3lrEHvOlvwgj1XLWQCtaaibSN11Q+gGBAS7Y1uZSWwXXRe4iF6OXnaq1riyQAPFOBtYc77Mxq0g=="
   "resolved" "https://registry.npmjs.org/htmlparser2/-/htmlparser2-10.0.0.tgz"

@@ -29,6 +29,7 @@
     "aos": "^2.3.4",
     "bootstrap": "^5.3.5",
     "gsap": "^3.12.7",
+    "html5-qrcode": "^2.3.8",
     "jquery": "^3.7.1",
     "ngx-countup": "^13.2.0",
     "ngx-owl-carousel-o": "^19.0.2",

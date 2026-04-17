@@ -1,0 +1,37 @@
+<section class="staff-page">
+  <div class="page-header">
+    <div>
+      <span class="page-label">QR check-in</span>
+      <h2>Scan token</h2>
+      <p>Point the camera at a QR code containing either a raw token or a check-in URL.</p>
+    </div>
+  </div>
+
+  <div class="scanner-card">
+    <div class="scanner-shell">
+      <div [id]="scannerRegionId" class="scanner-region"></div>
+    </div>
+
+    <div class="scanner-meta">
+      <span class="meta-pill" [class.ready]="isScannerReady && !isSubmitting">
+        {{ isSubmitting ? 'Processing scan…' : isScannerReady ? 'Camera ready' : 'Starting camera…' }}
+      </span>
+
+      <button type="button" class="restart-btn" (click)="restartScanner()" [disabled]="isSubmitting">
+        Restart scanner
+      </button>
+    </div>
+  </div>
+
+  <div class="state-card error" *ngIf="errorMessage">
+    <strong>Check-in failed</strong>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="state-card success" *ngIf="lastResult as result">
+    <strong>Check-in complete</strong>
+    <p><strong>Kind:</strong> {{ result.kind }}</p>
+    <p><strong>ID:</strong> {{ result.id }}</p>
+    <p><strong>Checked in at:</strong> {{ result.checked_in_at | date: 'medium' }}</p>
+  </div>
+</section>
