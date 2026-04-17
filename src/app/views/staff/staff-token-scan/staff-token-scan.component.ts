@@ -23,23 +23,23 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private ngZone = inject(NgZone);
 
   private qrScanner: Html5Qrcode | null = null;
-  private pausedUntil = 0;
-  private resumeTimeoutId: number | null = null;
+  private inFlightTokens = new Set<string>();
+  private tokenCooldowns = new Map<string, number>();
 
   isScannerReady = false;
-  isSubmitting = false;
+  inFlightCount = 0;
   errorMessage = '';
   lastResult: AttendanceCheckInByTokenResponse | null = null;
+
+  get isSubmitting(): boolean {
+    return this.inFlightCount > 0;
+  }
 
   async ngAfterViewInit(): Promise<void> {
     await this.startScanner();
   }
 
   async ngOnDestroy(): Promise<void> {
-    if (this.resumeTimeoutId !== null) {
-      window.clearTimeout(this.resumeTimeoutId);
-    }
-
     if (this.qrScanner?.isScanning) {
       await this.qrScanner.stop();
     }
@@ -85,51 +85,69 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   }
 
   private async handleScan(decodedText: string): Promise<void> {
-    const now = Date.now();
-    if (this.isSubmitting || now < this.pausedUntil) {
-      return;
-    }
-
     const token = this.extractToken(decodedText);
     if (!token) {
-      this.pausedUntil = now + this.duplicateGuardMs;
       return;
     }
 
-    this.isSubmitting = true;
+    if (this.shouldIgnoreToken(token)) {
+      return;
+    }
+
     this.errorMessage = '';
     this.lastResult = null;
-    this.pausedUntil = now + this.duplicateGuardMs;
-    this.qrScanner?.pause(true);
+    this.inFlightTokens.add(token);
+    this.inFlightCount += 1;
 
     this.attendanceService.checkInByToken({ token, source: 'qr' }).subscribe({
       next: (result) => {
         this.ngZone.run(() => {
           this.lastResult = result;
-          this.isSubmitting = false;
           this.toast.success(`${this.labelForKind(result.kind)} checked in.`);
-          this.scheduleScannerResume();
+          this.finishTokenRequest(token);
         });
       },
       error: (error: HttpErrorResponse) => {
         this.ngZone.run(() => {
           this.errorMessage = error.error?.detail || 'Unable to check in by token.';
           this.lastResult = null;
-          this.isSubmitting = false;
           this.toast.error(this.errorMessage);
-          this.scheduleScannerResume();
+          this.finishTokenRequest(token);
         });
       },
     });
   }
 
-  private scheduleScannerResume(): void {
-    if (this.resumeTimeoutId !== null) {
-      window.clearTimeout(this.resumeTimeoutId);
+  private shouldIgnoreToken(token: string): boolean {
+    if (this.inFlightTokens.has(token)) {
+      return true;
     }
 
-    this.resumeTimeoutId = window.setTimeout(() => {
-      this.qrScanner?.resume();
+    const now = Date.now();
+    const cooldownUntil = this.tokenCooldowns.get(token) ?? 0;
+    if (cooldownUntil > now) {
+      return true;
+    }
+
+    if (cooldownUntil) {
+      this.tokenCooldowns.delete(token);
+    }
+
+    return false;
+  }
+
+  private finishTokenRequest(token: string): void {
+    this.inFlightTokens.delete(token);
+    this.inFlightCount = Math.max(0, this.inFlightCount - 1);
+
+    const cooldownUntil = Date.now() + this.duplicateGuardMs;
+    this.tokenCooldowns.set(token, cooldownUntil);
+
+    window.setTimeout(() => {
+      const currentCooldown = this.tokenCooldowns.get(token);
+      if (currentCooldown === cooldownUntil) {
+        this.tokenCooldowns.delete(token);
+      }
     }, this.duplicateGuardMs);
   }
 
