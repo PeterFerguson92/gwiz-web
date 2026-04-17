@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, inject, NgZone, OnDestroy } from '@angular/core';
-
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 import { AttendanceCheckInByTokenResponse } from '@core/models/attendance.models';
