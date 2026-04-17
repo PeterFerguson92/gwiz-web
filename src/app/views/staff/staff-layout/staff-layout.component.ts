@@ -21,6 +21,16 @@ export class StaffLayoutComponent {
     return this.authService.getCurrentUser();
   }
 
+  get eventCheckInLink(): string {
+    const match = this.router.url.match(/\/staff\/events\/([^/]+)\/check-in/);
+    return match ? `/staff/events/${match[1]}/check-in` : '/staff';
+  }
+
+  get sessionAttendanceLink(): string {
+    const match = this.router.url.match(/\/staff\/classes\/([^/]+)\/attendance/);
+    return match ? `/staff/classes/${match[1]}/attendance` : '/staff';
+  }
+
   signOut(): void {
     this.authService.logout(false);
     this.router.navigate(['/staff/login']);

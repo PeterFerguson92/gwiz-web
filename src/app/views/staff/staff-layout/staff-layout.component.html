@@ -21,8 +21,8 @@
     <a routerLink="/staff" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Overview
     </a>
-    <a routerLink="/staff/events/demo-event/check-in" routerLinkActive="active">Event check-in</a>
-    <a routerLink="/staff/classes/demo-session/attendance" routerLinkActive="active">
+    <a [routerLink]="eventCheckInLink" routerLinkActive="active">Event check-in</a>
+    <a [routerLink]="sessionAttendanceLink" routerLinkActive="active">
       Session attendance
     </a>
     <a routerLink="/staff/check-in/token" routerLinkActive="active">Token check-in</a>
