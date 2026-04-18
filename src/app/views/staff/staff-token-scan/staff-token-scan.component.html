@@ -42,12 +42,20 @@
       <h3>{{ resultTitle }}</h3>
     </div>
 
-    <div class="result-inline-meta" *ngIf="lastResult as result">
+    <div class="result-inline-meta">
+      <span class="result-inline-chip" *ngIf="lastResult as result">
+        <span class="meta-label">Name</span>
+        <strong>{{ result.display_name }}</strong>
+      </span>
       <span class="result-inline-chip">
+        <span class="meta-label">Status</span>
+        <strong>{{ resultStatusLabel }}</strong>
+      </span>
+      <span class="result-inline-chip" *ngIf="lastResult as result">
         <span class="meta-label">Kind</span>
         <strong>{{ result.kind }}</strong>
       </span>
-      <span class="result-inline-chip">
+      <span class="result-inline-chip" *ngIf="lastResult as result">
         <span class="meta-label">Checked in</span>
         <strong>{{ result.checked_in_at | date: 'mediumTime' }}</strong>
       </span>
