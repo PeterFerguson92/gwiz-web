@@ -18,6 +18,7 @@
   background: rgba(2, 6, 23, 0.94);
   backdrop-filter: blur(16px);
   padding: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 .page-header {
@@ -281,6 +282,10 @@
 }
 
 @media (max-width: 640px) {
+  .ops-toolbar {
+    margin-bottom: 0.75rem;
+  }
+
   .summary-grid {
     grid-template-columns: 1fr;
   }
