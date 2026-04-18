@@ -23,6 +23,14 @@ export class StaffTokenCheckInComponent {
   lastResult: AttendanceCheckInByTokenResponse | null = null;
   errorMessage = '';
 
+  get resultHeadline(): string {
+    if (!this.lastResult) {
+      return '';
+    }
+
+    return `${this.lastResult.display_name} — CHECKED IN`;
+  }
+
   submit(): void {
     const token = this.tokenControl.value.trim();
     if (!token || this.isSubmitting) {

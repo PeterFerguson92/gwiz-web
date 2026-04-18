@@ -14,6 +14,7 @@ export interface AttendanceActionResponse {
 
 export interface AttendanceCheckInByTokenResponse extends AttendanceActionResponse {
   kind: 'ticket' | 'booking';
+  display_name: string;
 }
 
 export interface AttendanceAttendeeItem {

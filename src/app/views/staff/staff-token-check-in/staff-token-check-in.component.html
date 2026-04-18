@@ -29,7 +29,7 @@
   </div>
 
   <div class="state-card success" *ngIf="lastResult as result">
-    <strong>Check-in complete</strong>
+    <strong>{{ resultHeadline }}</strong>
     <p><strong>Kind:</strong> {{ result.kind }}</p>
     <p><strong>ID:</strong> {{ result.id }}</p>
     <p><strong>Checked in at:</strong> {{ result.checked_in_at | date: 'medium' }}</p>

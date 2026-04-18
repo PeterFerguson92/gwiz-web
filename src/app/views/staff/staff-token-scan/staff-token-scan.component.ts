@@ -320,9 +320,11 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   }
 
   get resultTitle(): string {
+    if (this.resultState === 'success' && this.lastResult) {
+      return `${this.lastResult.display_name} — CHECKED IN`;
+    }
+
     switch (this.resultState) {
-      case 'success':
-        return 'CHECKED IN';
       case 'already_checked_in':
         return 'ALREADY CHECKED IN';
       case 'invalid_code':
