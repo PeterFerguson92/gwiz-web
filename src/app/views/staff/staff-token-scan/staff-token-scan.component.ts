@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, NgZone, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 import { AttendanceCheckInByTokenResponse } from '@core/models/attendance.models';
@@ -21,6 +29,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   readonly scannerRegionId = 'staff-token-scanner';
   private readonly duplicateGuardMs = 3000;
   private readonly transientStateMs = 2500;
+  @ViewChild('resultCard') private resultCard?: ElementRef<HTMLElement>;
   private attendanceService = inject(AttendanceService);
   private toast = inject(ToastService);
   private ngZone = inject(NgZone);
@@ -123,6 +132,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
         this.ngZone.run(() => {
           this.lastResult = result;
           this.resultState = 'success';
+          this.scrollToResult();
           this.triggerFlash('success');
           this.handleFeedback('success');
           this.toast.success(`${this.labelForKind(result.kind)} checked in.`);
@@ -136,6 +146,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
           this.lastResult = null;
           this.warningMessage = '';
           this.resultState = error.status === 409 ? 'already_checked_in' : 'failed';
+          this.scrollToResult();
           this.triggerFlash(error.status === 409 ? 'already_checked_in' : 'error');
           this.handleFeedback('error');
           this.toast.error(this.errorMessage);
@@ -189,6 +200,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.clearTransientState();
     this.warningMessage = message;
     this.resultState = 'invalid_code';
+    this.scrollToResult();
     this.triggerFlash('error');
     this.handleFeedback('warning');
     this.scheduleStateClear();
@@ -236,6 +248,15 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     }
 
     this.flashState = null;
+  }
+
+  private scrollToResult(): void {
+    window.setTimeout(() => {
+      this.resultCard?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 0);
   }
 
   private handleFeedback(type: 'success' | 'warning' | 'error'): void {
