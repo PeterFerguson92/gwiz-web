@@ -283,6 +283,11 @@
 
 @media (max-width: 640px) {
   .ops-toolbar {
+    position: static;
+    top: auto;
+  }
+
+  .ops-toolbar {
     margin-bottom: 0.75rem;
   }
 
