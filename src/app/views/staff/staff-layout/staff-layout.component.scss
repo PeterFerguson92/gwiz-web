@@ -1,16 +1,18 @@
 :host {
   display: block;
-  min-height: 100vh;
+  min-height: 100dvh;
   background:
     radial-gradient(circle at top left, rgba(201, 15, 22, 0.16), transparent 34%),
     linear-gradient(180deg, #020617 0%, #111827 100%);
   color: #f8fafc;
   padding: 2rem 1.5rem;
+  box-sizing: border-box;
 }
 
 .staff-shell {
   max-width: 1180px;
   margin: 0 auto;
+  min-height: calc(100dvh - 4rem);
 }
 
 .staff-header,
@@ -78,6 +80,7 @@
   background: transparent;
   color: #f8fafc;
   padding: 0.7rem 1rem;
+  min-height: 2.8rem;
   cursor: pointer;
 }
 
@@ -93,6 +96,10 @@
   padding: 0.65rem 0.95rem;
   color: #cbd5e1;
   text-decoration: none;
+  min-height: 2.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .staff-nav a.active {
@@ -106,9 +113,106 @@
 }
 
 @media (max-width: 768px) {
-  .staff-header,
-  .header-actions,
-  .staff-nav {
+  :host {
+    padding: 0.8rem;
+  }
+
+  .staff-shell {
+    min-height: calc(100dvh - 1.6rem);
+  }
+
+  .staff-header {
     display: grid;
+    gap: 0.85rem;
+    padding: 1rem;
+  }
+
+  .staff-shell.compact-flow .staff-header {
+    gap: 0.65rem;
+    padding: 0.8rem;
+  }
+
+  .header-copy h1 {
+    margin: 0.4rem 0 0.2rem;
+    font-size: 1.55rem;
+  }
+
+  .staff-shell.compact-flow .header-copy h1 {
+    font-size: 1.35rem;
+  }
+
+  .header-copy p {
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .staff-shell.compact-flow .header-copy p {
+    display: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .staff-shell.compact-flow .header-actions {
+    gap: 0.6rem;
+  }
+
+  .staff-user {
+    gap: 0.1rem;
+  }
+
+  .staff-user strong {
+    font-size: 0.95rem;
+  }
+
+  .user-email {
+    font-size: 0.82rem;
+  }
+
+  .signout-btn {
+    padding: 0.55rem 0.85rem;
+    min-height: 2.55rem;
+    font-size: 0.9rem;
+  }
+
+  .staff-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.75rem;
+    padding: 0.6rem;
+  }
+
+  .staff-nav a {
+    flex: 1 1 calc(50% - 0.3rem);
+    min-height: 2.45rem;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  .staff-shell.compact-flow .staff-nav {
+    gap: 0.35rem;
+    padding: 0.45rem;
+  }
+
+  .staff-shell.compact-flow .staff-nav a {
+    min-height: 2.25rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.82rem;
+  }
+
+  .staff-content {
+    margin-top: 0.75rem;
+    padding: 0.9rem;
+  }
+
+  .staff-shell.compact-flow .staff-content {
+    margin-top: 0.6rem;
+    padding: 0.75rem;
   }
 }

@@ -21,6 +21,10 @@ export class StaffLayoutComponent {
     return this.authService.getCurrentUser();
   }
 
+  get isCompactFlowRoute(): boolean {
+    return /\/staff\/check-in\/(scan|token)$/.test(this.router.url);
+  }
+
   get eventCheckInLink(): string {
     const match = this.router.url.match(/\/staff\/events\/([^/]+)\/check-in/);
     return match ? `/staff/events/${match[1]}/check-in` : '/staff';
