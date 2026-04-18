@@ -29,6 +29,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   readonly scannerRegionId = 'staff-token-scanner';
   private readonly duplicateGuardMs = 3000;
   private readonly transientStateMs = 2500;
+  private readonly readyHintMs = 1400;
   @ViewChild('resultCard') private resultCard?: ElementRef<HTMLElement>;
   private attendanceService = inject(AttendanceService);
   private toast = inject(ToastService);
@@ -39,6 +40,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   private tokenCooldowns = new Map<string, number>();
   private clearStateTimeoutId: number | null = null;
   private clearFlashTimeoutId: number | null = null;
+  private clearReadyHintTimeoutId: number | null = null;
   private audioContext: AudioContext | null = null;
   private lastInvalidScanAt = 0;
 
@@ -49,6 +51,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
   lastResult: AttendanceCheckInByTokenResponse | null = null;
   resultState: ScanResultState | null = null;
   flashState: ScanFlashState | null = null;
+  readyHintVisible = false;
 
   get isSubmitting(): boolean {
     return this.inFlightCount > 0;
@@ -64,6 +67,9 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     }
     if (this.clearFlashTimeoutId !== null) {
       window.clearTimeout(this.clearFlashTimeoutId);
+    }
+    if (this.clearReadyHintTimeoutId !== null) {
+      window.clearTimeout(this.clearReadyHintTimeoutId);
     }
 
     if (this.qrScanner?.isScanning) {
@@ -89,6 +95,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     this.isScannerReady = false;
     this.errorMessage = '';
     this.warningMessage = '';
+    this.hideReadyHint();
 
     try {
       this.qrScanner = new Html5Qrcode(this.scannerRegionId, {
@@ -124,6 +131,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
     }
 
     this.clearTransientState();
+    this.hideReadyHint();
     this.inFlightTokens.add(token);
     this.inFlightCount += 1;
 
@@ -226,6 +234,7 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
 
     this.clearStateTimeoutId = window.setTimeout(() => {
       this.clearTransientState();
+      this.showReadyHint();
     }, this.transientStateMs);
   }
 
@@ -252,11 +261,51 @@ export class StaffTokenScanComponent implements AfterViewInit, OnDestroy {
 
   private scrollToResult(): void {
     window.setTimeout(() => {
-      this.resultCard?.nativeElement.scrollIntoView({
+      if (!window.matchMedia('(max-width: 640px)').matches) {
+        return;
+      }
+
+      const element = this.resultCard?.nativeElement;
+      if (!element) {
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+      const isFullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+      if (isFullyVisible) {
+        return;
+      }
+
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
     }, 0);
+  }
+
+  private showReadyHint(): void {
+    if (!window.matchMedia('(max-width: 640px)').matches || !this.isScannerReady) {
+      return;
+    }
+
+    this.readyHintVisible = true;
+
+    if (this.clearReadyHintTimeoutId !== null) {
+      window.clearTimeout(this.clearReadyHintTimeoutId);
+    }
+
+    this.clearReadyHintTimeoutId = window.setTimeout(() => {
+      this.hideReadyHint();
+    }, this.readyHintMs);
+  }
+
+  private hideReadyHint(): void {
+    if (this.clearReadyHintTimeoutId !== null) {
+      window.clearTimeout(this.clearReadyHintTimeoutId);
+      this.clearReadyHintTimeoutId = null;
+    }
+
+    this.readyHintVisible = false;
   }
 
   private handleFeedback(type: 'success' | 'warning' | 'error'): void {

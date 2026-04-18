@@ -10,6 +10,9 @@
   <div class="scanner-card">
     <div class="scanner-shell">
       <div [id]="scannerRegionId" class="scanner-region"></div>
+      <div class="scan-overlay" aria-hidden="true">
+        <div class="scan-window"></div>
+      </div>
     </div>
 
     <div class="scanner-meta">
@@ -21,6 +24,8 @@
         Restart scanner
       </button>
     </div>
+
+    <div class="ready-hint" *ngIf="readyHintVisible">Ready for next scan</div>
   </div>
 
   <div
