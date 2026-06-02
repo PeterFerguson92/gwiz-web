@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
         filter((event) => event instanceof NavigationEnd),
         map(() => {
           const isStaffRoute = this.router.url.startsWith('/staff');
+          this.syncShellTheme(isStaffRoute);
           this.syncAosState(isStaffRoute);
 
           let route = this.activatedRoute;
@@ -44,6 +45,10 @@ export class AppComponent implements OnInit {
           this.titleService.setTitle('Flight School X Chamber Gang');
         }
       });
+  }
+
+  private syncShellTheme(isStaffRoute: boolean): void {
+    document.body.classList.toggle('staff-shell-active', isStaffRoute);
   }
 
   private syncAosState(isStaffRoute: boolean): void {
