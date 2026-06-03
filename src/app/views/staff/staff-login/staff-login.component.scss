@@ -1,8 +1,28 @@
 @use '../../auth/auth.component.scss' as *;
 
+:host {
+  display: block;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at top left, rgba(201, 15, 22, 0.16), transparent 34%),
+    linear-gradient(180deg, #020617 0%, #111827 100%);
+  color: #f8fafc;
+  box-sizing: border-box;
+}
+
 .staff-auth-wrapper {
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+
   .auth-card {
     max-width: 980px;
+  }
+}
+
+@media (max-width: 768px) {
+  .staff-auth-wrapper {
+    padding: 0.8rem;
   }
 }
 
